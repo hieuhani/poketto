@@ -1,9 +1,9 @@
 import { Bootstrap } from '~/shared/Bootstrap';
 import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
+import { WelcomeScreen } from './screens/WelcomeScreen';
+import { StackNavigation } from '~/navigation';
+import { NewWalletScreen } from './screens/NewWalletScreen';
+import { SecretRecoveryScreen } from './screens/SecretRecoveryScreen';
 
 export const App: React.FunctionComponent = () => {
   return (
@@ -16,20 +16,13 @@ export const App: React.FunctionComponent = () => {
           transform: 'translateY(-50%)',
         }}
       >
-        <Box px={4} py={4}>
-          <Box sx={{ textAlign: 'center', marginBottom: 8 }}>
-            <Typography variant="h5">Welcome to APTOS Wallet</Typography>
-            <Typography variant="subtitle1">
-              Secured store for your digital assets
-            </Typography>
-          </Box>
-          <Stack spacing={2}>
-            <Button variant="contained" fullWidth>
-              Create a new wallet
-            </Button>
-            <Button fullWidth>Import my existing wallet</Button>
-          </Stack>
-        </Box>
+        <StackNavigation
+          routes={[
+            { route: 'welcome', screen: <WelcomeScreen /> },
+            { route: 'new_wallet', screen: <NewWalletScreen /> },
+            { route: 'secret_recovery', screen: <SecretRecoveryScreen /> },
+          ]}
+        />
       </Paper>
     </Bootstrap>
   );
