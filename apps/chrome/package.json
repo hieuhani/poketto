@@ -1,0 +1,30 @@
+{
+  "name": "@poketto/chrome",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "displayName": "Poketto",
+  "description": "Yoji poketto",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.9.3",
+    "@emotion/styled": "^11.9.3",
+    "@mui/material": "^5.9.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "webextension-polyfill": "^0.9.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.15",
+    "@types/react-dom": "^18.0.6",
+    "@vitejs/plugin-react": "^2.0.0",
+    "fs-extra": "^10.1.0",
+    "kolorist": "^1.5.1",
+    "typescript": "^4.6.4",
+    "vite": "^3.0.0"
+  }
+}
