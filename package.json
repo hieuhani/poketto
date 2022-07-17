@@ -7,6 +7,7 @@
     "libs/*"
   ],
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "dev:chrome": "nx dev @poketto/chrome",
     "build:chrome": "nx build @poketto/chrome"
   },
