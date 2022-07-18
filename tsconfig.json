@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@poketto/core": ["libs/core/src"]
+    }
+  },
+  "include": [
+    "apps",
+    "libs"
+  ],
+  "exclude": ["apps/**/node_modules", "libs/**/node_modules"]
+}

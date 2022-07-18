@@ -1,0 +1,32 @@
+{
+  "name": "@poketto/core",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "build": "tsup --dts",
+    "dev": "tsup --watch",
+    "clean": "rimraf dist"
+  },
+  "source": "src/index.ts",
+  "typing": "dist/index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "sideEffects": true,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {
+    "aptos": "^1.2.0"
+  },
+  "peerDependencies": {
+    "aptos": "^1.2.0"
+  }
+}

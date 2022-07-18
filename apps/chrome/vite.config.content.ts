@@ -7,6 +7,7 @@ import packageJson from './package.json';
 export default defineConfig({
   ...sharedConfig,
   build: {
+    target: ['esnext'],
     watch: isDev ? {} : undefined,
     outDir: r('extension/dist/contentScripts'),
     cssCodeSplit: false,

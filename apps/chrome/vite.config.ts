@@ -6,9 +6,11 @@ import { r, port, isDev } from './scripts/utils';
 
 export const sharedConfig: UserConfig = {
   root: r('src'),
+
   resolve: {
     alias: {
       '~/': `${r('src')}/`,
+      '@poketto/core': r('../../libs/core/src/'),
     },
   },
   define: {
@@ -55,6 +57,7 @@ export default defineConfig(({ command }) => ({
     },
   },
   build: {
+    target: ['esnext'],
     outDir: r('extension/dist'),
     emptyOutDir: false,
     sourcemap: isDev ? 'inline' : false,
