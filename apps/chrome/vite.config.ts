@@ -44,6 +44,9 @@ export const sharedConfig: UserConfig = {
   ],
   optimizeDeps: {
     include: ['webextension-polyfill'],
+    esbuildOptions: {
+      target: 'es2020'
+    },
   },
 };
 // https://vitejs.dev/config/
