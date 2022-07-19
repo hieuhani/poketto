@@ -79,9 +79,13 @@ importers:
 
   libs/core:
     specifiers:
+      '@types/react': ^18.0.15
       aptos: ^1.2.0
+      react: ^18.2.0
     devDependencies:
+      '@types/react': 18.0.15
       aptos: 1.2.0
+      react: 18.2.0
 
 packages:
 
@@ -4713,7 +4717,6 @@ packages:
     hasBin: true
     dependencies:
       js-tokens: 4.0.0
-    dev: false
 
   /lowercase-keys/2.0.0:
     resolution: {integrity: sha512-tqNXrS78oMOE73NMxK4EMLQsQowWf8jKooH9g7xPavRT706R6bkQJ6DY2Te7QukaZsulxa30wQ7bk0pm4XiHmA==}
@@ -5553,7 +5556,6 @@ packages:
     engines: {node: '>=0.10.0'}
     dependencies:
       loose-envify: 1.4.0
-    dev: false
 
   /read-pkg/3.0.0:
     resolution: {integrity: sha512-BLq/cCO9two+lBgiTYNqD6GdtK8s4NpaWrl6/rCO9w0TUS8oJl7cmToOZfRYllKTISY6nt1U7jQ53brmKqY6BA==}
