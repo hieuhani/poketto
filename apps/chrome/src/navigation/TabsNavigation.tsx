@@ -13,18 +13,24 @@ interface Route {
 }
 interface Props {
   routes: Route[];
+  navigation?: ReactNode;
 }
 
 interface NavigationContextState {
   navigate: (route: string) => void;
+  activeRoute: string;
 }
 const NavigationContext = createContext<NavigationContextState>({
   navigate: (route: string) => {
     throw Error('Unimplemented');
   },
+  activeRoute: '',
 });
 
-export const TabsNavigation: React.FunctionComponent<Props> = ({ routes }) => {
+export const TabsNavigation: React.FunctionComponent<Props> = ({
+  routes,
+  navigation,
+}) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const routeIndex = useMemo<Record<string, number>>(
     () =>
@@ -38,7 +44,7 @@ export const TabsNavigation: React.FunctionComponent<Props> = ({ routes }) => {
   );
   const navigate = useCallback(
     (route: string) => {
-      if (routeIndex[route]) {
+      if (routeIndex[route] !== undefined) {
         setActiveIndex(routeIndex[route]);
       }
     },
@@ -53,9 +59,11 @@ export const TabsNavigation: React.FunctionComponent<Props> = ({ routes }) => {
     <NavigationContext.Provider
       value={{
         navigate,
+        activeRoute: routes[activeIndex].route,
       }}
     >
       {routes[activeIndex].screen}
+      {navigation}
     </NavigationContext.Provider>
   );
 };
