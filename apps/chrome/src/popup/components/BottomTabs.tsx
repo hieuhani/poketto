@@ -4,7 +4,7 @@ import {
   IoHomeOutline,
   IoSettingsOutline,
   IoAlbumsOutline,
-  IoBookmarksOutline,
+  IoTicketOutline,
 } from 'react-icons/io5';
 import { useTabsNavigation } from '~/navigation';
 
@@ -15,11 +15,7 @@ export const BottomTabs: React.FunctionComponent = () => {
   };
 
   return (
-    <BottomNavigation
-      sx={{ width: 500 }}
-      value={activeRoute}
-      onChange={onRouteChanged}
-    >
+    <BottomNavigation value={activeRoute} onChange={onRouteChanged}>
       <BottomNavigationAction
         label="Home"
         value="home"
@@ -28,7 +24,7 @@ export const BottomTabs: React.FunctionComponent = () => {
       <BottomNavigationAction
         label="Collectibles"
         value="collectible"
-        icon={<IoBookmarksOutline size={24} />}
+        icon={<IoTicketOutline size={24} />}
       />
       <BottomNavigationAction
         label="Activities"
