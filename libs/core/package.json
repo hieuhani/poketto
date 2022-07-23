@@ -24,6 +24,7 @@
     "dist"
   ],
   "devDependencies": {
+    "@types/node": "^18.0.5",
     "@types/react": "^18.0.15",
     "aptos": "^1.2.0",
     "react": "^18.2.0"
@@ -31,5 +32,11 @@
   "peerDependencies": {
     "aptos": "^1.2.0",
     "react": "^18.2.0"
+  },
+  "dependencies": {
+    "@metamask/browser-passworder": "^3.0.0",
+    "@scure/bip39": "^1.1.0",
+    "buffer": "^6.0.3",
+    "tweetnacl": "^1.0.3"
   }
 }

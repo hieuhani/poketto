@@ -1,35 +1,83 @@
 import { AptosAccount } from 'aptos';
-import React, { PropsWithChildren, useContext, useState } from 'react';
+import React, {
+  PropsWithChildren,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { createContext } from 'react';
-import { getAccountFromStorage, saveStorageWallet } from '..';
+import { generateMnemonic } from '../mnemonic';
+import { createAccount, loadAccount } from '../account';
+import { readWallet, storeWallet } from './storage';
+
+type WalletState =
+  | 'pending:createNewAccount'
+  | 'pending:loadAccount'
+  | 'fulfilled:noAccount'
+  | 'fulfilled:accountLoaded'
+  | 'rejected:createNewAccount';
 
 interface WalletContextState {
   account: AptosAccount | null;
-  updateAccount: (account: AptosAccount) => void;
+  createNewAccount: (password: string) => void;
+  state: WalletState;
 }
+
 const WalletContext = createContext<WalletContextState>({
   account: null,
-  updateAccount: (account: AptosAccount) => {
+  createNewAccount: (password: string) => {
     throw new Error('unimplemented');
   },
+  state: 'pending:loadAccount',
 });
 
 export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
   children,
 }) => {
-  const [stateAccount, setAccount] = useState<AptosAccount | null>(() =>
-    getAccountFromStorage()
-  );
+  const [stateAccount, setAccount] = useState<AptosAccount | null>(null);
+  const [state, setState] = useState<WalletState>('pending:loadAccount');
+  const loadWallet = async () => {
+    const wallet = await readWallet();
+    if (!wallet) {
+      setState('fulfilled:noAccount');
+    } else {
+      const { encryptedMnemonic } = wallet;
+      const account = await loadAccount('password', encryptedMnemonic);
+      setAccount(account);
+      setState('fulfilled:accountLoaded');
+    }
+  };
 
-  const updateAccount = (account: AptosAccount) => {
-    setAccount(account);
-    saveStorageWallet({ account: account.toPrivateKeyObject() });
+  useEffect(() => {
+    loadWallet();
+  }, []);
+
+  const createNewAccount = async (password: string) => {
+    try {
+      setState('pending:createNewAccount');
+      const mnemonic = generateMnemonic();
+      const { account, encryptedMnemonic, encryptedPrivateKey } =
+        await createAccount({ mnemonic, password });
+
+      await storeWallet({
+        encryptedMnemonic,
+        encryptedPrivateKey,
+      });
+      // TODO: fund account here
+
+      setAccount(account);
+      setState('fulfilled:accountLoaded');
+    } catch (e) {
+      console.error(e);
+      setState('rejected:createNewAccount');
+    }
   };
   return (
     <WalletContext.Provider
       value={{
         account: stateAccount,
-        updateAccount,
+        state,
+        createNewAccount,
       }}
     >
       {children}

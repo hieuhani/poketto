@@ -22,6 +22,7 @@ importers:
     specifiers:
       '@emotion/react': ^11.9.3
       '@emotion/styled': ^11.9.3
+      '@hookform/resolvers': ^2.9.6
       '@mui/material': ^5.9.0
       '@poketto/core': workspace:0.0.0
       '@types/fs-extra': ^9.0.13
@@ -39,6 +40,7 @@ importers:
       npm-run-all: ^4.1.5
       react: ^18.2.0
       react-dom: ^18.2.0
+      react-hook-form: ^7.33.1
       react-icons: ^4.4.0
       rimraf: ^3.0.2
       typescript: ^4.6.4
@@ -47,17 +49,21 @@ importers:
       web-ext: ^7.1.1
       webext-bridge: ^5.0.5
       webextension-polyfill: ^0.9.0
+      yup: ^0.32.11
     dependencies:
       '@emotion/react': 11.9.3_dlcr7kzjh265l7kenqxjsvuiz4
       '@emotion/styled': 11.9.3_xorl7rqfpn4gtnla4dfecagcw4
+      '@hookform/resolvers': 2.9.6_react-hook-form@7.33.1
       '@mui/material': 5.9.0_bl6qrq6463ovzmqn4cmwv7vydq
       '@poketto/core': link:../../libs/core
       aptos: 1.2.0
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
+      react-hook-form: 7.33.1_react@18.2.0
       react-icons: 4.4.0_react@18.2.0
       webext-bridge: 5.0.5
       webextension-polyfill: 0.9.0
+      yup: 0.32.11
     devDependencies:
       '@types/fs-extra': 9.0.13
       '@types/node': 18.0.5
@@ -79,10 +85,21 @@ importers:
 
   libs/core:
     specifiers:
+      '@metamask/browser-passworder': ^3.0.0
+      '@scure/bip39': ^1.1.0
+      '@types/node': ^18.0.5
       '@types/react': ^18.0.15
       aptos: ^1.2.0
+      buffer: ^6.0.3
       react: ^18.2.0
+      tweetnacl: ^1.0.3
+    dependencies:
+      '@metamask/browser-passworder': 3.0.0
+      '@scure/bip39': 1.1.0
+      buffer: 6.0.3
+      tweetnacl: 1.0.3
     devDependencies:
+      '@types/node': 18.0.5
       '@types/react': 18.0.15
       aptos: 1.2.0
       react: 18.2.0
@@ -642,6 +659,14 @@ packages:
       - supports-color
     dev: true
 
+  /@hookform/resolvers/2.9.6_react-hook-form@7.33.1:
+    resolution: {integrity: sha512-f4VxF8w9rdX0WsDCk3FW1dGPj/Sj8+1Ulcgtm5ymgWEpbA/fjY+NUDh+L9hftmxDgP8+EJFtF+qFK4gPEXVrVQ==}
+    peerDependencies:
+      react-hook-form: ^7.0.0
+    dependencies:
+      react-hook-form: 7.33.1_react@18.2.0
+    dev: false
+
   /@humanwhocodes/config-array/0.9.5:
     resolution: {integrity: sha512-ObyMyWxZiCu/yTisA7uzx81s40xR2fD5Cg/2Kq7G02ajkNubJf6BopgDTmDyc3U7sXpNKM8cYOw7s7Tyr+DnCw==}
     engines: {node: '>=10.10.0'}
@@ -855,6 +880,11 @@ packages:
     resolution: {integrity: sha512-X7lnoos6vF+llTjMDhP8HQJy2nL4RNf1LRejfNKOJLKrZ55A4p2z1WdhPY/NCieqiLH6gwlzDSVpmPYSPLd+bg==}
     dev: true
 
+  /@metamask/browser-passworder/3.0.0:
+    resolution: {integrity: sha512-hD10mgvhcDkZX8wnauw8udp1K2MzcbZfrN7Yon9sQ+OqVK9kiQ4VhZAyZNZTy9KJLtfoVD9Y2F6L4gEese7hDA==}
+    engines: {node: '>=12.0.0'}
+    dev: false
+
   /@mui/base/5.0.0-alpha.89_bb2bxwco6ptpubzwpazr52qf6i:
     resolution: {integrity: sha512-2g18hzt947qQ3gQQPOPEBfzQmaT2wafVhyJ7ZOZXeU6kKb88MdlHoPkK2lKXCHMBtRGnnsiF36j0rmhQXu0I5g==}
     engines: {node: '>=12.0.0'}
@@ -1006,6 +1036,10 @@ packages:
       prop-types: 15.8.1
       react: 18.2.0
       react-is: 18.2.0
+    dev: false
+
+  /@noble/hashes/1.1.2:
+    resolution: {integrity: sha512-KYRCASVTv6aeUi1tsF8/vpyR7zpfs3FUzy2Jqm+MU+LmUKhQ0y2FpfwqkCcxSg2ua4GALJd8k2R76WxwZGbQpA==}
     dev: false
 
   /@nodelib/fs.scandir/2.1.5:
@@ -1206,6 +1240,17 @@ packages:
       picomatch: 2.3.1
     dev: true
 
+  /@scure/base/1.1.1:
+    resolution: {integrity: sha512-ZxOhsSyxYwLJj3pLZCefNitxsj093tb2vq90mp2txoYeBqbcjDjqFhyM8eUjq/uFm6zJ+mUuqxlS2FkuSY1MTA==}
+    dev: false
+
+  /@scure/bip39/1.1.0:
+    resolution: {integrity: sha512-pwrPOS16VeTKg98dYXQyIjJEcWfz7/1YJIwxUEPFfQPtc86Ym/1sVgQ2RLoD43AazMk2l/unK4ITySSpW2+82w==}
+    dependencies:
+      '@noble/hashes': 1.1.2
+      '@scure/base': 1.1.1
+    dev: false
+
   /@sindresorhus/is/4.6.0:
     resolution: {integrity: sha512-t09vSN3MdfsyCHoFcTRCH/iUtG7OJ0CsjzB8cjAmKc/va/kIgeDI/TxsigdncE/4be734m0cvIYwNaV4i2XqAw==}
     engines: {node: '>=10'}
@@ -1318,6 +1363,10 @@ packages:
     dependencies:
       '@types/node': 18.0.5
     dev: true
+
+  /@types/lodash/4.14.182:
+    resolution: {integrity: sha512-/THyiqyQAP9AfARo4pF+aCGcyiQ94tX/Is2I7HofNRqoYLgN1PBoOWu2/zTA5zMxzP5EFutMtWtGAFRKUe961Q==}
+    dev: false
 
   /@types/minimatch/3.0.5:
     resolution: {integrity: sha512-Klz949h02Gz2uZCMGwDUSDS1YBlTdDDgbWHi+81l29tQALUtvz4rAYi5uoVhE5Lagoq6DeqAUlbrHvW/mXDgdQ==}
@@ -4672,6 +4721,10 @@ packages:
       p-locate: 4.1.0
     dev: true
 
+  /lodash-es/4.17.21:
+    resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
+    dev: false
+
   /lodash.includes/4.3.0:
     resolution: {integrity: sha512-W3Bx6mdkRTGtlJISOvVD/lbqjTlPPUDTMnlXZFnVwi9NKJ6tiAk6LVdlhZMm17VZisqhKcgzpO5Wz91PCt5b0w==}
     dev: true
@@ -4710,7 +4763,6 @@ packages:
 
   /lodash/4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
-    dev: true
 
   /loose-envify/1.4.0:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
@@ -4918,6 +4970,10 @@ packages:
     resolution: {integrity: sha512-UdAqHyFngu7TfQKsCBgAA6pWDkT8MAO7d0jyOecVhN5354xbLqdn8mV9Tat9gepAupm0bt2DbeaSC8vS52MuFA==}
     dev: true
     optional: true
+
+  /nanoclone/0.2.1:
+    resolution: {integrity: sha512-wynEP02LmIbLpcYw8uBKpcfF6dmg2vcpKqxeH5UcoKEYdExslsdUA4ugFauuaeYdTB76ez6gJW8XAZ6CgkXYxA==}
+    dev: false
 
   /nanoevents/6.0.2:
     resolution: {integrity: sha512-FRS2otuFcPPYDPYViNWQ42+1iZqbXydinkRHTHFxrF4a1CpBfmydR9zkI44WSXAXCyPrkcGtPk5CnpW6Y3lFKQ==}
@@ -5441,6 +5497,10 @@ packages:
       react-is: 16.13.1
     dev: false
 
+  /property-expr/2.0.5:
+    resolution: {integrity: sha512-IJUkICM5dP5znhCckHSv30Q4b5/JA5enCtkRHYaOVOAocnH/1BQEYTC5NMfT3AVl/iXKdr3aqQbQn9DxyWknwA==}
+    dev: false
+
   /proto-list/1.2.4:
     resolution: {integrity: sha512-vtK/94akxsTMhe0/cbfpR+syPuszcuwhqVjJq26CuNDgFGj682oRBXOP5MJpv2r7JtE8MsiepGIqvvOTBwn2vA==}
     dev: true
@@ -5510,6 +5570,15 @@ packages:
       loose-envify: 1.4.0
       react: 18.2.0
       scheduler: 0.23.0
+    dev: false
+
+  /react-hook-form/7.33.1_react@18.2.0:
+    resolution: {integrity: sha512-ydTfTxEJdvgjCZBj5DDXRc58oTEfnFupEwwTAQ9FSKzykEJkX+3CiAkGtAMiZG7IPWHuzgT6AOBfogiKhUvKgg==}
+    engines: {node: '>=12.22.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /react-icons/4.4.0_react@18.2.0:
@@ -6320,6 +6389,10 @@ packages:
       is-number: 7.0.0
     dev: true
 
+  /toposort/2.0.2:
+    resolution: {integrity: sha512-0a5EOkAUp8D4moMi2W8ZF8jcga7BgZd91O/yabJCFY8az+XSzeGyTKs0Aoo897iV1Nj6guFq8orWDS96z91oGg==}
+    dev: false
+
   /tosource/1.0.0:
     resolution: {integrity: sha512-N6g8eQ1eerw6Y1pBhdgkubWIiPFwXa2POSUrlL8jth5CyyEWNWzoGKRkO3CaO7Jx27hlJP54muB3btIAbx4MPg==}
     engines: {node: '>=0.4.0'}
@@ -7029,6 +7102,19 @@ packages:
       buffer-crc32: 0.2.13
       fd-slicer: 1.1.0
     dev: true
+
+  /yup/0.32.11:
+    resolution: {integrity: sha512-Z2Fe1bn+eLstG8DRR6FTavGD+MeAwyfmouhHsIUgaADz8jvFKbO/fXc2trJKZg+5EBjh4gGm3iU/t3onKlXHIg==}
+    engines: {node: '>=10'}
+    dependencies:
+      '@babel/runtime': 7.18.6
+      '@types/lodash': 4.14.182
+      lodash: 4.17.21
+      lodash-es: 4.17.21
+      nanoclone: 0.2.1
+      property-expr: 2.0.5
+      toposort: 2.0.2
+    dev: false
 
   /zip-dir/2.0.0:
     resolution: {integrity: sha512-uhlsJZWz26FLYXOD6WVuq+fIcZ3aBPGo/cFdiLlv3KNwpa52IF3ISV8fLhQLiqVu5No3VhlqlgthN6gehil1Dg==}

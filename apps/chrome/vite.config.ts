@@ -45,7 +45,7 @@ export const sharedConfig: UserConfig = {
   optimizeDeps: {
     include: ['webextension-polyfill'],
     esbuildOptions: {
-      target: 'es2020'
+      target: 'es2020',
     },
   },
 };

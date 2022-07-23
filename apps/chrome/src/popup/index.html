@@ -7,6 +7,13 @@
   </head>
   <body>
     <div id="root"></div>
+    <script type="module">
+      window.global = globalThis;
+    </script>
+    <script type="module">
+      import { Buffer } from 'buffer';
+      window.Buffer = Buffer;
+    </script>
     <script type="module" src="./main.tsx"></script>
   </body>
 </html>
