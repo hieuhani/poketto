@@ -19,6 +19,7 @@ export const App: React.FunctionComponent = () => {
             height: '100vh',
             display: 'grid',
             gridTemplateRows: '1fr 60px',
+            backgroundColor: 'grey.900',
           }}
         >
           <TabsNavigation

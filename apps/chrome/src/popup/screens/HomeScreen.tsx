@@ -1,9 +1,11 @@
 import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 import { OverviewCard } from '../components/OverviewCard';
+import { TokenRow } from '../components/TokenRow';
 
 export const HomeScreen: React.FunctionComponent = () => (
-  <Box paddingX={2}>
-    <Box paddingY={2}>
+  <Stack paddingX={2} spacing={2} paddingTop={2}>
+    <Box>
       <Box
         sx={{
           backgroundColor: 'grey.200',
@@ -14,5 +16,8 @@ export const HomeScreen: React.FunctionComponent = () => (
       />
     </Box>
     <OverviewCard />
-  </Box>
+
+    <TokenRow />
+    <TokenRow />
+  </Stack>
 );

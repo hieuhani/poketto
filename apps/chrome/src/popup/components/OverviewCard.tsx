@@ -2,13 +2,19 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
-import { IoChevronForwardOutline, IoSendOutline } from 'react-icons/io5';
+import {
+  IoChevronForwardOutline,
+  IoSendOutline,
+  IoEyeOffOutline,
+} from 'react-icons/io5';
 
 export const OverviewCard: React.FunctionComponent = () => (
   <Paper
     sx={{
-      background: 'linear-gradient(223.61deg, #547AFF 0%, #413DFF 100%)',
+      background:
+        'linear-gradient(to right bottom, rgb(0, 127, 255), rgb(0, 89, 178) 120%)',
       borderRadius: 4,
+      overflow: 'hidden',
     }}
   >
     <ButtonBase
@@ -23,8 +29,11 @@ export const OverviewCard: React.FunctionComponent = () => (
       }}
     >
       <Box marginRight="auto">
-        <Typography>Account balance</Typography>
-        <Typography variant="h5">$185</Typography>
+        <Box display="flex" alignItems="center">
+          <Typography marginRight={1}>Account balance</Typography>
+          <IoEyeOffOutline size={18} />
+        </Box>
+        <Typography variant="h5">$186.98</Typography>
       </Box>
       <IoChevronForwardOutline size={24} />
     </ButtonBase>
@@ -32,14 +41,14 @@ export const OverviewCard: React.FunctionComponent = () => (
       <ButtonBase
         sx={{ paddingY: 2, display: 'flex', flexDirection: 'column' }}
       >
-        <IoSendOutline size={24} />
-        Deposit
+        <IoSendOutline size={26} />
+        <Typography>Deposit</Typography>
       </ButtonBase>
       <ButtonBase
         sx={{ paddingY: 2, display: 'flex', flexDirection: 'column' }}
       >
-        <IoSendOutline size={24} />
-        Send
+        <IoSendOutline size={26} />
+        <Typography>Send</Typography>
       </ButtonBase>
     </Box>
   </Paper>
