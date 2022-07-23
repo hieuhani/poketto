@@ -2,11 +2,7 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
-import {
-  IoChevronForwardOutline,
-  IoSendOutline,
-  IoEyeOffOutline,
-} from 'react-icons/io5';
+import { IoSendOutline, IoEyeOffOutline } from 'react-icons/io5';
 
 export const OverviewCard: React.FunctionComponent = () => (
   <Paper
@@ -35,7 +31,6 @@ export const OverviewCard: React.FunctionComponent = () => (
         </Box>
         <Typography variant="h5">$186.98</Typography>
       </Box>
-      <IoChevronForwardOutline size={24} />
     </ButtonBase>
     <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
       <ButtonBase
