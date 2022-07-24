@@ -2,14 +2,21 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import ButtonBase from '@mui/material/ButtonBase';
 import Menu from '@mui/material/Menu';
+import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 import { IoWalletOutline, IoAddOutline } from 'react-icons/io5';
 import { useState } from 'react';
 import ListItemText from '@mui/material/ListItemText';
+import { makeShortAddress } from '../helpers/address';
 
-export const WalletSwitcher: React.FunctionComponent = () => {
+interface Props {
+  activeAddress: string;
+}
+export const WalletSwitcher: React.FunctionComponent<Props> = ({
+  activeAddress,
+}) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -32,10 +39,22 @@ export const WalletSwitcher: React.FunctionComponent = () => {
           paddingLeft: 2,
           paddingRight: 1,
           position: 'relative',
+          textAlign: 'right',
         }}
         borderRadius={2}
       >
-        <Typography>0xsdf...da9d</Typography>
+        <Box>
+          <Typography
+            variant="subtitle2"
+            fontWeight="700"
+            textTransform="uppercase"
+          >
+            Devnet
+          </Typography>
+          <Typography lineHeight={1} title={activeAddress}>
+            {makeShortAddress(activeAddress)}
+          </Typography>
+        </Box>
         <IoWalletOutline size={26} />
       </Stack>
       <Menu
@@ -50,12 +69,7 @@ export const WalletSwitcher: React.FunctionComponent = () => {
             overflow: 'visible',
             filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
             mt: 1.5,
-            '& .MuiAvatar-root': {
-              width: 32,
-              height: 32,
-              ml: -0.5,
-              mr: 1,
-            },
+
             '&:before': {
               content: '""',
               display: 'block',

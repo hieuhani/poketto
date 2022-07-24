@@ -1,27 +1,25 @@
-import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
+import { useWallet } from '@poketto/core';
 import { OverviewCard } from '../components/OverviewCard';
 import { TokenRow } from '../components/TokenRow';
-import { WalletSwitcher } from '../components/WalletSwitcher';
+import { WalletHeader } from '../components/WalletHeader';
 
-export const HomeScreen: React.FunctionComponent = () => (
-  <Stack paddingX={2} spacing={2} paddingTop={2}>
-    <Box display="flex" alignItems="center" justifyContent="space-between">
-      <Box
-        sx={{
-          backgroundColor: 'grey.200',
-          width: '44px',
-          height: '44px',
-          borderRadius: '50%',
-        }}
+export const HomeScreen: React.FunctionComponent = () => {
+  const { account, state, coins } = useWallet();
+
+  return (
+    <Stack paddingX={2} paddingTop={2} spacing={2}>
+      <WalletHeader
+        loading={state.startsWith('account:pending')}
+        activeAddress={account?.address().hex()}
       />
-      <WalletSwitcher />
-    </Box>
-    <OverviewCard />
+      <OverviewCard />
 
-    <TokenRow />
-    <TokenRow />
-    <TokenRow />
-    <TokenRow />
-  </Stack>
-);
+      <Stack spacing={2}>
+        {coins.map((coin) => (
+          <TokenRow key={coin.name} coin={coin} />
+        ))}
+      </Stack>
+    </Stack>
+  );
+};

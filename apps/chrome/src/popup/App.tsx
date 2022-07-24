@@ -20,6 +20,8 @@ export const App: React.FunctionComponent = () => {
         display: 'grid',
         gridTemplateRows: '1fr 60px',
         backgroundColor: 'grey.900',
+        position: 'relative',
+        overflow: 'hidden',
       }}
     >
       {authenticated ? (
@@ -30,7 +32,11 @@ export const App: React.FunctionComponent = () => {
             { route: 'activity', screen: <ActivityScreen /> },
             { route: 'setting', screen: <SettingScreen /> },
           ]}
-          navigation={<BottomTabs />}
+          navigation={
+            <Box position="absolute" bottom={0} left={0} right={0}>
+              <BottomTabs />
+            </Box>
+          }
         />
       ) : (
         <StackNavigation

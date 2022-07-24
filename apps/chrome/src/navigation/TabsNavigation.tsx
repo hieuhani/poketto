@@ -1,3 +1,4 @@
+import Box from '@mui/material/Box';
 import {
   createContext,
   ReactNode,
@@ -62,7 +63,9 @@ export const TabsNavigation: React.FunctionComponent<Props> = ({
         activeRoute: routes[activeIndex].route,
       }}
     >
-      {routes[activeIndex].screen}
+      <Box flex={1} sx={{ overflowY: 'auto' }}>
+        {routes[activeIndex].screen}
+      </Box>
       {navigation}
     </NavigationContext.Provider>
   );

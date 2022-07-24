@@ -27,9 +27,7 @@ export async function createAccount({
   const secretKey = keypair.secretKey;
   const secretKeyHex64 = Buffer.from(secretKey).toString('hex').slice(0, 64);
   const address = Buffer.from(keypair.publicKey).toString('hex');
-
   const account = new AptosAccount(secretKey, address);
-
   const encryptedMnemonic = await encrypt(password, mnemonic);
   const encryptedPrivateKey = await encrypt(password, secretKeyHex64);
 
