@@ -19,7 +19,10 @@ type WalletState =
   | 'account:pending:loadAccount'
   | 'account:fulfilled:noAccount'
   | 'account:fulfilled:activeAccount'
-  | 'account:rejected:createAccount';
+  | 'account:rejected:createAccount'
+  | 'account:pending:faucetFundAccount'
+  | 'account:fulfilled:faucetFundAccount'
+  | 'account:rejected:faucetFundAccount';
 
 interface WalletContextState {
   account: AptosAccount | null;
@@ -29,6 +32,7 @@ interface WalletContextState {
   resources: Types.AccountResource[];
   coins: Coin[];
   createNewAccount: (password: string) => void;
+  fundAccountWithFaucet: (amount: number) => void;
 }
 
 const WalletContext = createContext<WalletContextState>({
@@ -39,6 +43,9 @@ const WalletContext = createContext<WalletContextState>({
   resources: [],
   coins: [],
   createNewAccount: (password: string) => {
+    throw new Error('unimplemented');
+  },
+  fundAccountWithFaucet: (amount: number) => {
     throw new Error('unimplemented');
   },
 });
@@ -116,6 +123,19 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
       setState('account:rejected:createAccount');
     }
   };
+
+  const fundAccountWithFaucet = async (amount: number) => {
+    if (stateAccount) {
+      try {
+        setState('account:pending:faucetFundAccount');
+        await faucetClient.fundAccount(stateAccount.address(), amount);
+        setState('account:fulfilled:faucetFundAccount');
+      } catch (e) {
+        console.error(e);
+        setState('account:rejected:faucetFundAccount');
+      }
+    }
+  };
   return (
     <WalletContext.Provider
       value={{
@@ -126,6 +146,7 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
         resources,
         coins,
         createNewAccount,
+        fundAccountWithFaucet,
       }}
     >
       {children}
