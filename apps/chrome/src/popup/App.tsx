@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 import { StackNavigation, TabsNavigation } from '~/navigation';
-import { HomeScreen } from './screens/HomeScreen';
+import { Home } from './screens/home/Home';
 import { CollectibleScreen } from './screens/CollectibleScreen';
 import { ActivityScreen } from './screens/ActivityScreen';
 import { SettingScreen } from './screens/SettingScreen';
@@ -40,7 +40,7 @@ export const App: React.FunctionComponent = () => {
       {authenticated ? (
         <TabsNavigation
           routes={[
-            { route: 'home', screen: <HomeScreen /> },
+            { route: 'home', screen: <Home /> },
             { route: 'collectible', screen: <CollectibleScreen /> },
             { route: 'activity', screen: <ActivityScreen /> },
             { route: 'setting', screen: <SettingScreen /> },

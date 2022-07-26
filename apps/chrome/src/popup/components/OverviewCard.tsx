@@ -6,8 +6,12 @@ import { IoEyeOffOutline } from 'react-icons/io5';
 
 interface Props {
   balance: number;
+  goToTransferScreen: () => void;
 }
-export const OverviewCard: React.FunctionComponent<Props> = ({ balance }) => (
+export const OverviewCard: React.FunctionComponent<Props> = ({
+  balance,
+  goToTransferScreen,
+}) => (
   <Paper
     sx={{
       background:
@@ -74,6 +78,7 @@ export const OverviewCard: React.FunctionComponent<Props> = ({ balance }) => (
       </ButtonBase>
       <ButtonBase
         sx={{ paddingY: 2, display: 'flex', flexDirection: 'column' }}
+        onClick={goToTransferScreen}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
