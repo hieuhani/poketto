@@ -94,7 +94,7 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
       const name = segments[segments.length - 1];
       return {
         name: name.substring(0, name.length - 1),
-        balance: Number(resource.data.coin.value),
+        balance: Number((resource.data as any).coin.value),
       };
     });
 
@@ -136,6 +136,7 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
       }
     }
   };
+
   return (
     <WalletContext.Provider
       value={{

@@ -11,6 +11,7 @@ import { useWallet } from '@poketto/core';
 export const App: React.FunctionComponent = () => {
   const { account, state } = useWallet();
   const authenticated = account !== null && !state.startsWith('pending:');
+
   return (
     <Box
       sx={{
@@ -24,6 +25,18 @@ export const App: React.FunctionComponent = () => {
         overflow: 'hidden',
       }}
     >
+      <Box
+        width={272}
+        height={272}
+        sx={{
+          position: 'absolute',
+          left: -130,
+          top: -92,
+          borderRadius: 136,
+          filter: 'blur(200px)',
+          backgroundColor: '#1e88e5',
+        }}
+      />
       {authenticated ? (
         <TabsNavigation
           routes={[

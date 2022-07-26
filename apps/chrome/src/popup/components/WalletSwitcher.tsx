@@ -6,10 +6,11 @@ import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
-import { IoWalletOutline, IoAddOutline } from 'react-icons/io5';
-import { useState } from 'react';
+import { IoAddOutline } from 'react-icons/io5';
+import { useEffect, useRef, useState } from 'react';
 import ListItemText from '@mui/material/ListItemText';
 import { makeShortAddress } from '../helpers/address';
+import { renderIcon } from '../helpers/blockies';
 
 interface Props {
   activeAddress: string;
@@ -22,9 +23,23 @@ export const WalletSwitcher: React.FunctionComponent<Props> = ({
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
+  const canvas = useRef<HTMLCanvasElement | null>(null);
   const handleClose = () => {
     setAnchorEl(null);
   };
+  useEffect(() => {
+    renderIcon(
+      {
+        seed: activeAddress,
+        color: '#dfe',
+        bgcolor: '#aaa', // choose a different background color, default: random
+        size: 8,
+        scale: 5,
+        spotcolor: '#000',
+      },
+      canvas.current
+    );
+  }, [activeAddress]);
 
   return (
     <>
@@ -49,13 +64,22 @@ export const WalletSwitcher: React.FunctionComponent<Props> = ({
             fontWeight="700"
             textTransform="uppercase"
           >
-            Devnet
+            Wallet 1
           </Typography>
           <Typography lineHeight={1} title={activeAddress}>
             {makeShortAddress(activeAddress)}
           </Typography>
         </Box>
-        <IoWalletOutline size={26} />
+        <Box
+          borderRadius="50%"
+          height={40}
+          width={40}
+          overflow="hidden"
+          border="2px solid"
+          borderColor="#1976d2"
+        >
+          <canvas ref={canvas} height="40" width="40" />
+        </Box>
       </Stack>
       <Menu
         anchorEl={anchorEl}
