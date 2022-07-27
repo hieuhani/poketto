@@ -14,7 +14,8 @@ import { NetworkConfig, networkConfigs, NetworkProfile } from '../network';
 import { useAccountResources } from './hooks';
 import { Coin } from '../resource';
 
-type WalletState =
+export type TransactionPayload = Types.TransactionPayload;
+export type WalletState =
   | 'account:pending:createAccount'
   | 'account:pending:loadAccount'
   | 'account:fulfilled:noAccount'
@@ -24,7 +25,7 @@ type WalletState =
   | 'account:fulfilled:faucetFundAccount'
   | 'account:rejected:faucetFundAccount';
 
-interface WalletContextState {
+export interface WalletContextState {
   account: AptosAccount | null;
   state: WalletState;
   network: NetworkConfig;
@@ -33,6 +34,10 @@ interface WalletContextState {
   coins: Coin[];
   createNewAccount: (password: string) => void;
   fundAccountWithFaucet: (amount: number) => void;
+  submitTransaction: (
+    payload: TransactionPayload,
+    fromAccount?: AptosAccount
+  ) => Promise<string>;
 }
 
 const WalletContext = createContext<WalletContextState>({
@@ -46,6 +51,12 @@ const WalletContext = createContext<WalletContextState>({
     throw new Error('unimplemented');
   },
   fundAccountWithFaucet: (amount: number) => {
+    throw new Error('unimplemented');
+  },
+  submitTransaction: (
+    payload: Types.TransactionPayload,
+    fromAccount?: AptosAccount
+  ) => {
     throw new Error('unimplemented');
   },
 });
@@ -137,6 +148,28 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
     }
   };
 
+  const submitTransaction = async (
+    payload: Types.TransactionPayload,
+    fromAccount?: AptosAccount
+  ): Promise<string> => {
+    const account = fromAccount || stateAccount;
+    if (!account) {
+      throw new Error('Undefined account');
+    }
+
+    const txnRequest = await aptosClient.generateTransaction(
+      account.address(),
+      payload
+    );
+    const signedTxn = await aptosClient.signTransaction(account, txnRequest);
+    console.log({ signedTxn });
+    const transactionRes = await aptosClient.submitTransaction(signedTxn);
+    console.log({ transactionRes });
+    await aptosClient.waitForTransaction(transactionRes.hash);
+    console.log('xxx');
+    return transactionRes.hash;
+  };
+
   return (
     <WalletContext.Provider
       value={{
@@ -148,6 +181,7 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
         coins,
         createNewAccount,
         fundAccountWithFaucet,
+        submitTransaction,
       }}
     >
       {children}

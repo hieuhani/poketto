@@ -26,6 +26,10 @@ export const useCheckAddress = () => {
   const { aptosClient } = useWallet();
   const [status, setStatus] = useState<CheckAddressStatus>('initial');
   const check = async (address: string): Promise<string> => {
+    if (!address) {
+      setStatus('initial');
+      return 'initial';
+    }
     setStatus('checking');
     try {
       const account = await aptosClient.getAccount(address);
