@@ -26,7 +26,7 @@ export async function createAccount({
   const keypair = sign.keyPair.fromSeed(seed);
   const secretKey = keypair.secretKey;
   const secretKeyHex64 = Buffer.from(secretKey).toString('hex').slice(0, 64);
-  const address = Buffer.from(keypair.publicKey).toString('hex');
+  const address = keypair.publicKey.Hex;
   const account = new AptosAccount(secretKey, address);
   const encryptedMnemonic = await encrypt(password, mnemonic);
   const encryptedPrivateKey = await encrypt(password, secretKeyHex64);
@@ -39,7 +39,7 @@ export async function loadAccount(password: string, encryptedMnemonic: string) {
   const seed = generateAccountSeed(mnemonic);
   const keypair = sign.keyPair.fromSeed(seed);
 
-  const address = Buffer.from(keypair.publicKey).toString('hex');
+  const address = keypair.publicKey.Hex;
   return AptosAccount.fromAptosAccountObject({
     address,
     privateKeyHex: HexString.fromUint8Array(

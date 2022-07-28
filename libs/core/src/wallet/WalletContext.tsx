@@ -156,17 +156,14 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
     if (!account) {
       throw new Error('Undefined account');
     }
-
     const txnRequest = await aptosClient.generateTransaction(
       account.address(),
       payload
     );
+
     const signedTxn = await aptosClient.signTransaction(account, txnRequest);
-    console.log({ signedTxn });
     const transactionRes = await aptosClient.submitTransaction(signedTxn);
-    console.log({ transactionRes });
     await aptosClient.waitForTransaction(transactionRes.hash);
-    console.log('xxx');
     return transactionRes.hash;
   };
 

@@ -41,7 +41,6 @@ export interface TransferFormState {
 export const TransferScreen: React.FunctionComponent = () => {
   const { goBack } = useStackNavigation();
   const { account, state, resources, coins, submitTransaction } = useWallet();
-  console.log(resources);
   const balance = coins.reduce((acc, coin) => acc + coin.balance, 0);
   const { check: checkAddress, status: addressStatus } = useCheckAddress();
   const { register, watch, handleSubmit } = useForm({
