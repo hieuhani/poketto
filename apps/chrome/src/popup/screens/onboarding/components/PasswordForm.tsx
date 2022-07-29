@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import Button from '@mui/material/Button';
-import { Input } from '~/ui/Input';
+import { Input } from '../../../../ui/Input';
 
 const formSchema = Yup.object().shape({
   password: Yup.string()
@@ -39,7 +39,7 @@ export const PasswordForm: React.FunctionComponent<Props> = ({
       confirmPassword: '',
     },
     resolver: yupResolver(formSchema),
-    mode: 'onBlur',
+    mode: 'onChange',
   });
   const onFormSubmit = (data: PasswordFormState) => {
     onSubmit(data);

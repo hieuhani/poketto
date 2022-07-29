@@ -8,10 +8,10 @@ import Stack from '@mui/material/Stack';
 import MuiLink from '@mui/material/Link';
 import { useStackNavigation } from '../../../navigation';
 import { useWallet, useCheckAddress, TransactionPayload } from '@poketto/core';
-import { makeShortAddress } from '~/popup/helpers/address';
+import { makeShortAddress } from '../../helpers/address';
 import InputBase from '@mui/material/InputBase';
 import { useForm } from 'react-hook-form';
-import { useDebounce } from '~/popup/hooks/use-debounce';
+import { useDebounce } from '../../hooks/use-debounce';
 import { useEffect, useMemo } from 'react';
 import Button from '@mui/material/Button';
 

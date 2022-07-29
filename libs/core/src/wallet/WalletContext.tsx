@@ -32,12 +32,14 @@ export interface WalletContextState {
   aptosClient: AptosClient;
   resources: Types.AccountResource[];
   coins: Coin[];
-  createNewAccount: (password: string) => void;
+  oneTimeMnemonic: string | null;
+  createNewAccount: (password: string) => Promise<void>;
   fundAccountWithFaucet: (amount: number) => void;
   submitTransaction: (
     payload: TransactionPayload,
     fromAccount?: AptosAccount
   ) => Promise<string>;
+  clearOneTimeMnemonic: () => void;
 }
 
 const WalletContext = createContext<WalletContextState>({
@@ -47,6 +49,7 @@ const WalletContext = createContext<WalletContextState>({
   aptosClient: new AptosClient(networkConfigs.devnet.aptos),
   resources: [],
   coins: [],
+  oneTimeMnemonic: null,
   createNewAccount: (password: string) => {
     throw new Error('unimplemented');
   },
@@ -59,12 +62,16 @@ const WalletContext = createContext<WalletContextState>({
   ) => {
     throw new Error('unimplemented');
   },
+  clearOneTimeMnemonic: () => {
+    throw new Error('unimplemented');
+  },
 });
 
 export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
   children,
 }) => {
   const [stateAccount, setAccount] = useState<AptosAccount | null>(null);
+  const [oneTimeMnemonic, setOneTimeMnemonic] = useState<string | null>(null);
   // const [password, setPassword] = useState('');
   const [state, setState] = useState<WalletState>(
     'account:pending:loadAccount'
@@ -128,6 +135,7 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
       await faucetClient.fundAccount(account.address(), 0);
 
       setAccount(account);
+      setOneTimeMnemonic(mnemonic);
       setState('account:fulfilled:activeAccount');
     } catch (e) {
       console.error(e);
@@ -146,6 +154,9 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
         setState('account:rejected:faucetFundAccount');
       }
     }
+  };
+  const clearOneTimeMnemonic = () => {
+    setOneTimeMnemonic(null);
   };
 
   const submitTransaction = async (
@@ -176,9 +187,11 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
         aptosClient,
         resources,
         coins,
+        oneTimeMnemonic,
         createNewAccount,
         fundAccountWithFaucet,
         submitTransaction,
+        clearOneTimeMnemonic,
       }}
     >
       {children}

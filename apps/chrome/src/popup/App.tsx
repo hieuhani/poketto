@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box';
-import { StackNavigation, TabsNavigation } from '~/navigation';
+import { StackNavigation, TabsNavigation } from '../navigation';
 import { Home } from './screens/home/Home';
 import { CollectibleScreen } from './screens/CollectibleScreen';
 import { ActivityScreen } from './screens/ActivityScreen';
@@ -7,15 +7,17 @@ import { SettingScreen } from './screens/SettingScreen';
 import { BottomTabs } from './components/BottomTabs';
 import { WelcomeScreen, NewWalletScreen } from './screens/onboarding';
 import { useWallet } from '@poketto/core';
+import { RevealMnemonicScreen } from './screens/onboarding/RevealMnemonicScreen';
 
 export const App: React.FunctionComponent = () => {
-  const { account, state } = useWallet();
-  const authenticated = account !== null && !state.startsWith('pending:');
+  const { account, state, oneTimeMnemonic } = useWallet();
+  const authenticated =
+    account !== null && !oneTimeMnemonic && !state.startsWith('pending:');
 
   return (
     <Box
       sx={{
-        width: 420,
+        maxWidth: 420,
         marginX: 'auto',
         height: '100vh',
         display: 'grid',
@@ -56,6 +58,7 @@ export const App: React.FunctionComponent = () => {
           routes={[
             { route: 'welcome', screen: <WelcomeScreen /> },
             { route: 'new_wallet', screen: <NewWalletScreen /> },
+            { route: 'reveal_mnemonic', screen: <RevealMnemonicScreen /> },
           ]}
         />
       )}

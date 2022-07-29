@@ -1,6 +1,6 @@
 import Stack from '@mui/material/Stack';
 import { useWallet } from '@poketto/core';
-import { useStackNavigation } from '~/navigation';
+import { useStackNavigation } from '../../../navigation';
 import { OverviewCard } from '../../components/OverviewCard';
 import { TokenRow } from '../../components/TokenRow';
 import { WalletHeader } from '../../components/WalletHeader';

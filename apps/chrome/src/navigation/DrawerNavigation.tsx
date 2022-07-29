@@ -46,7 +46,7 @@ export const DrawerNavigation: React.FunctionComponent<
         open={routes[activeIndex] !== undefined}
         onClose={() => setActiveIndex(-1)}
         PaperProps={{
-          sx: { width: '420px', margin: '0 auto' },
+          sx: { maxdWidth: '420px', margin: '0 auto' },
         }}
       >
         {routes[activeIndex] && routes[activeIndex].screen}

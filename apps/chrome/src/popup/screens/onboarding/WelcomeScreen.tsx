@@ -2,7 +2,7 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { useStackNavigation } from '~/navigation';
+import { useStackNavigation } from '../../../navigation';
 
 export const WelcomeScreen: React.FunctionComponent = () => {
   const { navigate } = useStackNavigation();

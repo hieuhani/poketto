@@ -1,4 +1,4 @@
-import { useStackNavigation } from '~/navigation';
+import { useStackNavigation } from '../../../navigation';
 import { IoArrowBackOutline } from 'react-icons/io5';
 import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
@@ -9,11 +9,12 @@ import { useWallet } from '@poketto/core';
 import { PasswordForm, PasswordFormState } from './components/PasswordForm';
 
 export const NewWalletScreen: React.FunctionComponent = () => {
-  const { goBack } = useStackNavigation();
+  const { goBack, navigate } = useStackNavigation();
   const { createNewAccount, state } = useWallet();
 
   const handlePasswordSubmitted = async (form: PasswordFormState) => {
-    createNewAccount(form.password);
+    await createNewAccount(form.password);
+    navigate('reveal_mnemonic');
   };
 
   return (

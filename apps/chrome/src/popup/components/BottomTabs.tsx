@@ -6,7 +6,7 @@ import {
   IoAlbumsOutline,
   IoTicketOutline,
 } from 'react-icons/io5';
-import { useTabsNavigation } from '~/navigation';
+import { useTabsNavigation } from '../../navigation';
 
 export const BottomTabs: React.FunctionComponent = () => {
   const { activeRoute, navigate } = useTabsNavigation();

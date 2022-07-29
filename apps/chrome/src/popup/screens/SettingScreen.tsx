@@ -7,7 +7,7 @@ import Divider from '@mui/material/Divider';
 import { SettingGroup } from '../components/SettingGroup';
 import { SettingItem } from '../components/SettingItem';
 import { TitleHeader } from '../components/TitleHeader';
-import { DrawerNavigation } from '~/navigation';
+import { DrawerNavigation } from '../../navigation';
 import { NetworksView } from './settings/NetworksView';
 import { useWallet } from '@poketto/core';
 
