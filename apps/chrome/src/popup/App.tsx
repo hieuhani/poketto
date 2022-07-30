@@ -39,29 +39,31 @@ export const App: React.FunctionComponent = () => {
           backgroundColor: '#1e88e5',
         }}
       />
-      {authenticated ? (
-        <TabsNavigation
-          routes={[
-            { route: 'home', screen: <Home /> },
-            { route: 'collectible', screen: <CollectibleScreen /> },
-            { route: 'activity', screen: <ActivityScreen /> },
-            { route: 'setting', screen: <SettingScreen /> },
-          ]}
-          navigation={
-            <Box position="absolute" bottom={0} left={0} right={0}>
-              <BottomTabs />
-            </Box>
-          }
-        />
-      ) : (
-        <StackNavigation
-          routes={[
-            { route: 'welcome', screen: <WelcomeScreen /> },
-            { route: 'new_wallet', screen: <NewWalletScreen /> },
-            { route: 'reveal_mnemonic', screen: <RevealMnemonicScreen /> },
-          ]}
-        />
-      )}
+      <Box zIndex={1000}>
+        {authenticated ? (
+          <TabsNavigation
+            routes={[
+              { route: 'home', screen: <Home /> },
+              { route: 'collectible', screen: <CollectibleScreen /> },
+              { route: 'activity', screen: <ActivityScreen /> },
+              { route: 'setting', screen: <SettingScreen /> },
+            ]}
+            navigation={
+              <Box position="absolute" bottom={0} left={0} right={0}>
+                <BottomTabs />
+              </Box>
+            }
+          />
+        ) : (
+          <StackNavigation
+            routes={[
+              { route: 'welcome', screen: <WelcomeScreen /> },
+              { route: 'new_wallet', screen: <NewWalletScreen /> },
+              { route: 'reveal_mnemonic', screen: <RevealMnemonicScreen /> },
+            ]}
+          />
+        )}
+      </Box>
     </Box>
   );
 };

@@ -1,6 +1,7 @@
 import { PropsWithChildren } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import { HotToast } from '../ui/HotToast';
 
 const darkTheme = createTheme({
   palette: {
@@ -14,6 +15,7 @@ export const Bootstrap: React.FunctionComponent<PropsWithChildren> = ({
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
+      <HotToast />
       {children}
     </ThemeProvider>
   );

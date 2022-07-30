@@ -14,6 +14,7 @@ import { useForm } from 'react-hook-form';
 import { useDebounce } from '../../hooks/use-debounce';
 import { useEffect, useMemo } from 'react';
 import Button from '@mui/material/Button';
+import toast from 'react-hot-toast';
 
 export const STATIC_GAS_AMOUNT = 150;
 
@@ -91,14 +92,20 @@ export const TransferScreen: React.FunctionComponent = () => {
   }, [addressStatus]);
 
   const onFormSubmit = async (data: TransferFormState) => {
-    const payload: TransactionPayload = {
-      arguments: [data.toAddress, data.amount],
-      function: '0x1::coin::transfer',
-      type: 'script_function_payload',
-      type_arguments: ['0x1::test_coin::TestCoin'],
-    };
-    const txtHash = await submitTransaction(payload);
-    console.log(txtHash);
+    try {
+      const payload: TransactionPayload = {
+        arguments: [data.toAddress, data.amount],
+        function: '0x1::coin::transfer',
+        type: 'script_function_payload',
+        type_arguments: ['0x1::aptos_coin::AptosCoin'],
+      };
+      const txtHash = await submitTransaction(payload);
+
+      console.log(txtHash);
+      toast.success('Transaction sent');
+    } catch (e: any) {
+      toast.error(e.response.data.message);
+    }
   };
 
   return (
@@ -196,7 +203,7 @@ export const TransferScreen: React.FunctionComponent = () => {
           >
             Gas fee
           </Typography>
-          <Typography>{STATIC_GAS_AMOUNT} TestCoin</Typography>
+          <Typography>{STATIC_GAS_AMOUNT} AptosCoin</Typography>
         </Paper>
         <Button
           variant="contained"

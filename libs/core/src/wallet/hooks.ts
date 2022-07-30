@@ -4,7 +4,8 @@ import { useWallet } from './WalletContext';
 
 export const useAccountResources = (
   client: AptosClient,
-  account: AptosAccount | null
+  account: AptosAccount | null,
+  polling = false
 ) => {
   const [resources, setResources] = useState<Types.AccountResource[]>([]);
   const fetchResources = async (address: HexString) => {

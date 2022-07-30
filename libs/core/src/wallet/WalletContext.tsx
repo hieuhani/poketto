@@ -15,6 +15,7 @@ import { useAccountResources } from './hooks';
 import { Coin } from '../resource';
 
 export type TransactionPayload = Types.TransactionPayload;
+export type AccountResource = Types.AccountResource;
 export type WalletState =
   | 'account:pending:createAccount'
   | 'account:pending:loadAccount'

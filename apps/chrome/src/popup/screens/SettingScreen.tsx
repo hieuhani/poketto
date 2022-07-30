@@ -1,8 +1,8 @@
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import { FaFaucet } from 'react-icons/fa';
-import { IoSettingsSharp } from 'react-icons/io5';
-import { green, orange } from '@mui/material/colors';
+import { IoSettingsSharp, IoApps } from 'react-icons/io5';
+import { blue, green, orange } from '@mui/material/colors';
 import Divider from '@mui/material/Divider';
 import { SettingGroup } from '../components/SettingGroup';
 import { SettingItem } from '../components/SettingItem';
@@ -29,7 +29,7 @@ export const SettingScreen: React.FunctionComponent = () => {
             <SettingGroup>
               <SettingItem
                 title="Faucet"
-                description="Get your +5000 TestCoin"
+                description="Get your +5000 AptosCoin"
                 icon={FaFaucet}
                 iconBgColor={green[600]}
                 onClick={() => fundAccountWithFaucet(5000)}
@@ -42,6 +42,14 @@ export const SettingScreen: React.FunctionComponent = () => {
                 icon={IoSettingsSharp}
                 iconBgColor={orange[600]}
                 onClick={() => navigate('networks')}
+              />
+            </SettingGroup>
+            <SettingGroup>
+              <SettingItem
+                title="Trusted Apps"
+                description="Manage trusted apps"
+                icon={IoApps}
+                iconBgColor={blue[600]}
               />
             </SettingGroup>
           </Stack>
