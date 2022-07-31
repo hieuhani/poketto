@@ -13,8 +13,8 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           vercel-args: '--prod'
-          vercel-org-id: ${{ secrets.ORG_ID }}
           vercel-project-id: ${{ secrets.PROJECT_ID }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
       - name: preview-url
         run: |
           echo ${{ steps.vercel-action.outputs.preview-url }}
