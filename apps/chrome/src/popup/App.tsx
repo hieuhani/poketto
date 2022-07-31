@@ -8,11 +8,14 @@ import { BottomTabs } from './components/BottomTabs';
 import { WelcomeScreen, NewWalletScreen } from './screens/onboarding';
 import { useWallet } from '@poketto/core';
 import { RevealMnemonicScreen } from './screens/onboarding/RevealMnemonicScreen';
+import { PasswordResumeScreen } from './screens/onboarding/PasswordResumeScreen';
 
 export const App: React.FunctionComponent = () => {
-  const { account, state, oneTimeMnemonic } = useWallet();
+  const { account, state, oneTimeMnemonic, password } = useWallet();
   const authenticated =
-    account !== null && !oneTimeMnemonic && !state.startsWith('pending:');
+    account !== null &&
+    !oneTimeMnemonic &&
+    !state.startsWith('account:pending:');
 
   return (
     <Box
@@ -40,7 +43,9 @@ export const App: React.FunctionComponent = () => {
         }}
       />
       <Box zIndex={1000}>
-        {authenticated ? (
+        {state === 'account:pending:loadAccount' && !password ? (
+          <PasswordResumeScreen />
+        ) : authenticated ? (
           <TabsNavigation
             routes={[
               { route: 'home', screen: <Home /> },

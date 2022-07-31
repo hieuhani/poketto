@@ -34,6 +34,9 @@ export interface WalletContextState {
   resources: Types.AccountResource[];
   coins: Coin[];
   oneTimeMnemonic: string | null;
+  password: string;
+  passwordError: string | null;
+  updatePassword: (password: string) => void;
   createNewAccount: (password: string) => Promise<void>;
   fundAccountWithFaucet: (amount: number) => void;
   submitTransaction: (
@@ -50,7 +53,10 @@ const WalletContext = createContext<WalletContextState>({
   aptosClient: new AptosClient(networkConfigs.devnet.aptos),
   resources: [],
   coins: [],
+  password: '',
+  passwordError: null,
   oneTimeMnemonic: null,
+  updatePassword: (password: string) => {},
   createNewAccount: (password: string) => {
     throw new Error('unimplemented');
   },
@@ -73,7 +79,8 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
 }) => {
   const [stateAccount, setAccount] = useState<AptosAccount | null>(null);
   const [oneTimeMnemonic, setOneTimeMnemonic] = useState<string | null>(null);
-  // const [password, setPassword] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState(null);
   const [state, setState] = useState<WalletState>(
     'account:pending:loadAccount'
   );
@@ -93,15 +100,22 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
     return new AptosClient(network.aptos);
   }, [network]);
 
-  const loadWallet = async () => {
+  const loadWallet = async (password: string) => {
     const wallet = await readWallet();
     if (!wallet) {
       setState('account:fulfilled:noAccount');
     } else {
-      const { encryptedMnemonic } = wallet;
-      const account = await loadAccount('password', encryptedMnemonic);
-      setAccount(account);
-      setState('account:fulfilled:activeAccount');
+      if (password) {
+        const { encryptedMnemonic } = wallet;
+        try {
+          const account = await loadAccount(password, encryptedMnemonic);
+          setAccount(account);
+          setState('account:fulfilled:activeAccount');
+        } catch (e: any) {
+          setPassword('');
+          setPasswordError(e.message);
+        }
+      }
     }
   };
 
@@ -118,8 +132,8 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
     });
 
   useEffect(() => {
-    loadWallet();
-  }, []);
+    loadWallet(password);
+  }, [password]);
 
   const createNewAccount = async (password: string) => {
     try {
@@ -179,6 +193,11 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
     return transactionRes.hash;
   };
 
+  const updatePassword = (password: string) => {
+    setPasswordError(null);
+    setPassword(password);
+  };
+
   return (
     <WalletContext.Provider
       value={{
@@ -189,6 +208,9 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
         resources,
         coins,
         oneTimeMnemonic,
+        password,
+        passwordError,
+        updatePassword,
         createNewAccount,
         fundAccountWithFaucet,
         submitTransaction,
