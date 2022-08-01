@@ -15,11 +15,9 @@ export const App: React.FunctionComponent = () => {
   const authenticated =
     account !== null &&
     !oneTimeMnemonic &&
-    ![
-      'account:pending:createAccount',
-      'account:pending:loadAccount',
-      'account:pending:faucetFundAccount',
-    ].includes(state);
+    !['account:pending:createAccount', 'account:pending:loadAccount'].includes(
+      state
+    );
 
   return (
     <Box
