@@ -27,7 +27,7 @@ export const NewWalletScreen: React.FunctionComponent = () => {
       <Divider />
       <PasswordForm
         onSubmit={handlePasswordSubmitted}
-        loading={state.startsWith('pending:')}
+        loading={state === 'account:pending:createAccount'}
       />
     </Box>
   );
