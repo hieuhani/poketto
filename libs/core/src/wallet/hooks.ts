@@ -1,22 +1,42 @@
 import { AptosAccount, AptosClient, HexString, Types } from 'aptos';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useWallet } from './WalletContext';
 
+export interface UseAccountResourcesOptions {
+  refetchInterval?: number;
+}
 export const useAccountResources = (
   client: AptosClient,
   account: AptosAccount | null,
-  polling = false
+  { refetchInterval = undefined }: UseAccountResourcesOptions = {}
 ) => {
+  const firstCalled = useRef(false);
   const [resources, setResources] = useState<Types.AccountResource[]>([]);
   const fetchResources = async (address: HexString) => {
     const data = await client.getAccountResources(address);
     setResources(data);
   };
   useEffect(() => {
+    let intervalFetch: NodeJS.Timer | null = null;
     if (account) {
-      fetchResources(account.address());
+      if (refetchInterval) {
+        if (!firstCalled.current) {
+          firstCalled.current = true;
+          fetchResources(account.address());
+        }
+        intervalFetch = setInterval(() => {
+          fetchResources(account.address());
+        }, refetchInterval);
+      } else {
+        fetchResources(account.address());
+      }
     }
-  }, [account]);
+    return () => {
+      if (refetchInterval && intervalFetch) {
+        clearInterval(intervalFetch);
+      }
+    };
+  }, [account, refetchInterval]);
   return {
     data: resources,
   };

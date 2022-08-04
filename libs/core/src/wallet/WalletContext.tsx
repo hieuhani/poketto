@@ -119,7 +119,9 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
     }
   };
 
-  const { data: resources } = useAccountResources(aptosClient, stateAccount);
+  const { data: resources } = useAccountResources(aptosClient, stateAccount, {
+    refetchInterval: 5000,
+  });
   const coins = resources
     .filter((resource) => resource.type.startsWith('0x1::coin::CoinStore'))
     .map((resource) => {

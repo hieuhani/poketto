@@ -17,6 +17,7 @@
     "@poketto/core": "workspace:0.0.0",
     "aptos": "^1.2.1",
     "buffer": "^6.0.3",
+    "lodash.get": "^4.4.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.33.1",
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.13",
+    "@types/lodash.get": "^4.4.7",
     "@types/node": "^18.0.5",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",

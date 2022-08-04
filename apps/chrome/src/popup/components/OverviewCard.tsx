@@ -8,6 +8,14 @@ interface Props {
   balance: number;
   goToTransferScreen: () => void;
 }
+
+const formatMoney = (amount: number) => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  }).format(amount);
+};
+
 export const OverviewCard: React.FunctionComponent<Props> = ({
   balance,
   goToTransferScreen,
@@ -39,11 +47,7 @@ export const OverviewCard: React.FunctionComponent<Props> = ({
           </Typography>
           <IoEyeOffOutline size={18} />
         </Box>
-        <Typography variant="h5">
-          {new Intl.NumberFormat('en-US', {
-            maximumSignificantDigits: 3,
-          }).format(balance)}
-        </Typography>
+        <Typography variant="h5">{formatMoney(balance)}</Typography>
       </Box>
     </ButtonBase>
     <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>

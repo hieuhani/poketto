@@ -12,7 +12,7 @@ import { makeShortAddress } from '../../helpers/address';
 import InputBase from '@mui/material/InputBase';
 import { useForm } from 'react-hook-form';
 import { useDebounce } from '../../hooks/use-debounce';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Button from '@mui/material/Button';
 import toast from 'react-hot-toast';
 
@@ -42,6 +42,7 @@ export interface TransferFormState {
 export const TransferScreen: React.FunctionComponent = () => {
   const { goBack } = useStackNavigation();
   const { account, state, resources, coins, submitTransaction } = useWallet();
+  const [sending, setSending] = useState(false);
   const balance = coins.reduce((acc, coin) => acc + coin.balance, 0);
   const { check: checkAddress, status: addressStatus } = useCheckAddress();
   const { register, watch, handleSubmit } = useForm({
@@ -92,6 +93,7 @@ export const TransferScreen: React.FunctionComponent = () => {
   }, [addressStatus]);
 
   const onFormSubmit = async (data: TransferFormState) => {
+    setSending(true);
     try {
       const payload: TransactionPayload = {
         arguments: [data.toAddress, data.amount],
@@ -102,10 +104,12 @@ export const TransferScreen: React.FunctionComponent = () => {
       const txtHash = await submitTransaction(payload);
 
       console.log(txtHash);
+
       toast.success('Transaction sent');
     } catch (e: any) {
       toast.error(e.response.data.message);
     }
+    setSending(false);
   };
 
   return (
@@ -212,7 +216,8 @@ export const TransferScreen: React.FunctionComponent = () => {
           disabled={
             addressStatus !== 'valid' ||
             (amount || 0) === 0 ||
-            STATIC_GAS_AMOUNT + parseFloat(amount) > balance
+            STATIC_GAS_AMOUNT + parseFloat(amount) > balance ||
+            sending
           }
         >
           Send

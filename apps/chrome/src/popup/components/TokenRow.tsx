@@ -2,7 +2,6 @@ import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import ButtonBase from '@mui/material/ButtonBase';
-import { IoChevronForwardOutline } from 'react-icons/io5';
 import { Coin } from '@poketto/core';
 
 interface Props {
@@ -41,6 +40,5 @@ export const TokenRow: React.FunctionComponent<Props> = ({ coin }) => (
         {coin.balance} {coin.name}
       </Typography>
     </Box>
-    <IoChevronForwardOutline size={24} />
   </Paper>
 );
