@@ -18,6 +18,7 @@
     "aptos": "^1.2.1",
     "buffer": "^6.0.3",
     "lodash.get": "^4.4.2",
+    "qrcode.react": "^3.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.33.1",

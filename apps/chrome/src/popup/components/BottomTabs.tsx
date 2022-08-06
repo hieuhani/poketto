@@ -4,11 +4,11 @@ import {
   IoWalletOutline,
   IoSettingsOutline,
   IoAlbumsOutline,
-  IoTicketOutline,
   IoWalletSharp,
   IoSettingsSharp,
   IoAlbumsSharp,
-  IoTicketSharp,
+  // IoTicketSharp,
+  // IoTicketOutline,
 } from 'react-icons/io5';
 import { useTabsNavigation } from '../../navigation';
 
@@ -35,7 +35,7 @@ export const BottomTabs: React.FunctionComponent = () => {
           )
         }
       />
-      <BottomNavigationAction
+      {/* <BottomNavigationAction
         value="collectible"
         label="Collectible"
         icon={
@@ -45,7 +45,7 @@ export const BottomTabs: React.FunctionComponent = () => {
             <IoTicketOutline size={24} />
           )
         }
-      />
+      /> */}
       <BottomNavigationAction
         value="activity"
         label="Activity"

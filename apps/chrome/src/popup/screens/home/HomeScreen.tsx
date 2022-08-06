@@ -5,11 +5,18 @@ import { useStackNavigation } from '../../../navigation';
 import { OverviewCard } from '../../components/OverviewCard';
 import { TokenRow } from '../../components/TokenRow';
 import { WalletHeader } from '../../components/WalletHeader';
+import { useModalNavigation } from '../../../navigation/ModalNavigation';
 
 export const HomeScreen: React.FunctionComponent = () => {
   const { account, state, coins } = useWallet();
   const { navigate } = useStackNavigation();
+  const { openModal } = useModalNavigation();
   const balance = coins.reduce((acc, coin) => acc + coin.balance, 0);
+  const handleGoToReceiveScreen = () => {
+    openModal('ReceiveCoin', {
+      accountAddress: account?.address().hex() || '',
+    });
+  };
   return (
     <Stack paddingX={2} paddingTop={2} spacing={2}>
       <WalletHeader
@@ -21,7 +28,10 @@ export const HomeScreen: React.FunctionComponent = () => {
         address={account?.address().hex() || ''}
       />
 
-      <WalletActions goToTransferScreen={() => navigate('transfer')} />
+      <WalletActions
+        goToReceiveScreen={handleGoToReceiveScreen}
+        goToTransferScreen={() => navigate('transfer')}
+      />
 
       <Stack spacing={2}>
         {coins.map((coin) => (

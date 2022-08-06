@@ -5,15 +5,18 @@ import ButtonBase from '@mui/material/ButtonBase';
 
 interface Props {
   goToTransferScreen: () => void;
+  goToReceiveScreen: () => void;
 }
 
 export const WalletActions: React.FunctionComponent<Props> = ({
   goToTransferScreen,
+  goToReceiveScreen,
 }) => (
   <Paper sx={{ borderRadius: 2 }}>
     <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
       <ButtonBase
         sx={{ paddingY: 2, display: 'flex', flexDirection: 'column' }}
+        onClick={goToReceiveScreen}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

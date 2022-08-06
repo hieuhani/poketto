@@ -21,6 +21,13 @@ export const theme = (isDark: boolean): Theme => {
           },
         },
       },
+      MuiBackdrop: {
+        styleOverrides: {
+          root: {
+            backdropFilter: 'blur(5px)',
+          },
+        },
+      },
     },
   });
 };
