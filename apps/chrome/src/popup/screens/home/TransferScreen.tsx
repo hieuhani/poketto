@@ -8,13 +8,14 @@ import Stack from '@mui/material/Stack';
 import MuiLink from '@mui/material/Link';
 import { useStackNavigation } from '../../../navigation';
 import { useWallet, useCheckAddress, TransactionPayload } from '@poketto/core';
-import { makeShortAddress } from '../../helpers/address';
 import InputBase from '@mui/material/InputBase';
 import { useForm } from 'react-hook-form';
 import { useDebounce } from '../../hooks/use-debounce';
 import { useEffect, useMemo, useState } from 'react';
 import Button from '@mui/material/Button';
 import toast from 'react-hot-toast';
+import { HexAddress } from '../../../ui/HexAddress';
+import { formatMoney } from '../../helpers/number';
 
 export const STATIC_GAS_AMOUNT = 150;
 
@@ -123,41 +124,18 @@ export const TransferScreen: React.FunctionComponent = () => {
       <Stack px={2} spacing={2}>
         {account && (
           <Paper sx={{ px: 2, py: 2 }}>
-            <Typography
-              fontWeight="600"
-              fontSize="small"
-              textTransform="uppercase"
-            >
-              From
-            </Typography>
-            <Typography>
-              Wallet 1: {makeShortAddress(account.address().hex(), 12)}
-            </Typography>
-            <MuiLink
-              href={`https://explorer.devnet.aptos.dev/account/${account
-                .address()
-                .hex()}`}
-              target="_blank"
-              sx={{ textDecoration: 'none' }}
-            >
-              View on explorer
-            </MuiLink>
+            <HexAddress
+              address={account.address().hex()}
+              AddressProps={{ variant: 'body1', color: 'white' }}
+            />
+            {coins[0] && (
+              <Typography variant="caption" color="grey.400">
+                {formatMoney(coins[0].balance)}
+              </Typography>
+            )}
           </Paper>
         )}
-        {coins[0] && (
-          <Paper sx={{ px: 2, py: 2 }}>
-            <Typography
-              fontWeight="600"
-              fontSize="small"
-              textTransform="uppercase"
-            >
-              Coin
-            </Typography>
-            <Typography>
-              {coins[0].balance} {coins[0].name}
-            </Typography>
-          </Paper>
-        )}
+
         <Paper sx={{ px: 2, pt: 2, paddingBottom: 3 }}>
           <Typography
             fontWeight="600"

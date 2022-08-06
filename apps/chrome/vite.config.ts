@@ -15,11 +15,7 @@ export default defineConfig(({ command }) => ({
       '@poketto/core': r('../../libs/core/src/'),
     },
   },
-  plugins: [
-    // React fast refresh doesn't work, cause injecting of preambleCode into index.html
-    // TODO: fix it
-    react({ fastRefresh: false }),
-  ],
+  plugins: [react()],
   optimizeDeps: {
     esbuildOptions: {
       target: 'es2020',

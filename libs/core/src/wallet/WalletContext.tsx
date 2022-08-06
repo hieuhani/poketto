@@ -79,7 +79,7 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
 }) => {
   const [stateAccount, setAccount] = useState<AptosAccount | null>(null);
   const [oneTimeMnemonic, setOneTimeMnemonic] = useState<string | null>(null);
-  const [password, setPassword] = useState('password');
+  const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState(null);
   const [state, setState] = useState<WalletState>(
     'account:pending:loadAccount'

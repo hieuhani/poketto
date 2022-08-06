@@ -28,6 +28,15 @@ export const theme = (isDark: boolean): Theme => {
           },
         },
       },
+      MuiDialog: {
+        defaultProps: {
+          PaperProps: {
+            sx: {
+              borderRadius: 4,
+            },
+          },
+        },
+      },
     },
   });
 };

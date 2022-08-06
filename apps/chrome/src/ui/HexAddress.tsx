@@ -1,4 +1,4 @@
-import Typography from '@mui/material/Typography';
+import Typography, { TypographyProps } from '@mui/material/Typography';
 import ButtonBase from '@mui/material/ButtonBase';
 import Tooltip from '@mui/material/Tooltip';
 import { IoCopyOutline } from 'react-icons/io5';
@@ -11,6 +11,7 @@ interface Props {
   takeLeft?: number;
   takeRight?: number;
   addressSx?: SxProps;
+  AddressProps?: TypographyProps;
 }
 
 export const HexAddress: React.FunctionComponent<Props> = ({
@@ -18,6 +19,7 @@ export const HexAddress: React.FunctionComponent<Props> = ({
   takeLeft = 6,
   takeRight = 4,
   addressSx,
+  AddressProps,
 }) => {
   const copyAddress = () => {
     navigator.clipboard.writeText(address);
@@ -39,6 +41,7 @@ export const HexAddress: React.FunctionComponent<Props> = ({
           color="grey.400"
           marginRight={1}
           sx={addressSx}
+          {...AddressProps}
         >
           {makeShortAddress(address, takeLeft, takeRight)}
         </Typography>

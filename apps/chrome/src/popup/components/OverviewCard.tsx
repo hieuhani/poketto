@@ -4,8 +4,6 @@ import Box from '@mui/material/Box';
 import { HexAddress } from '../../ui/HexAddress';
 import { BackgroundPattern } from './BackgroundPattern';
 
-import bg from './bg.svg';
-
 interface Props {
   balance: number;
   address: string;
