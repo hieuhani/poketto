@@ -3,6 +3,7 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { useStackNavigation } from '../../../navigation';
+import { Logo } from '../../components/Logo';
 
 export const WelcomeScreen: React.FunctionComponent = () => {
   const { navigate } = useStackNavigation();
@@ -17,14 +18,10 @@ export const WelcomeScreen: React.FunctionComponent = () => {
           alignItems: 'center',
         }}
       >
-        <Box
-          width={120}
-          height={120}
-          sx={{ backgroundColor: 'grey.400' }}
-          borderRadius="50%"
-          marginBottom={6}
-        />
-        <Typography variant="h5">Welcome to Poketto Wallet</Typography>
+        <Logo />
+        <Typography marginTop={4} variant="h5">
+          Welcome to Poketto Wallet
+        </Typography>
         <Typography variant="subtitle1">
           Secured store for your digital assets
         </Typography>
@@ -37,7 +34,9 @@ export const WelcomeScreen: React.FunctionComponent = () => {
         >
           Create a new wallet
         </Button>
-        <Button fullWidth>Import my existing wallet</Button>
+        <Button fullWidth onClick={() => navigate('import_wallet')}>
+          Import my existing wallet
+        </Button>
       </Stack>
     </Box>
   );

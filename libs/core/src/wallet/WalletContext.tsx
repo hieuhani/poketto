@@ -24,7 +24,10 @@ export type WalletState =
   | 'account:rejected:createAccount'
   | 'account:pending:faucetFundAccount'
   | 'account:fulfilled:faucetFundAccount'
-  | 'account:rejected:faucetFundAccount';
+  | 'account:rejected:faucetFundAccount'
+  | 'account:pending:importAccount'
+  | 'account:fulfilled:importAccount'
+  | 'account:rejected:importAccount';
 
 export interface WalletContextState {
   account: AptosAccount | null;
@@ -38,6 +41,7 @@ export interface WalletContextState {
   passwordError: string | null;
   updatePassword: (password: string) => void;
   createNewAccount: (password: string) => Promise<void>;
+  importAccount: (mnemonic: string, password: string) => Promise<void>;
   fundAccountWithFaucet: (amount: number) => void;
   submitTransaction: (
     payload: TransactionPayload,
@@ -58,6 +62,9 @@ const WalletContext = createContext<WalletContextState>({
   oneTimeMnemonic: null,
   updatePassword: (password: string) => {},
   createNewAccount: (password: string) => {
+    throw new Error('unimplemented');
+  },
+  importAccount: (mnemonic: string, password: string) => {
     throw new Error('unimplemented');
   },
   fundAccountWithFaucet: (amount: number) => {
@@ -160,6 +167,29 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
     }
   };
 
+  const importAccount = async (mnemonic: string, password: string) => {
+    try {
+      setState('account:pending:importAccount');
+
+      const { account, encryptedMnemonic, encryptedPrivateKey } =
+        await createAccount({ mnemonic, password });
+
+      // To test the imported account
+      await aptosClient.getAccountResources(account.address());
+      await storeWallet({
+        encryptedMnemonic,
+        encryptedPrivateKey,
+      });
+
+      setAccount(account);
+
+      setState('account:fulfilled:importAccount');
+    } catch (e) {
+      console.error(e);
+      setState('account:rejected:importAccount');
+    }
+  };
+
   const fundAccountWithFaucet = async (amount: number) => {
     if (stateAccount) {
       try {
@@ -214,6 +244,7 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
         passwordError,
         updatePassword,
         createNewAccount,
+        importAccount,
         fundAccountWithFaucet,
         submitTransaction,
         clearOneTimeMnemonic,

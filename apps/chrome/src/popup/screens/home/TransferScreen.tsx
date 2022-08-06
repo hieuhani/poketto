@@ -130,7 +130,7 @@ export const TransferScreen: React.FunctionComponent = () => {
             />
             {coins[0] && (
               <Typography variant="caption" color="grey.400">
-                {formatMoney(coins[0].balance)}
+                Balance: {formatMoney(coins[0].balance)}
               </Typography>
             )}
           </Paper>

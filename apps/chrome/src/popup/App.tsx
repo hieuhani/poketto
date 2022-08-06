@@ -9,6 +9,7 @@ import { WelcomeScreen, NewWalletScreen } from './screens/onboarding';
 import { useWallet } from '@poketto/core';
 import { RevealMnemonicScreen } from './screens/onboarding/RevealMnemonicScreen';
 import { PasswordResumeScreen } from './screens/onboarding/PasswordResumeScreen';
+import { ImportWalletScreen } from './screens/onboarding/ImportWalletScreen';
 
 export const App: React.FunctionComponent = () => {
   const { account, state, oneTimeMnemonic, password } = useWallet();
@@ -66,6 +67,7 @@ export const App: React.FunctionComponent = () => {
             routes={[
               { route: 'welcome', screen: <WelcomeScreen /> },
               { route: 'new_wallet', screen: <NewWalletScreen /> },
+              { route: 'import_wallet', screen: <ImportWalletScreen /> },
               { route: 'reveal_mnemonic', screen: <RevealMnemonicScreen /> },
             ]}
           />

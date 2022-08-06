@@ -3,7 +3,7 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { useWallet } from '@poketto/core';
-import Alert from '@mui/material/Alert';
+import { MnemonicView } from './components/MnemonicView';
 
 export const RevealMnemonicScreen: React.FunctionComponent = () => {
   const { oneTimeMnemonic, clearOneTimeMnemonic } = useWallet();
@@ -13,22 +13,16 @@ export const RevealMnemonicScreen: React.FunctionComponent = () => {
 
   return (
     <Box px={4} py={4}>
-      <Box
-        sx={{
-          marginBottom: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        <Typography variant="h5">Secret recovery phrase</Typography>
+      <Typography variant="h5" marginBottom={1}>
+        Secret recovery phrase
+      </Typography>
+      <Typography variant="subtitle1" color="grey.400" marginBottom={4}>
+        This phrase is the only way to recover your wallet. Please keep it's
+        safe.
+      </Typography>
 
-        <Alert severity="warning">
-          This phrase is the only way to recover your wallet.
-        </Alert>
+      {oneTimeMnemonic && <MnemonicView mnemonic={oneTimeMnemonic} />}
 
-        <Typography>{oneTimeMnemonic}</Typography>
-      </Box>
       <Stack spacing={2}>
         <Button variant="contained" fullWidth onClick={handleContinue}>
           Continue

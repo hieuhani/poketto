@@ -2,10 +2,8 @@ import { useStackNavigation } from '../../../navigation';
 import { IoArrowBackOutline } from 'react-icons/io5';
 import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
-
 import Divider from '@mui/material/Divider';
 import { useWallet } from '@poketto/core';
-
 import { PasswordForm, PasswordFormState } from './components/PasswordForm';
 
 export const NewWalletScreen: React.FunctionComponent = () => {
