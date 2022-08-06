@@ -2,16 +2,17 @@ import Box from '@mui/material/Box';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { Input } from '../../../ui/Input';
 import { useWallet } from '@poketto/core';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import { Logo } from '../../components/Logo';
+import { Input } from '../../../ui/Input';
 
 const formSchema = Yup.object().shape({
   password: Yup.string()
     .required('Password is mendatory')
-    .min(3, 'Password must be at 3 char long'),
+    .min(3, 'Password length should be at least 3 characters long'),
 });
 
 export interface PasswordResumeFormState {
@@ -37,10 +38,19 @@ export const PasswordResumeScreen: React.FunctionComponent = () => {
   return (
     <Box px={4} py={4}>
       <form onSubmit={handleSubmit(onFormSubmit)}>
-        <Stack spacing={2}>
-          <Typography variant="h6">
-            Please enter your password to unlock
+        <Box
+          marginY={8}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          flexDirection="column"
+        >
+          <Logo />
+          <Typography marginTop={3} variant="h5">
+            Welcome back
           </Typography>
+        </Box>
+        <Stack spacing={2}>
           <Controller
             name="password"
             control={control}
@@ -62,6 +72,7 @@ export const PasswordResumeScreen: React.FunctionComponent = () => {
             variant="contained"
             fullWidth
             type="submit"
+            size="large"
             disabled={!isValid}
           >
             Unlock

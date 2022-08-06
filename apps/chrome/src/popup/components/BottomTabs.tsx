@@ -1,10 +1,14 @@
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import {
-  IoHomeOutline,
+  IoWalletOutline,
   IoSettingsOutline,
   IoAlbumsOutline,
   IoTicketOutline,
+  IoWalletSharp,
+  IoSettingsSharp,
+  IoAlbumsSharp,
+  IoTicketSharp,
 } from 'react-icons/io5';
 import { useTabsNavigation } from '../../navigation';
 
@@ -15,26 +19,54 @@ export const BottomTabs: React.FunctionComponent = () => {
   };
 
   return (
-    <BottomNavigation value={activeRoute} onChange={onRouteChanged}>
+    <BottomNavigation
+      showLabels={false}
+      value={activeRoute}
+      onChange={onRouteChanged}
+    >
       <BottomNavigationAction
-        label="Home"
         value="home"
-        icon={<IoHomeOutline size={24} />}
+        label="Wallet"
+        icon={
+          activeRoute === 'home' ? (
+            <IoWalletSharp size={24} />
+          ) : (
+            <IoWalletOutline size={24} />
+          )
+        }
       />
       <BottomNavigationAction
-        label="Collectibles"
         value="collectible"
-        icon={<IoTicketOutline size={24} />}
+        label="Collectible"
+        icon={
+          activeRoute === 'collectible' ? (
+            <IoTicketSharp size={24} />
+          ) : (
+            <IoTicketOutline size={24} />
+          )
+        }
       />
       <BottomNavigationAction
-        label="Activities"
         value="activity"
-        icon={<IoAlbumsOutline size={24} />}
+        label="Activity"
+        icon={
+          activeRoute === 'activity' ? (
+            <IoAlbumsSharp size={24} />
+          ) : (
+            <IoAlbumsOutline size={24} />
+          )
+        }
       />
       <BottomNavigationAction
-        label="Settings"
         value="setting"
-        icon={<IoSettingsOutline size={24} />}
+        label="Setting"
+        icon={
+          activeRoute === 'setting' ? (
+            <IoSettingsSharp size={24} />
+          ) : (
+            <IoSettingsOutline size={24} />
+          )
+        }
       />
     </BottomNavigation>
   );

@@ -1,4 +1,6 @@
 import { alpha, styled } from '@mui/material/styles';
+import { grey } from '@mui/material/colors';
+
 import type { InputBaseProps } from '@mui/material/InputBase';
 import InputBase from '@mui/material/InputBase';
 import FormControl from '@mui/material/FormControl';
@@ -12,14 +14,16 @@ const StyledInput = styled(InputBase)(({ theme }) => ({
   },
 
   '& .MuiInputBase-input': {
-    borderRadius: 4,
+    borderRadius: 8,
+    height: '1.75rem',
     position: 'relative',
-    border: '1px solid #ced4da',
-    padding: '6px 10px',
+    padding: '0.625rem 1rem',
+    backgroundColor: grey[900],
     transition: theme.transitions.create(['border-color', 'box-shadow']),
     '&:focus': {
       boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
       borderColor: theme.palette.primary.main,
+      backgroundColor: alpha(grey[900], 0.6),
     },
   },
 }));

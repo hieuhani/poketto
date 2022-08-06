@@ -67,7 +67,7 @@ export const WalletSwitcher: React.FunctionComponent<Props> = ({
             Wallet 1
           </Typography>
           <Typography lineHeight={1} title={activeAddress}>
-            {makeShortAddress(activeAddress)}
+            {makeShortAddress(activeAddress, 6, 4)}
           </Typography>
         </Box>
         <Box

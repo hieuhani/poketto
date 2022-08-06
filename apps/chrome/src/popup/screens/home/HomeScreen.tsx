@@ -1,5 +1,6 @@
 import Stack from '@mui/material/Stack';
 import { useWallet } from '@poketto/core';
+import { WalletActions } from '../../components/WalletActions';
 import { useStackNavigation } from '../../../navigation';
 import { OverviewCard } from '../../components/OverviewCard';
 import { TokenRow } from '../../components/TokenRow';
@@ -17,8 +18,10 @@ export const HomeScreen: React.FunctionComponent = () => {
       />
       <OverviewCard
         balance={balance}
-        goToTransferScreen={() => navigate('transfer')}
+        address={account?.address().hex() || ''}
       />
+
+      <WalletActions goToTransferScreen={() => navigate('transfer')} />
 
       <Stack spacing={2}>
         {coins.map((coin) => (

@@ -1,4 +1,8 @@
-export const makeShortAddress = (address: string, partialLength = 4): string =>
-  `${address.slice(0, partialLength)}...${address.slice(
-    address.length - partialLength
+export const makeShortAddress = (
+  address: string,
+  takeLeft = 4,
+  takeRight = 4
+): string =>
+  `${address.slice(0, takeLeft)}...${address.slice(
+    address.length - takeRight
   )}`;
