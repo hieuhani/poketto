@@ -1,8 +1,8 @@
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import { FaFaucet, FaSeedling } from 'react-icons/fa';
+import { FaFaucet, FaSeedling, FaKey } from 'react-icons/fa';
 import { IoSettingsSharp, IoLogOut, IoLockClosed } from 'react-icons/io5';
-import { green, orange, red, blue, brown } from '@mui/material/colors';
+import { green, orange, red, blue, brown, yellow } from '@mui/material/colors';
 import Divider from '@mui/material/Divider';
 import { SettingGroup } from '../../components/SettingGroup';
 import { SettingItem } from '../../components/SettingItem';
@@ -52,6 +52,14 @@ export const SettingHome: React.FunctionComponent = () => {
                 icon={FaSeedling}
                 iconBgColor={brown[600]}
                 onClick={() => stackNavigate('reveal_seed_phrase')}
+              />
+              <Divider />
+              <SettingItem
+                title="Change Password"
+                description="Change your wallet password"
+                icon={FaKey}
+                iconBgColor={yellow[700]}
+                onClick={() => stackNavigate('change_password')}
               />
             </SettingGroup>
             <SettingGroup>

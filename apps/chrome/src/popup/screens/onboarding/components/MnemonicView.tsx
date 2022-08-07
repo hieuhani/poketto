@@ -26,6 +26,7 @@ export const MnemonicView: React.FunctionComponent<Props> = ({ mnemonic }) => {
         marginBottom: 4,
         userSelect: 'none',
         position: 'relative',
+        borderRadius: 4,
       }}
     >
       <Box
