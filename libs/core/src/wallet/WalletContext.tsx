@@ -8,7 +8,7 @@ import React, {
 } from 'react';
 import { createContext } from 'react';
 import { generateMnemonic } from '../mnemonic';
-import { createAccount, loadAccount } from '../account';
+import { createAccount, decryptMnemonic, loadAccount } from '../account';
 import { deleteWallet, readWallet, storeWallet } from './storage';
 import { NetworkConfig, networkConfigs, NetworkProfile } from '../network';
 import { useAccountResources } from './hooks';
@@ -30,7 +30,10 @@ export type WalletState =
   | 'account:rejected:importAccount'
   | 'account:pending:logout'
   | 'account:fulfilled:logout'
-  | 'account:rejected:logout';
+  | 'account:rejected:logout'
+  | 'account:pending:revealSeedPhrase'
+  | 'account:fulfilled:revealSeedPhrase'
+  | 'account:rejected:revealSeedPhrase';
 
 export interface WalletContextState {
   account: AptosAccount | null;
@@ -53,6 +56,7 @@ export interface WalletContextState {
   clearOneTimeMnemonic: () => void;
   logout: () => void;
   lockWallet: () => void;
+  revealSeedPhrase: (password: string) => void;
 }
 
 const WalletContext = createContext<WalletContextState>({
@@ -88,6 +92,9 @@ const WalletContext = createContext<WalletContextState>({
     throw new Error('unimplemented');
   },
   lockWallet: () => {
+    throw new Error('unimplemented');
+  },
+  revealSeedPhrase: (password: string) => {
     throw new Error('unimplemented');
   },
 });
@@ -255,6 +262,27 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
     setState('account:pending:loadAccount');
   };
 
+  const revealSeedPhrase = async (password: string) => {
+    setState('account:pending:revealSeedPhrase');
+    const wallet = await readWallet();
+    if (wallet && wallet.encryptedMnemonic) {
+      try {
+        const mnemonic = await decryptMnemonic(
+          password,
+          wallet.encryptedMnemonic
+        );
+        setState('account:fulfilled:revealSeedPhrase');
+        return mnemonic;
+      } catch (e: unknown) {
+        setState('account:rejected:revealSeedPhrase');
+        throw e;
+      }
+    } else {
+      setState('account:rejected:revealSeedPhrase');
+      throw new Error('No wallet found');
+    }
+  };
+
   return (
     <WalletContext.Provider
       value={{
@@ -275,6 +303,7 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
         clearOneTimeMnemonic,
         logout,
         lockWallet,
+        revealSeedPhrase,
       }}
     >
       {children}

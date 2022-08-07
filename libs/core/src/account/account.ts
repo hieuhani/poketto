@@ -50,6 +50,14 @@ export async function loadAccount(password: string, encryptedMnemonic: string) {
   });
 }
 
+export async function decryptMnemonic(
+  password: string,
+  encryptedMnemonic: string
+) {
+  const mnemonic = await decrypt<string>(password, encryptedMnemonic);
+  return mnemonic;
+}
+
 interface ApptosLocalStorageState {
   account: AptosAccountObject;
 }
