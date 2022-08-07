@@ -10,6 +10,7 @@ import { useWallet } from '@poketto/core';
 import { RevealMnemonicScreen } from './screens/onboarding/RevealMnemonicScreen';
 import { PasswordResumeScreen } from './screens/onboarding/PasswordResumeScreen';
 import { ImportWalletScreen } from './screens/onboarding/ImportWalletScreen';
+import { ForgotPasswordScreen } from './screens/onboarding/ForgotPasswordScreen';
 
 export const App: React.FunctionComponent = () => {
   const { account, state, oneTimeMnemonic, password } = useWallet();
@@ -47,7 +48,12 @@ export const App: React.FunctionComponent = () => {
       />
       <Box zIndex={1000}>
         {state === 'account:pending:loadAccount' && !password ? (
-          <PasswordResumeScreen />
+          <StackNavigation
+            routes={[
+              { route: 'password_resume', screen: <PasswordResumeScreen /> },
+              { route: 'forgot_password', screen: <ForgotPasswordScreen /> },
+            ]}
+          />
         ) : authenticated ? (
           <TabsNavigation
             routes={[

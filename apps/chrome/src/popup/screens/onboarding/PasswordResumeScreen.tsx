@@ -8,6 +8,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { Logo } from '../../components/Logo';
 import { Input } from '../../../ui/Input';
+import { useStackNavigation } from '../../../navigation';
 
 const formSchema = Yup.object().shape({
   password: Yup.string()
@@ -19,6 +20,7 @@ export interface PasswordResumeFormState {
   password: string;
 }
 export const PasswordResumeScreen: React.FunctionComponent = () => {
+  const { navigate } = useStackNavigation();
   const { updatePassword, passwordError } = useWallet();
   const {
     control,
@@ -76,6 +78,9 @@ export const PasswordResumeScreen: React.FunctionComponent = () => {
             disabled={!isValid}
           >
             Unlock
+          </Button>
+          <Button fullWidth onClick={() => navigate('forgot_password')}>
+            Forgot password?
           </Button>
         </Stack>
       </form>
