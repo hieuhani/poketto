@@ -52,6 +52,7 @@ export interface WalletContextState {
   ) => Promise<string>;
   clearOneTimeMnemonic: () => void;
   logout: () => void;
+  lockWallet: () => void;
 }
 
 const WalletContext = createContext<WalletContextState>({
@@ -84,6 +85,9 @@ const WalletContext = createContext<WalletContextState>({
     throw new Error('unimplemented');
   },
   logout: () => {
+    throw new Error('unimplemented');
+  },
+  lockWallet: () => {
     throw new Error('unimplemented');
   },
 });
@@ -246,6 +250,11 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
     setState('account:fulfilled:logout');
   };
 
+  const lockWallet = async () => {
+    setPassword('');
+    setState('account:pending:loadAccount');
+  };
+
   return (
     <WalletContext.Provider
       value={{
@@ -265,6 +274,7 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
         submitTransaction,
         clearOneTimeMnemonic,
         logout,
+        lockWallet,
       }}
     >
       {children}
