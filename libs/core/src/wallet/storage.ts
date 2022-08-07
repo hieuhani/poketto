@@ -15,3 +15,7 @@ export const storeWallet = async (data: WalletData) => {
 export const readWallet = async (): Promise<WalletData | null> => {
   return storage.get<WalletData | null>(WALLET_STORAGE_KEY);
 };
+
+export const deleteWallet = async () => {
+  await storage.remove(WALLET_STORAGE_KEY);
+};

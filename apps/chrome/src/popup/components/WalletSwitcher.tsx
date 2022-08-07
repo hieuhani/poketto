@@ -48,7 +48,7 @@ export const WalletSwitcher: React.FunctionComponent<Props> = ({
         spacing={1}
         direction="row"
         alignItems="center"
-        onClick={handleClick}
+        // onClick={handleClick}
         sx={{
           paddingY: 1,
           paddingLeft: 2,

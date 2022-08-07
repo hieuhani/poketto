@@ -1,8 +1,8 @@
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import { FaFaucet } from 'react-icons/fa';
-import { IoSettingsSharp } from 'react-icons/io5';
-import { green, orange } from '@mui/material/colors';
+import { IoSettingsSharp, IoLogOut } from 'react-icons/io5';
+import { green, orange, red } from '@mui/material/colors';
 import Divider from '@mui/material/Divider';
 import { SettingGroup } from '../components/SettingGroup';
 import { SettingItem } from '../components/SettingItem';
@@ -12,7 +12,7 @@ import { NetworksView } from './settings/NetworksView';
 import { useWallet } from '@poketto/core';
 
 export const SettingScreen: React.FunctionComponent = () => {
-  const { fundAccountWithFaucet, state } = useWallet();
+  const { fundAccountWithFaucet, state, logout } = useWallet();
   return (
     <DrawerNavigation
       routes={[
@@ -42,6 +42,15 @@ export const SettingScreen: React.FunctionComponent = () => {
                 icon={IoSettingsSharp}
                 iconBgColor={orange[600]}
                 onClick={() => navigate('networks')}
+              />
+            </SettingGroup>
+            <SettingGroup>
+              <SettingItem
+                title="Logout"
+                icon={IoLogOut}
+                iconBgColor={red[600]}
+                disabled={state === 'account:pending:logout'}
+                onClick={() => logout()}
               />
             </SettingGroup>
           </Stack>

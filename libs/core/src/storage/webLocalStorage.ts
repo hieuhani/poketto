@@ -13,4 +13,7 @@ export class WebLocalStorage implements Storage {
       window.localStorage.setItem(key, JSON.stringify(data))
     );
   }
+  async remove(key: string): Promise<void> {
+    await Promise.resolve(window.localStorage.removeItem(key));
+  }
 }

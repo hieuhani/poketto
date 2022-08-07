@@ -9,7 +9,7 @@ import React, {
 import { createContext } from 'react';
 import { generateMnemonic } from '../mnemonic';
 import { createAccount, loadAccount } from '../account';
-import { readWallet, storeWallet } from './storage';
+import { deleteWallet, readWallet, storeWallet } from './storage';
 import { NetworkConfig, networkConfigs, NetworkProfile } from '../network';
 import { useAccountResources } from './hooks';
 import { Coin } from '../resource';
@@ -27,7 +27,10 @@ export type WalletState =
   | 'account:rejected:faucetFundAccount'
   | 'account:pending:importAccount'
   | 'account:fulfilled:importAccount'
-  | 'account:rejected:importAccount';
+  | 'account:rejected:importAccount'
+  | 'account:pending:logout'
+  | 'account:fulfilled:logout'
+  | 'account:rejected:logout';
 
 export interface WalletContextState {
   account: AptosAccount | null;
@@ -48,6 +51,7 @@ export interface WalletContextState {
     fromAccount?: AptosAccount
   ) => Promise<string>;
   clearOneTimeMnemonic: () => void;
+  logout: () => void;
 }
 
 const WalletContext = createContext<WalletContextState>({
@@ -77,6 +81,9 @@ const WalletContext = createContext<WalletContextState>({
     throw new Error('unimplemented');
   },
   clearOneTimeMnemonic: () => {
+    throw new Error('unimplemented');
+  },
+  logout: () => {
     throw new Error('unimplemented');
   },
 });
@@ -230,6 +237,15 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
     setPassword(password);
   };
 
+  const logout = async () => {
+    setState('account:pending:logout');
+    await deleteWallet();
+    setAccount(null);
+    setPassword('');
+    setOneTimeMnemonic(null);
+    setState('account:fulfilled:logout');
+  };
+
   return (
     <WalletContext.Provider
       value={{
@@ -248,6 +264,7 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
         fundAccountWithFaucet,
         submitTransaction,
         clearOneTimeMnemonic,
+        logout,
       }}
     >
       {children}
