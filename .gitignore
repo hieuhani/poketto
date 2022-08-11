@@ -39,3 +39,4 @@ testem.log
 Thumbs.db
 .vercel
 .turbo
+.pnpm-debug.log
