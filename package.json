@@ -2,23 +2,15 @@
   "name": "poketto",
   "version": "0.0.0",
   "license": "MIT",
-  "workspaces": [
-    "apps/*",
-    "libs/*"
-  ],
   "scripts": {
-    "preinstall": "npx only-allow pnpm",
-    "dev:chrome": "nx dev @poketto/chrome",
-    "build:chrome": "nx build @poketto/chrome",
-    "build:core": "nx build @poketto/core"
+    "build": "turbo run build",
+    "dev": "turbo run dev"
   },
   "private": true,
   "devDependencies": {
-    "@nrwl/cli": "14.4.3",
-    "@nrwl/workspace": "14.4.3",
-    "nx": "14.4.3",
     "prettier": "^2.6.2",
     "tsup": "^6.1.3",
+    "turbo": "^1.4.3",
     "typescript": "~4.7.2"
   }
 }
