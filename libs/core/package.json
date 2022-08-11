@@ -1,6 +1,5 @@
 {
   "name": "@poketto/core",
-  "private": true,
   "version": "0.0.0",
   "scripts": {
     "build": "tsup --dts",
