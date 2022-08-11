@@ -12,7 +12,7 @@ jobs:
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          vercel-args: '--prod --force'
+          vercel-args: '--prod'
           vercel-project-id: ${{ secrets.PROJECT_ID }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
       - name: preview-url
