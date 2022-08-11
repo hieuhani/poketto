@@ -115,13 +115,13 @@ export const TransferScreen: React.FunctionComponent = () => {
 
   return (
     <form onSubmit={handleSubmit(onFormSubmit)}>
-      <Box py={1} px={2} display="flex" alignItems="center">
+      <Box py={1} px={1} display="flex" alignItems="center">
         <IconButton onClick={goBack}>
           <IoArrowBackOutline />
         </IconButton>
         <Typography variant="h6">Send coins</Typography>
       </Box>
-      <Stack px={2} spacing={2}>
+      <Stack px={1} spacing={1}>
         {account && (
           <Paper sx={{ px: 2, py: 2 }}>
             <HexAddress

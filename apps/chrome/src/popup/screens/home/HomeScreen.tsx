@@ -18,7 +18,7 @@ export const HomeScreen: React.FunctionComponent = () => {
     });
   };
   return (
-    <Stack paddingX={2} paddingTop={2} spacing={2}>
+    <Stack paddingX={1} paddingTop={2} spacing={2}>
       <WalletHeader
         loading={state.startsWith('account:pending')}
         activeAddress={account?.address().hex()}
