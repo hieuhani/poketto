@@ -4,7 +4,19 @@
   "license": "MIT",
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev"
+    "dev:chrome": "turbo run dev --filter=chrome...",
+    "dev:mobile": "turbo run dev --filter=mobile..."
+  },
+  "workspaces": {
+    "packages": [
+      "apps/*",
+      "libs/*"
+    ],
+    "nohoist": [
+      "**/react",
+      "**/react-dom",
+      "**/react-native"
+    ]
   },
   "private": true,
   "devDependencies": {

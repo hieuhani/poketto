@@ -20,9 +20,8 @@ jobs:
       - name: job deploy failed
         if: ${{ failure() }}
         run: |
-          npm install -g pnpm
-          pnpm install
-          pnpm build:chrome
+          yarn install
+          yarn build
       - name: preview-url
         run: |
           echo ${{ steps.vercel-action.outputs.preview-url }}

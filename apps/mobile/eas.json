@@ -1,0 +1,11 @@
+{
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "env": {
+        "ENTRY_FILE": "./__generated__/AppEntry.js"
+      }
+    }
+  }
+}

@@ -104,8 +104,6 @@ export const TransferScreen: React.FunctionComponent = () => {
       };
       const txtHash = await submitTransaction(payload);
 
-      console.log(txtHash);
-
       toast.success('Transaction sent');
     } catch (e: any) {
       toast.error(e.response.data.message);
