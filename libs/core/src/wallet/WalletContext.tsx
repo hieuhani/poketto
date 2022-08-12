@@ -16,7 +16,7 @@ import { Coin } from '../resource';
 import { decrypt, encrypt } from '../password';
 
 export type TransactionPayload = Types.TransactionPayload;
-export type AccountResource = Types.AccountResource;
+export type AccountResource = Types.MoveResource;
 export type WalletState =
   | 'account:pending:createAccount'
   | 'account:pending:loadAccount'
@@ -44,7 +44,7 @@ export interface WalletContextState {
   state: WalletState;
   network: NetworkConfig;
   aptosClient: AptosClient;
-  resources: Types.AccountResource[];
+  resources: Types.MoveResource[];
   coins: Coin[];
   oneTimeMnemonic: string | null;
   password: string;
@@ -183,7 +183,6 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
       });
       // TODO: please check why this is needed
       await faucetClient.fundAccount(account.address(), 0);
-
       setAccount(account);
       setOneTimeMnemonic(mnemonic);
       setState('account:fulfilled:activeAccount');

@@ -8,6 +8,7 @@ import Stack from '@mui/material/Stack';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import get from 'lodash.get';
+import { UserTransaction } from 'aptos/dist/generated/models/UserTransaction';
 
 interface DepositTransaction {
   amount: number;
@@ -30,13 +31,13 @@ export const ActivityScreen: React.FunctionComponent = () => {
     []
   );
 
-  const fetchDepositTransactions = async (coin: Types.AccountResource) => {
+  const fetchDepositTransactions = async (coin: Types.MoveResource) => {
     const counter = (coin?.data as any).deposit_events.counter;
     const data = await aptosClient.getEventsByEventHandle(
       account!.address().toString(),
       coin.type,
       'deposit_events',
-      { start: counter <= 25 ? 0 : counter - 25 }
+      { start: counter <= BigInt(25) ? BigInt(0) : counter - BigInt(25) }
     );
     setDepositTransactions(
       data.map((event) => ({
@@ -50,14 +51,15 @@ export const ActivityScreen: React.FunctionComponent = () => {
   const fetchSendTransactions = async () => {
     const currentAddress = account!.address().toString();
     const currentAccount = await aptosClient.getAccount(currentAddress);
-    const sequence = parseInt(currentAccount.sequence_number);
+    const sequence = BigInt(currentAccount.sequence_number);
     const data = await aptosClient.getAccountTransactions(
       currentAddress,
-      sequence <= 25 ? undefined : { start: sequence - 25, limit: 25 }
+      sequence <= BigInt(25)
+        ? undefined
+        : { start: sequence - BigInt(25), limit: 25 }
     );
-
     setSendTransactions(
-      data.map((event) => ({
+      data.map((event: any) => ({
         version: event.version,
         gasUsed: event.gas_used,
         vmStatus: event.vm_status,

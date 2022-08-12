@@ -11,7 +11,7 @@ export const useAccountResources = (
   { refetchInterval = undefined }: UseAccountResourcesOptions = {}
 ) => {
   const firstCalled = useRef(false);
-  const [resources, setResources] = useState<Types.AccountResource[]>([]);
+  const [resources, setResources] = useState<Types.MoveResource[]>([]);
   const fetchResources = async (address: HexString) => {
     const data = await client.getAccountResources(address);
     setResources(data);
