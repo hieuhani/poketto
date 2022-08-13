@@ -5,22 +5,25 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 import { HexAddress } from '../../ui/HexAddress';
 import { useWallet } from '@poketto/core';
-import { useEffect } from 'react';
 import toast from 'react-hot-toast';
 
 interface Props {
   accountAddress: string;
+  close: () => void;
 }
 export const ReceiveCoin: React.FunctionComponent<Props> = ({
   accountAddress,
+  close,
 }) => {
   const { fundAccountWithFaucet, state } = useWallet();
   const loading = state === 'account:pending:faucetFundAccount';
-  useEffect(() => {
-    if (state === 'account:fulfilled:faucetFundAccount') {
-      toast.success('5000 Aptos Coins have been added to your account');
-    }
-  }, [state]);
+
+  const handleFaucet = async () => {
+    await fundAccountWithFaucet(5000);
+
+    close();
+    toast.success('5000 Aptos Coins have been added to your account');
+  };
   return (
     <Box width="240px" paddingY={4}>
       {accountAddress && (
@@ -51,7 +54,7 @@ export const ReceiveCoin: React.FunctionComponent<Props> = ({
         variant="contained"
         sx={{ borderRadius: 4 }}
         size="small"
-        onClick={() => fundAccountWithFaucet(5000)}
+        onClick={handleFaucet}
         disabled={loading}
         endIcon={loading ? <CircularProgress size={20} color="info" /> : null}
       >

@@ -9,7 +9,15 @@ import React, {
 import { createContext } from 'react';
 import { generateMnemonic } from '../mnemonic';
 import { createAccount, loadAccount } from '../account';
-import { deleteWallet, readWallet, storeWallet } from './storage';
+import {
+  addWalletAccount,
+  defaultWalletPreference,
+  deleteWallet,
+  readWalletAccounts,
+  readWalletPreference,
+  WalletPreference,
+  writeWalletAccounts,
+} from './storage';
 import { NetworkConfig, networkConfigs, NetworkProfile } from '../network';
 import { useAccountResources } from './hooks';
 import { Coin } from '../resource';
@@ -37,10 +45,14 @@ export type WalletState =
   | 'account:rejected:revealSeedPhrase'
   | 'account:pending:changePassword'
   | 'account:fulfilled:changePassword'
-  | 'account:rejected:changePassword';
+  | 'account:rejected:changePassword'
+  | 'account:pending:createNewSiblingAccount'
+  | 'account:fulfilled:createNewSiblingAccount'
+  | 'account:rejected:createNewSiblingAccount';
 
 export interface WalletContextState {
   account: AptosAccount | null;
+  accounts: AptosAccount[];
   state: WalletState;
   network: NetworkConfig;
   aptosClient: AptosClient;
@@ -49,8 +61,12 @@ export interface WalletContextState {
   oneTimeMnemonic: string | null;
   password: string;
   passwordError: string | null;
+  walletPreference: WalletPreference;
+  totalWalletAccount: number;
+  changeDefaultAccountIndex: (index: number) => void;
   updatePassword: (password: string) => void;
   createNewAccount: (password: string) => Promise<void>;
+  createNewSiblingAccount: () => Promise<string | undefined>;
   importAccount: (mnemonic: string, password: string) => Promise<void>;
   fundAccountWithFaucet: (amount: number) => void;
   submitTransaction: (
@@ -66,6 +82,7 @@ export interface WalletContextState {
 
 const WalletContext = createContext<WalletContextState>({
   account: null,
+  accounts: [],
   state: 'account:pending:loadAccount',
   network: networkConfigs.devnet,
   aptosClient: new AptosClient(networkConfigs.devnet.aptos),
@@ -74,7 +91,17 @@ const WalletContext = createContext<WalletContextState>({
   password: '',
   passwordError: null,
   oneTimeMnemonic: null,
-  updatePassword: (password: string) => {},
+  walletPreference: defaultWalletPreference,
+  totalWalletAccount: 0,
+  changeDefaultAccountIndex: (index: number) => {
+    throw new Error('unimplemented');
+  },
+  updatePassword: (password: string) => {
+    throw new Error('unimplemented');
+  },
+  createNewSiblingAccount: () => {
+    throw new Error('unimplemented');
+  },
   createNewAccount: (password: string) => {
     throw new Error('unimplemented');
   },
@@ -110,8 +137,11 @@ const WalletContext = createContext<WalletContextState>({
 export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
   children,
 }) => {
-  const [stateAccount, setAccount] = useState<AptosAccount | null>(null);
+  const [accounts, setAccounts] = useState<AptosAccount[]>([]);
   const [oneTimeMnemonic, setOneTimeMnemonic] = useState<string | null>(null);
+  const [walletPreference, setWalletPreference] = useState<WalletPreference>(
+    defaultWalletPreference
+  );
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState(null);
   const [state, setState] = useState<WalletState>(
@@ -133,16 +163,22 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
     return new AptosClient(network.aptos);
   }, [network]);
 
+  const stateAccount = accounts[walletPreference.defaultAccountIndex];
+
   const loadWallet = async (password: string) => {
-    const wallet = await readWallet();
-    if (!wallet) {
+    const walletAccounts = await readWalletAccounts();
+
+    if (!walletAccounts || (walletAccounts && walletAccounts.length === 0)) {
       setState('account:fulfilled:noAccount');
     } else {
       if (password) {
-        const { encryptedMnemonic } = wallet;
         try {
-          const account = await loadAccount(password, encryptedMnemonic);
-          setAccount(account);
+          const accounts = await Promise.all(
+            walletAccounts.map((account) =>
+              loadAccount(password, account.mnemonic)
+            )
+          );
+          setAccounts(accounts);
           setState('account:fulfilled:activeAccount');
         } catch (e: any) {
           setPassword('');
@@ -170,6 +206,14 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
     loadWallet(password);
   }, [password]);
 
+  useEffect(() => {
+    const loadWalletPreference = async () => {
+      const preference = await readWalletPreference();
+      setWalletPreference(preference);
+    };
+    loadWalletPreference();
+  }, []);
+
   const createNewAccount = async (password: string) => {
     try {
       setState('account:pending:createAccount');
@@ -177,13 +221,12 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
       const { account, encryptedMnemonic, encryptedPrivateKey } =
         await createAccount({ mnemonic, password });
 
-      await storeWallet({
-        encryptedMnemonic,
-        encryptedPrivateKey,
+      await addWalletAccount({
+        mnemonic: encryptedMnemonic,
+        privateKey: encryptedPrivateKey,
       });
-      // TODO: please check why this is needed
       await faucetClient.fundAccount(account.address(), 0);
-      setAccount(account);
+      setAccounts([...accounts, account]);
       setOneTimeMnemonic(mnemonic);
       setState('account:fulfilled:activeAccount');
     } catch (e) {
@@ -201,12 +244,12 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
 
       // To test the imported account
       await aptosClient.getAccountResources(account.address());
-      await storeWallet({
-        encryptedMnemonic,
-        encryptedPrivateKey,
+      await addWalletAccount({
+        mnemonic: encryptedMnemonic,
+        privateKey: encryptedPrivateKey,
       });
 
-      setAccount(account);
+      setAccounts([...accounts, account]);
 
       setState('account:fulfilled:importAccount');
     } catch (e) {
@@ -258,7 +301,7 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
   const logout = async () => {
     setState('account:pending:logout');
     await deleteWallet();
-    setAccount(null);
+    setAccounts([]);
     setPassword('');
     setOneTimeMnemonic(null);
     setState('account:fulfilled:logout');
@@ -271,10 +314,12 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
 
   const revealSeedPhrase = async (password: string) => {
     setState('account:pending:revealSeedPhrase');
-    const wallet = await readWallet();
-    if (wallet && wallet.encryptedMnemonic) {
+    const walletAccounts = await readWalletAccounts();
+
+    const wallet = walletAccounts[walletPreference.defaultAccountIndex];
+    if (wallet && wallet.mnemonic) {
       try {
-        const mnemonic = await decrypt(password, wallet.encryptedMnemonic);
+        const mnemonic = await decrypt(password, wallet.mnemonic);
         setState('account:fulfilled:revealSeedPhrase');
         return mnemonic;
       } catch (e: unknown) {
@@ -292,21 +337,22 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
     newPassword: string
   ) => {
     setState('account:pending:changePassword');
-    const wallet = await readWallet();
-    if (wallet && wallet.encryptedMnemonic && wallet.encryptedPrivateKey) {
-      const mnemonic = await decrypt(currentPassword, wallet.encryptedMnemonic);
-      const privateKey = await decrypt(
-        currentPassword,
-        wallet.encryptedPrivateKey
+    const walletAccounts = await readWalletAccounts();
+    if (walletAccounts.length > 0) {
+      const updatedWalletAccounts = await Promise.all(
+        walletAccounts.map(async (wallet) => {
+          const mnemonic = await decrypt(currentPassword, wallet.mnemonic);
+          const privateKey = await decrypt(currentPassword, wallet.privateKey);
+          const encryptedMnemonic = await encrypt(newPassword, mnemonic);
+          const encryptedPrivateKey = await encrypt(newPassword, privateKey);
+          return {
+            mnemonic: encryptedMnemonic,
+            privateKey: encryptedPrivateKey,
+          };
+        })
       );
 
-      const encryptedMnemonic = await encrypt(newPassword, mnemonic);
-      const encryptedPrivateKey = await encrypt(newPassword, privateKey);
-
-      await storeWallet({
-        encryptedMnemonic,
-        encryptedPrivateKey,
-      });
+      await writeWalletAccounts(updatedWalletAccounts);
       setState('account:fulfilled:changePassword');
     } else {
       setState('account:rejected:changePassword');
@@ -314,9 +360,40 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
     }
   };
 
+  const createNewSiblingAccount = async () => {
+    setState('account:pending:createNewSiblingAccount');
+    try {
+      const mnemonic = generateMnemonic();
+      const { account, encryptedMnemonic, encryptedPrivateKey } =
+        await createAccount({ mnemonic, password });
+
+      await addWalletAccount({
+        mnemonic: encryptedMnemonic,
+        privateKey: encryptedPrivateKey,
+      });
+      await faucetClient.fundAccount(account.address(), 0);
+      setAccounts([...accounts, account]);
+
+      setState('account:fulfilled:createNewSiblingAccount');
+      return mnemonic;
+    } catch (e) {
+      console.error(e);
+      setState('account:rejected:createNewSiblingAccount');
+    }
+  };
+  const changeDefaultAccountIndex = (index: number) => {
+    setWalletPreference({
+      ...walletPreference,
+      defaultAccountIndex: index,
+    });
+  };
+
+  const totalWalletAccount = useMemo(() => accounts.length, [accounts]);
+
   return (
     <WalletContext.Provider
       value={{
+        accounts,
         account: stateAccount,
         state,
         network,
@@ -326,6 +403,10 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
         oneTimeMnemonic,
         password,
         passwordError,
+        walletPreference,
+        totalWalletAccount,
+        changeDefaultAccountIndex,
+        createNewSiblingAccount,
         updatePassword,
         createNewAccount,
         importAccount,

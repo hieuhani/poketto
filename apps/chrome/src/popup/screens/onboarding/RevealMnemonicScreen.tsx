@@ -23,7 +23,7 @@ export const RevealMnemonicScreen: React.FunctionComponent = () => {
 
       {oneTimeMnemonic && <MnemonicView mnemonic={oneTimeMnemonic} />}
 
-      <Stack spacing={2}>
+      <Stack spacing={2} marginTop={4}>
         <Button variant="contained" fullWidth onClick={handleContinue}>
           Continue
         </Button>

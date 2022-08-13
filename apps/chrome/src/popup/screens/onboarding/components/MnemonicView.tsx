@@ -23,7 +23,6 @@ export const MnemonicView: React.FunctionComponent<Props> = ({ mnemonic }) => {
       sx={{
         px: 2,
         py: 4,
-        marginBottom: 4,
         userSelect: 'none',
         position: 'relative',
         borderRadius: 4,
