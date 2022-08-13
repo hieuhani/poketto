@@ -8,19 +8,24 @@ import {
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import { ReceiveCoin } from '../popup/modals/ReceiveCoin';
-import DialogTitle from '@mui/material/DialogTitle';
+import { RevealMnemonic } from '../popup/modals/RevealMnemonic';
 
 const modals = {
   ReceiveCoin,
+  RevealMnemonic,
 };
 
 export type AvailableModal = keyof typeof modals;
 interface ModalNavigationContextState {
   openModal: (modal: AvailableModal, params?: object) => void;
+  closeModal: () => void;
 }
 
 const ModalNavigationContext = createContext<ModalNavigationContextState>({
   openModal: (modal: AvailableModal, params?: object) => {
+    throw new Error('unimplemented');
+  },
+  closeModal: () => {
     throw new Error('unimplemented');
   },
 });
@@ -32,7 +37,7 @@ export const ModalNavigation: React.FunctionComponent<
   const [modalParams, setModalParams] = useState<any>();
   const open = !!modalName;
 
-  const handleClose = () => {
+  const closeModal = () => {
     setModalName(null);
   };
 
@@ -48,11 +53,13 @@ export const ModalNavigation: React.FunctionComponent<
     return modals[modalName];
   }, [modalName]);
   return (
-    <ModalNavigationContext.Provider value={{ openModal }}>
+    <ModalNavigationContext.Provider value={{ openModal, closeModal }}>
       {children}
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={open} onClose={closeModal}>
         <DialogContent>
-          {ModalComponent && <ModalComponent {...modalParams} />}
+          {ModalComponent && (
+            <ModalComponent {...modalParams} close={closeModal} />
+          )}
         </DialogContent>
       </Dialog>
     </ModalNavigationContext.Provider>

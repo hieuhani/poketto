@@ -24,6 +24,7 @@ export async function createAccount({
 }: NewAccountPayload): Promise<NewAccount> {
   const seed = generateAccountSeed(mnemonic);
   const keypair = sign.keyPair.fromSeed(seed);
+
   const secretKey = keypair.secretKey;
   const secretKeyHex64 = Buffer.from(secretKey).toString('hex').slice(0, 64);
   // TODO: update type definition

@@ -6,11 +6,13 @@ import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
-import { IoAddOutline } from 'react-icons/io5';
+import { IoAddOutline, IoCheckmark } from 'react-icons/io5';
 import { useEffect, useRef, useState } from 'react';
 import ListItemText from '@mui/material/ListItemText';
 import { makeShortAddress } from '../helpers/address';
 import { renderIcon } from '../helpers/blockies';
+import { useWallet } from '@poketto/core';
+import { useModalNavigation } from '../../navigation/ModalNavigation';
 
 interface Props {
   activeAddress: string;
@@ -18,11 +20,18 @@ interface Props {
 export const WalletSwitcher: React.FunctionComponent<Props> = ({
   activeAddress,
 }) => {
+  const {
+    accounts,
+    walletPreference,
+    createNewSiblingAccount,
+    changeDefaultAccountIndex,
+  } = useWallet();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
+  const { openModal } = useModalNavigation();
   const canvas = useRef<HTMLCanvasElement | null>(null);
   const handleClose = () => {
     setAnchorEl(null);
@@ -32,7 +41,7 @@ export const WalletSwitcher: React.FunctionComponent<Props> = ({
       {
         seed: activeAddress,
         color: '#dfe',
-        bgcolor: '#aaa', // choose a different background color, default: random
+        bgcolor: '#aaa',
         size: 8,
         scale: 5,
         spotcolor: '#000',
@@ -41,6 +50,11 @@ export const WalletSwitcher: React.FunctionComponent<Props> = ({
     );
   }, [activeAddress]);
 
+  const handleAddWallet = async () => {
+    const mnemonic = await createNewSiblingAccount();
+    openModal('RevealMnemonic', { mnemonic });
+  };
+
   return (
     <>
       <Stack
@@ -48,7 +62,7 @@ export const WalletSwitcher: React.FunctionComponent<Props> = ({
         spacing={1}
         direction="row"
         alignItems="center"
-        // onClick={handleClick}
+        onClick={handleClick}
         sx={{
           paddingY: 1,
           paddingLeft: 2,
@@ -64,7 +78,7 @@ export const WalletSwitcher: React.FunctionComponent<Props> = ({
             fontWeight="700"
             textTransform="uppercase"
           >
-            Wallet 1
+            Wallet {walletPreference.defaultAccountIndex + 1}
           </Typography>
 
           <Typography
@@ -117,19 +131,36 @@ export const WalletSwitcher: React.FunctionComponent<Props> = ({
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem>
-          <ListItemText inset>0xd2ffe...beda9d</ListItemText>
-        </MenuItem>
+        {accounts.map((account, index) => {
+          const isActive = walletPreference.defaultAccountIndex === index;
+          return (
+            <MenuItem
+              key={index}
+              onClick={() => changeDefaultAccountIndex(index)}
+            >
+              {isActive && (
+                <ListItemIcon>
+                  <IoCheckmark />
+                </ListItemIcon>
+              )}
+              <ListItemText inset={!isActive}>
+                <Typography component="span" sx={{ marginRight: 1 }}>
+                  Wallet {index + 1}
+                </Typography>
+                <Typography component="span" color="grey.500">
+                  ({makeShortAddress(account.address().hex())})
+                </Typography>
+              </ListItemText>
+            </MenuItem>
+          );
+        })}
 
-        <MenuItem>
-          <ListItemText inset>0xpdbf2...pl0672</ListItemText>
-        </MenuItem>
         <Divider />
-        <MenuItem>
+        <MenuItem onClick={handleAddWallet}>
           <ListItemIcon>
             <IoAddOutline />
           </ListItemIcon>
-          Add a new wallet
+          Add wallet
         </MenuItem>
       </Menu>
     </>

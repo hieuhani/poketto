@@ -11,15 +11,20 @@ import { RevealMnemonicScreen } from './screens/onboarding/RevealMnemonicScreen'
 import { PasswordResumeScreen } from './screens/onboarding/PasswordResumeScreen';
 import { ImportWalletScreen } from './screens/onboarding/ImportWalletScreen';
 import { ForgotPasswordScreen } from './screens/onboarding/ForgotPasswordScreen';
+import { GlobalLoading } from './components/GlobalLoading';
 
 export const App: React.FunctionComponent = () => {
   const { account, state, oneTimeMnemonic, password } = useWallet();
+  const loading = ['account:pending:createNewSiblingAccount'].includes(state);
+
   const authenticated =
     account !== null &&
     !oneTimeMnemonic &&
-    !['account:pending:createAccount', 'account:pending:loadAccount'].includes(
-      state
-    );
+    ![
+      'account:pending:createAccount',
+      'account:pending:loadAccount',
+      'account:fulfilled:noAccount',
+    ].includes(state);
 
   return (
     <Box
@@ -79,6 +84,7 @@ export const App: React.FunctionComponent = () => {
           />
         )}
       </Box>
+      <GlobalLoading loading={loading} />
     </Box>
   );
 };
