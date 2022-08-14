@@ -1,6 +1,4 @@
-import { WebLocalStorage } from '../storage';
-
-const storage = new WebLocalStorage();
+import { Storage } from '../storage';
 
 const WALLET_ACCOUNTS_STORAGE_KEY = 'accounts';
 const WALLET_PREFERENCE_STORAGE_KEY = 'preference';
@@ -17,34 +15,40 @@ export interface WalletPreference {
 export const defaultWalletPreference: WalletPreference = {
   defaultAccountIndex: 0,
 };
-export const writeWalletAccounts = async (data: WalletAccount[]) => {
-  await storage.save(WALLET_ACCOUNTS_STORAGE_KEY, data);
-};
 
-export const addWalletAccount = async (data: WalletAccount) => {
-  const accounts = await readWalletAccounts();
-  accounts.push(data);
-  await writeWalletAccounts(accounts);
-};
+export class WalletStorage {
+  private storage: Storage;
 
-export const readWalletAccounts = async (): Promise<WalletAccount[]> => {
-  const wallet = await storage.get<WalletAccount[] | null>(
-    WALLET_ACCOUNTS_STORAGE_KEY
-  );
-  return wallet || [];
-};
+  constructor(storage: Storage) {
+    this.storage = storage;
+  }
+  writeWalletAccounts = async (data: WalletAccount[]) => {
+    await this.storage.save(WALLET_ACCOUNTS_STORAGE_KEY, data);
+  };
 
-export const readWalletPreference = async (): Promise<WalletPreference> => {
-  const preference = await storage.get<WalletPreference | null>(
-    WALLET_PREFERENCE_STORAGE_KEY
-  );
-  return preference || defaultWalletPreference;
-};
+  addWalletAccount = async (data: WalletAccount) => {
+    const accounts = await this.readWalletAccounts();
+    accounts.push(data);
+    await this.writeWalletAccounts(accounts);
+  };
+  readWalletAccounts = async (): Promise<WalletAccount[]> => {
+    const wallet = await this.storage.get<WalletAccount[] | null>(
+      WALLET_ACCOUNTS_STORAGE_KEY
+    );
+    return wallet || [];
+  };
+  readWalletPreference = async (): Promise<WalletPreference> => {
+    const preference = await this.storage.get<WalletPreference | null>(
+      WALLET_PREFERENCE_STORAGE_KEY
+    );
+    return preference || defaultWalletPreference;
+  };
 
-export const deleteWallet = async () => {
-  await Promise.all(
-    [WALLET_ACCOUNTS_STORAGE_KEY, WALLET_PREFERENCE_STORAGE_KEY].map((key) =>
-      storage.remove(key)
-    )
-  );
-};
+  deleteWallet = async () => {
+    await Promise.all(
+      [WALLET_ACCOUNTS_STORAGE_KEY, WALLET_PREFERENCE_STORAGE_KEY].map((key) =>
+        this.storage.remove(key)
+      )
+    );
+  };
+}
