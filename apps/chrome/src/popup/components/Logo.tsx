@@ -1,13 +1,14 @@
-import Box from '@mui/material/Box';
+import Box, { BoxProps } from '@mui/material/Box';
 
-export const Logo: React.FunctionComponent = () => (
-  <Box>
+export const Logo: React.FunctionComponent<BoxProps> = (props) => (
+  <Box {...props}>
     <svg
       width="42"
       height="41"
       viewBox="0 0 42 41"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      style={{ width: '100%', height: '100%' }}
     >
       <path
         fillRule="evenodd"

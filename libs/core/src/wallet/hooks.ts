@@ -16,6 +16,9 @@ export const useAccountResources = (
     const data = await client.getAccountResources(address);
     setResources(data);
   };
+  const refetch = () => {
+    firstCalled.current = false;
+  };
   useEffect(() => {
     let intervalFetch: NodeJS.Timer | null = null;
     if (account) {
@@ -38,6 +41,7 @@ export const useAccountResources = (
     };
   }, [account, refetchInterval]);
   return {
+    refetch,
     data: resources,
   };
 };
