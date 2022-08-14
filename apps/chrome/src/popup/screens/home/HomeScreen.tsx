@@ -20,7 +20,7 @@ export const HomeScreen: React.FunctionComponent = () => {
   return (
     <Stack paddingX={1} paddingTop={2} spacing={2}>
       <WalletHeader
-        loading={state.startsWith('account:pending')}
+        loading={state.startsWith('account:pending:loadAccount')}
         activeAddress={account?.address().hex()}
       />
       <OverviewCard

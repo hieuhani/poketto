@@ -23,6 +23,11 @@ import { useAccountResources } from './hooks';
 import { Coin } from '../resource';
 import { decrypt, encrypt } from '../password';
 
+export interface SimulatedTransaction {
+  success: boolean;
+  gasUsed: number;
+  vmStatus: string;
+}
 export type TransactionPayload = Types.TransactionPayload;
 export type AccountResource = Types.MoveResource;
 export type WalletState =
@@ -48,7 +53,13 @@ export type WalletState =
   | 'account:rejected:changePassword'
   | 'account:pending:createNewSiblingAccount'
   | 'account:fulfilled:createNewSiblingAccount'
-  | 'account:rejected:createNewSiblingAccount';
+  | 'account:rejected:createNewSiblingAccount'
+  | 'account:pending:simulateTransaction'
+  | 'account:fulfilled:simulateTransaction'
+  | 'account:rejected:simulateTransaction'
+  | 'account:pending:submitTransaction'
+  | 'account:fulfilled:submitTransaction'
+  | 'account:rejected:submitTransaction';
 
 export interface WalletContextState {
   account: AptosAccount | null;
@@ -73,6 +84,10 @@ export interface WalletContextState {
     payload: TransactionPayload,
     fromAccount?: AptosAccount
   ) => Promise<string>;
+  simulateTransaction: (
+    payload: TransactionPayload,
+    fromAccount?: AptosAccount
+  ) => Promise<SimulatedTransaction>;
   clearOneTimeMnemonic: () => void;
   logout: () => void;
   lockWallet: () => void;
@@ -112,6 +127,12 @@ const WalletContext = createContext<WalletContextState>({
     throw new Error('unimplemented');
   },
   submitTransaction: (
+    payload: Types.TransactionPayload,
+    fromAccount?: AptosAccount
+  ) => {
+    throw new Error('unimplemented');
+  },
+  simulateTransaction: (
     payload: Types.TransactionPayload,
     fromAccount?: AptosAccount
   ) => {
@@ -282,15 +303,23 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
     if (!account) {
       throw new Error('Undefined account');
     }
-    const txnRequest = await aptosClient.generateTransaction(
-      account.address(),
-      payload
-    );
+    try {
+      setState('account:pending:submitTransaction');
+      const txnRequest = await aptosClient.generateTransaction(
+        account.address(),
+        payload
+      );
 
-    const signedTxn = await aptosClient.signTransaction(account, txnRequest);
-    const transactionRes = await aptosClient.submitTransaction(signedTxn);
-    await aptosClient.waitForTransaction(transactionRes.hash);
-    return transactionRes.hash;
+      const signedTxn = await aptosClient.signTransaction(account, txnRequest);
+      const transactionRes = await aptosClient.submitTransaction(signedTxn);
+      await aptosClient.waitForTransaction(transactionRes.hash);
+
+      setState('account:fulfilled:submitTransaction');
+      return transactionRes.hash;
+    } catch (e) {
+      setState('account:fulfilled:submitTransaction');
+      throw e;
+    }
   };
 
   const updatePassword = (password: string) => {
@@ -388,6 +417,41 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
     });
   };
 
+  const simulateTransaction = async (
+    payload: TransactionPayload,
+    fromAccount?: AptosAccount
+  ) => {
+    const account = fromAccount || stateAccount;
+    if (!account) {
+      throw new Error('Undefined account');
+    }
+    setState('account:pending:simulateTransaction');
+    try {
+      const txnRequest = await aptosClient.generateTransaction(
+        account.address(),
+        payload
+      );
+
+      const transactions = await aptosClient.simulateTransaction(
+        account,
+        txnRequest
+      );
+      if (transactions.length > 0) {
+        setState('account:fulfilled:simulateTransaction');
+        return {
+          success: transactions[0].success,
+          gasUsed: parseInt(transactions[0].gas_used, 10),
+          vmStatus: transactions[0].vm_status,
+        };
+      }
+
+      throw new Error('Invalid transaction');
+    } catch (e) {
+      setState('account:rejected:simulateTransaction');
+      throw e;
+    }
+  };
+
   const totalWalletAccount = useMemo(() => accounts.length, [accounts]);
 
   return (
@@ -411,6 +475,7 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
         createNewAccount,
         importAccount,
         fundAccountWithFaucet,
+        simulateTransaction,
         submitTransaction,
         clearOneTimeMnemonic,
         logout,

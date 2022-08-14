@@ -14,8 +14,11 @@ import { useDebounce } from '../../hooks/use-debounce';
 import { useEffect, useMemo, useState } from 'react';
 import Button from '@mui/material/Button';
 import toast from 'react-hot-toast';
+import Alert from '@mui/material/Alert';
 import { HexAddress } from '../../../ui/HexAddress';
 import { formatMoney } from '../../helpers/number';
+import { SimulatedTransaction } from '@poketto/core';
+import { useModalNavigation } from '../../../navigation/ModalNavigation';
 
 export const STATIC_GAS_AMOUNT = 150;
 
@@ -42,8 +45,11 @@ export interface TransferFormState {
 
 export const TransferScreen: React.FunctionComponent = () => {
   const { goBack } = useStackNavigation();
-  const { account, state, resources, coins, submitTransaction } = useWallet();
-  const [sending, setSending] = useState(false);
+  const { account, state, coins, submitTransaction, simulateTransaction } =
+    useWallet();
+  const { openModal } = useModalNavigation();
+  const [simulatedTransaction, setSimulatedTransaction] =
+    useState<SimulatedTransaction | null>(null);
   const balance = coins.reduce((acc, coin) => acc + coin.balance, 0);
   const { check: checkAddress, status: addressStatus } = useCheckAddress();
   const { register, watch, handleSubmit } = useForm({
@@ -62,19 +68,35 @@ export const TransferScreen: React.FunctionComponent = () => {
   } = { ...register('toAddress') };
 
   const debouncedAddressOnChange = useDebounce(toAddress, 500);
-
+  const debouncedAmountOnChange = useDebounce(amount, 500);
   useEffect(() => {
     if (debouncedAddressOnChange.length >= 60 && length <= 70) {
       checkAddress(debouncedAddressOnChange);
     }
   }, [debouncedAddressOnChange]);
 
+  useEffect(() => {
+    const executeSimulateTransaction = async (payload: TransactionPayload) => {
+      const result = await simulateTransaction(payload);
+      setSimulatedTransaction(result);
+    };
+    if (debouncedAmountOnChange && toAddress) {
+      const payload: TransactionPayload = {
+        arguments: [toAddress, debouncedAmountOnChange],
+        function: '0x1::coin::transfer',
+        type: 'script_function_payload',
+        type_arguments: ['0x1::aptos_coin::AptosCoin'],
+      };
+      executeSimulateTransaction(payload);
+    }
+  }, [debouncedAmountOnChange, toAddress]);
+
   const addressNote = useMemo(() => {
     switch (addressStatus) {
       case 'valid':
         return (
           <Typography variant="caption">
-            Address is valid.{' '}
+            Address is verified.{' '}
             <MuiLink
               href={`https://explorer.devnet.aptos.dev/account/${toAddress}`}
               target="_blank"
@@ -93,33 +115,41 @@ export const TransferScreen: React.FunctionComponent = () => {
     }
   }, [addressStatus]);
 
-  const onFormSubmit = async (data: TransferFormState) => {
-    setSending(true);
+  const onSendTransaction = async () => {
     try {
       const payload: TransactionPayload = {
-        arguments: [data.toAddress, data.amount],
+        arguments: [toAddress, amount],
         function: '0x1::coin::transfer',
         type: 'script_function_payload',
         type_arguments: ['0x1::aptos_coin::AptosCoin'],
       };
-      const txtHash = await submitTransaction(payload);
-
+      await submitTransaction(payload);
+      goBack();
       toast.success('Transaction sent');
     } catch (e: any) {
       toast.error(e.response.data.message);
     }
-    setSending(false);
+  };
+
+  const handlePreviewTransaction = () => {
+    openModal('ConfirmSendTransaction', {
+      onSendTransaction,
+      fromAddress: account?.address().hex() || '',
+      toAddress: toAddress,
+      amount: parseInt(amount, 10),
+      gasFee: simulatedTransaction?.gasUsed || 0,
+    });
   };
 
   return (
-    <form onSubmit={handleSubmit(onFormSubmit)}>
-      <Box py={1} px={2} display="flex" alignItems="center">
+    <form>
+      <Box py={1} px={1} display="flex" alignItems="center">
         <IconButton onClick={goBack}>
           <IoArrowBackOutline />
         </IconButton>
         <Typography variant="h6">Send coins</Typography>
       </Box>
-      <Stack px={2} spacing={2}>
+      <Stack px={1} spacing={2}>
         {account && (
           <Paper sx={{ px: 2, py: 2 }}>
             <HexAddress
@@ -134,14 +164,14 @@ export const TransferScreen: React.FunctionComponent = () => {
           </Paper>
         )}
 
-        <Paper sx={{ px: 2, pt: 2, paddingBottom: 3 }}>
+        <Paper sx={{ px: 2, py: 2 }}>
           <Typography
-            fontWeight="600"
-            fontSize="small"
-            textTransform="uppercase"
+            component="div"
+            variant="caption"
+            color="grey.400"
             marginBottom={1}
           >
-            To
+            Receive address
           </Typography>
           <StyledInput
             fullWidth
@@ -156,11 +186,11 @@ export const TransferScreen: React.FunctionComponent = () => {
           />
           {addressNote}
         </Paper>
-        <Paper sx={{ px: 2, pt: 2, paddingBottom: 3 }}>
+        <Paper sx={{ px: 2, py: 2 }}>
           <Typography
-            fontWeight="600"
-            fontSize="small"
-            textTransform="uppercase"
+            component="div"
+            variant="caption"
+            color="grey.400"
             marginBottom={1}
           >
             Amount
@@ -175,28 +205,30 @@ export const TransferScreen: React.FunctionComponent = () => {
             {...register('amount')}
           />
         </Paper>
-        <Paper sx={{ px: 2, py: 2 }}>
-          <Typography
-            fontWeight="600"
-            fontSize="small"
-            textTransform="uppercase"
-          >
-            Gas fee
-          </Typography>
-          <Typography>{STATIC_GAS_AMOUNT} AptosCoin</Typography>
-        </Paper>
+        {simulatedTransaction && !simulatedTransaction.success && (
+          <Alert severity="error">
+            Insufficient balance. Gas fee: {simulatedTransaction.gasUsed}
+          </Alert>
+        )}
+
         <Button
           variant="contained"
-          type="submit"
+          type="button"
+          onClick={handlePreviewTransaction}
           fullWidth
           disabled={
+            [
+              'account:pending:submitTransaction',
+              'account:pending:simulateTransaction',
+            ].includes(state) ||
+            !simulatedTransaction ||
+            (simulatedTransaction && !simulatedTransaction.success) ||
             addressStatus !== 'valid' ||
             (amount || 0) === 0 ||
-            STATIC_GAS_AMOUNT + parseFloat(amount) > balance ||
-            sending
+            parseFloat(amount) > balance
           }
         >
-          Send
+          Preview
         </Button>
       </Stack>
     </form>
