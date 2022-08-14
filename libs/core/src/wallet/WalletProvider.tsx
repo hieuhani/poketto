@@ -2,25 +2,26 @@ import { AptosAccount, AptosClient, FaucetClient, Types } from 'aptos';
 import React, { PropsWithChildren, useEffect, useMemo, useState } from 'react';
 import { generateMnemonic } from '../mnemonic';
 import { createAccount, loadAccount } from '../account';
+import { Storage } from '../storage';
 import {
-  addWalletAccount,
   defaultWalletPreference,
-  deleteWallet,
-  readWalletAccounts,
-  readWalletPreference,
   WalletPreference,
-  writeWalletAccounts,
+  WalletStorage,
 } from './storage';
 import { networkConfigs, NetworkProfile } from '../network';
 import { useAccountResources } from './hooks';
-
 import { decrypt, encrypt } from '../password';
 import { TransactionPayload, WalletState } from './types';
 import { WalletContext } from './WalletContext';
 
-export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
+interface Props extends PropsWithChildren {
+  storage: Storage;
+}
+export const WalletProvider: React.FunctionComponent<Props> = ({
   children,
+  storage,
 }) => {
+  const walletStorage = useMemo(() => new WalletStorage(storage), [storage]);
   const [accounts, setAccounts] = useState<AptosAccount[]>([]);
   const [oneTimeMnemonic, setOneTimeMnemonic] = useState<string | null>(null);
   const [walletPreference, setWalletPreference] = useState<WalletPreference>(
@@ -50,7 +51,7 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
   const stateAccount = accounts[walletPreference.defaultAccountIndex];
 
   const loadWallet = async (password: string) => {
-    const walletAccounts = await readWalletAccounts();
+    const walletAccounts = await walletStorage.readWalletAccounts();
 
     if (!walletAccounts || (walletAccounts && walletAccounts.length === 0)) {
       setState('account:fulfilled:noAccount');
@@ -96,7 +97,7 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
 
   useEffect(() => {
     const loadWalletPreference = async () => {
-      const preference = await readWalletPreference();
+      const preference = await walletStorage.readWalletPreference();
       setWalletPreference(preference);
     };
     loadWalletPreference();
@@ -109,7 +110,7 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
       const { account, encryptedMnemonic, encryptedPrivateKey } =
         await createAccount({ mnemonic, password });
 
-      await addWalletAccount({
+      await walletStorage.addWalletAccount({
         mnemonic: encryptedMnemonic,
         privateKey: encryptedPrivateKey,
       });
@@ -132,7 +133,7 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
 
       // To test the imported account
       await aptosClient.getAccountResources(account.address());
-      await addWalletAccount({
+      await walletStorage.addWalletAccount({
         mnemonic: encryptedMnemonic,
         privateKey: encryptedPrivateKey,
       });
@@ -196,7 +197,7 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
 
   const logout = async () => {
     setState('account:pending:logout');
-    await deleteWallet();
+    await walletStorage.deleteWallet();
     setAccounts([]);
     setPassword('');
     setOneTimeMnemonic(null);
@@ -210,7 +211,7 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
 
   const revealSeedPhrase = async (password: string) => {
     setState('account:pending:revealSeedPhrase');
-    const walletAccounts = await readWalletAccounts();
+    const walletAccounts = await walletStorage.readWalletAccounts();
 
     const wallet = walletAccounts[walletPreference.defaultAccountIndex];
     if (wallet && wallet.mnemonic) {
@@ -233,7 +234,7 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
     newPassword: string
   ) => {
     setState('account:pending:changePassword');
-    const walletAccounts = await readWalletAccounts();
+    const walletAccounts = await walletStorage.readWalletAccounts();
     if (walletAccounts.length > 0) {
       const updatedWalletAccounts = await Promise.all(
         walletAccounts.map(async (wallet) => {
@@ -248,7 +249,7 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
         })
       );
 
-      await writeWalletAccounts(updatedWalletAccounts);
+      await walletStorage.writeWalletAccounts(updatedWalletAccounts);
       setState('account:fulfilled:changePassword');
     } else {
       setState('account:rejected:changePassword');
@@ -263,7 +264,7 @@ export const WalletProvider: React.FunctionComponent<PropsWithChildren> = ({
       const { account, encryptedMnemonic, encryptedPrivateKey } =
         await createAccount({ mnemonic, password });
 
-      await addWalletAccount({
+      await walletStorage.addWalletAccount({
         mnemonic: encryptedMnemonic,
         privateKey: encryptedPrivateKey,
       });
