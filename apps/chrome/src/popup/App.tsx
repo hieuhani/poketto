@@ -15,7 +15,11 @@ import { GlobalLoading } from './components/GlobalLoading';
 
 export const App: React.FunctionComponent = () => {
   const { account, state, oneTimeMnemonic, password } = useWallet();
-  const loading = ['account:pending:createNewSiblingAccount'].includes(state);
+  const loading = [
+    'account:pending:submitTransaction',
+    'account:pending:createNewSiblingAccount',
+    'account:pending:createAccount',
+  ].includes(state);
 
   const authenticated =
     account !== null &&

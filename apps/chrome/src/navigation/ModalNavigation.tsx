@@ -9,10 +9,12 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import { ReceiveCoin } from '../popup/modals/ReceiveCoin';
 import { RevealMnemonic } from '../popup/modals/RevealMnemonic';
+import { ConfirmSendTransaction } from '../popup/modals/ConfirmSendTransaction';
 
 const modals = {
   ReceiveCoin,
   RevealMnemonic,
+  ConfirmSendTransaction,
 };
 
 export type AvailableModal = keyof typeof modals;

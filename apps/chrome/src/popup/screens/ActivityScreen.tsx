@@ -8,7 +8,6 @@ import Stack from '@mui/material/Stack';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import get from 'lodash.get';
-import { UserTransaction } from 'aptos/dist/generated/models/UserTransaction';
 
 interface DepositTransaction {
   amount: number;
@@ -79,34 +78,20 @@ export const ActivityScreen: React.FunctionComponent = () => {
   }, [resources]);
   return (
     <>
-      <Box px={2}>
+      <Box px={1}>
         <TitleHeader title="Activities" />
       </Box>
-      <Stack px={2} spacing={2}>
+      <Stack px={1} spacing={2}>
         {depositTransactions.map((transaction) => (
           <Paper
             key={`deposit-${transaction.sequenceNumber}`}
             sx={{ px: 2, py: 2 }}
           >
-            <Typography
-              fontWeight="600"
-              fontSize="small"
-              textTransform="uppercase"
-            >
-              {transaction.type}
-            </Typography>
             <Typography>+{transaction.amount}</Typography>
           </Paper>
         ))}
         {sentTransactions.map((transaction) => (
           <Paper key={`send-${transaction.version}`} sx={{ px: 2, py: 2 }}>
-            <Typography
-              fontWeight="600"
-              fontSize="small"
-              textTransform="uppercase"
-            >
-              Version: {transaction.version}
-            </Typography>
             <Typography>-{transaction.amount}</Typography>
           </Paper>
         ))}
