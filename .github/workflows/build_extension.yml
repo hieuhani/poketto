@@ -1,0 +1,26 @@
+name: build extension
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'apps/chrome/**'
+      - 'libs/core/**'
+  pull_request:
+    paths:
+      - 'apps/chrome/**'
+      - 'libs/core/**'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build
+        run: |
+          yarn install
+          yarn build:ext
+
+      - uses: actions/upload-artifact@v1
+        with:
+          name: extension
+          path: apps/chrome/extension

@@ -1,27 +1,23 @@
-name: deploy_staging
-on: [pull_request]
+name: deploy production
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'apps/chrome/**'
+      - 'libs/core/**'
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '16'
       - uses: amondnet/vercel-action@v25.1.0
-        id: vercel-action
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-args: '--prod --force'
           vercel-project-id: ${{ secrets.PROJECT_ID }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          alias-domains: |
-            pr-{{PR_NUMBER}}-poketto.sangnd.vercel.app
-      - name: job deploy failed
-        if: ${{ failure() }}
-        run: |
-          yarn install
-          yarn build
       - name: preview-url
         run: |
           echo ${{ steps.vercel-action.outputs.preview-url }}

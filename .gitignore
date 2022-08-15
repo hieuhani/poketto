@@ -40,3 +40,4 @@ Thumbs.db
 .vercel
 .turbo
 .pnpm-debug.log
+apps/chrome/extension/manifest.json
