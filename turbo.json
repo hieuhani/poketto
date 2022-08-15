@@ -6,6 +6,9 @@
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]
     },
+    "build:ext": {
+      "dependsOn": ["^build"]
+    },
     "dev": {},
     "dev:ext": {}
   }

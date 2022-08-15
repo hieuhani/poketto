@@ -4,13 +4,18 @@
   "displayName": "Poketto",
   "description": "Yoji poketto",
   "scripts": {
+    "dev": "vite --config ./config/vite.config.web.ts",
     "dev:ext": "npm run clear && cross-env NODE_ENV=development run-p dev:ext:*",
     "dev:ext:prepare": "esno scripts/prepare.ts",
     "dev:ext:popup": "vite build --config ./config/vite.config.popup.ts --watch",
     "dev:ext:background": "vite build --config ./config/vite.config.background.ts --watch",
     "dev:ext:content": "vite build --config ./config/vite.config.content.ts --watch",
-    "dev": "vite --config ./config/vite.config.web.ts",
     "build": "vite build --config ./config/vite.config.web.ts",
+    "build:ext": "npm run clear && cross-env NODE_ENV=production run-p build:ext:*",
+    "build:ext:prepare": "esno scripts/prepare.ts",
+    "build:ext:popup": "vite build --config ./config/vite.config.popup.ts",
+    "build:ext:background": "vite build --config ./config/vite.config.background.ts",
+    "build:ext:content": "vite build --config ./config/vite.config.content.ts",
     "clear": "rimraf extension/dist extension/manifest.json extension.*"
   },
   "dependencies": {
