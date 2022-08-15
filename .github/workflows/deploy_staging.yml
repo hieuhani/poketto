@@ -1,5 +1,9 @@
 name: deploy_staging
-on: [pull_request]
+on:
+  pull_request:
+    paths:
+      - 'apps/chrome/**'
+      - 'libs/core/**'
 jobs:
   deploy:
     runs-on: ubuntu-latest
