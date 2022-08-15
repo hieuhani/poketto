@@ -4,6 +4,7 @@
   "license": "MIT",
   "scripts": {
     "build": "turbo run build",
+    "dev:ext": "turbo run dev:ext --filter=chrome...",
     "dev:chrome": "turbo run dev --filter=chrome...",
     "dev:mobile": "turbo run dev --filter=mobile..."
   },

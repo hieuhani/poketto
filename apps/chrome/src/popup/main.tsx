@@ -2,9 +2,9 @@ import { WalletProvider } from '@poketto/core';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { WebLocalStorage } from '@poketto/core';
-import { Bootstrap } from './shared/Bootstrap';
-import { App } from './popup/App';
-import { ModalNavigation } from './navigation/ModalNavigation';
+import { Bootstrap } from '../shared/Bootstrap';
+import { App } from './App';
+import { ModalNavigation } from '../navigation/ModalNavigation';
 
 const storage = new WebLocalStorage();
 
