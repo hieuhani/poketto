@@ -11,6 +11,7 @@ jobs:
       - uses: amondnet/vercel-action@v25.1.0
         id: vercel-action
         with:
+          vercel-args: '--force'
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           vercel-project-id: ${{ secrets.PROJECT_ID }}
