@@ -12,7 +12,7 @@ interface Props {
   colorScheme: ColorSchemeName;
 }
 export const Navigation: React.FunctionComponent<Props> = ({ colorScheme }) => {
-  const isLoggedIn = true;
+  const isLoggedIn = false;
   const bootstrapAsync = async () => {};
   useEffect(() => {
     bootstrapAsync();
