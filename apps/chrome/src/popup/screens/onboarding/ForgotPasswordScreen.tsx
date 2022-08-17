@@ -24,7 +24,7 @@ export const ForgotPasswordScreen: React.FunctionComponent = () => {
   }, [state]);
   return (
     <Box pb={4}>
-      <Box py={1} px={2}>
+      <Box py={1} px={1}>
         <IconButton onClick={goBack}>
           <IoArrowBackOutline />
         </IconButton>

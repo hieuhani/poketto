@@ -11,7 +11,6 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import { useWallet } from '@poketto/core';
 import toast from 'react-hot-toast';
-import { useState } from 'react';
 
 const formSchema = Yup.object().shape({
   currentPassword: Yup.string()
@@ -58,13 +57,13 @@ export const ChangePasswordView: React.FunctionComponent = () => {
   };
   return (
     <>
-      <Box py={1} px={2} display="flex" alignItems="center">
+      <Box py={1} px={1} display="flex" alignItems="center">
         <IconButton onClick={goBack}>
           <IoArrowBackOutline />
         </IconButton>
         <Typography variant="h6">Change password</Typography>
       </Box>
-      <Box px={2}>
+      <Box px={1}>
         <form onSubmit={handleSubmit(onFormSubmit)}>
           <Stack spacing={2}>
             <Controller
