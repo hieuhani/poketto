@@ -6,6 +6,9 @@
     "dev": "tsup --watch",
     "clean": "rimraf dist"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "source": "src/index.ts",
   "typing": "dist/index.d.ts",
   "main": "./dist/index.js",
