@@ -36,6 +36,7 @@ export const SettingHome: React.FunctionComponent = () => {
                 onClick={() => stackNavigate('reveal_seed_phrase')}
               />
               <Divider />
+
               <SettingItem
                 title="Change Password"
                 description="Change your wallet password"
