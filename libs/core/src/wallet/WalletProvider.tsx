@@ -208,14 +208,14 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
     setState('account:pending:loadAccount');
   };
 
-  const revealSeedPhrase = async (password: string) => {
+  const revealSeedPhrase = async (password: string): Promise<string> => {
     setState('account:pending:revealSeedPhrase');
     const walletAccounts = await walletStorage.readWalletAccounts();
 
     const wallet = walletAccounts[walletPreference.defaultAccountIndex];
     if (wallet && wallet.mnemonic) {
       try {
-        const mnemonic = await decrypt(password, wallet.mnemonic);
+        const mnemonic = await decrypt<string>(password, wallet.mnemonic);
         setState('account:fulfilled:revealSeedPhrase');
         return mnemonic;
       } catch (e: unknown) {
@@ -224,6 +224,25 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
       }
     } else {
       setState('account:rejected:revealSeedPhrase');
+      throw new Error('No wallet found');
+    }
+  };
+  const revealPrivateKey = async (password: string): Promise<string> => {
+    setState('account:pending:revealPrivateKey');
+    const walletAccounts = await walletStorage.readWalletAccounts();
+
+    const wallet = walletAccounts[walletPreference.defaultAccountIndex];
+    if (wallet && wallet.privateKey) {
+      try {
+        const privateKey = await decrypt<string>(password, wallet.privateKey);
+        setState('account:fulfilled:revealPrivateKey');
+        return privateKey;
+      } catch (e: unknown) {
+        setState('account:rejected:revealPrivateKey');
+        throw e;
+      }
+    } else {
+      setState('account:rejected:revealPrivateKey');
       throw new Error('No wallet found');
     }
   };
@@ -350,6 +369,7 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
         logout,
         lockWallet,
         revealSeedPhrase,
+        revealPrivateKey,
         changePassword,
       }}
     >

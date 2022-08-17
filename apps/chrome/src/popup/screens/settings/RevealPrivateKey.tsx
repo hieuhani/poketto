@@ -12,7 +12,7 @@ import Stack from '@mui/material/Stack';
 import { useWallet } from '@poketto/core';
 import toast from 'react-hot-toast';
 import { useState } from 'react';
-import { MnemonicView } from '../onboarding/components/MnemonicView';
+import { PrivateKeyView } from '../onboarding/components/PrivateKeyView';
 
 const formSchema = Yup.object().shape({
   password: Yup.string()
@@ -24,10 +24,10 @@ export interface PasswordFormState {
   password: string;
 }
 
-export const RevealSeedPhrase: React.FunctionComponent = () => {
+export const RevealPrivateKey: React.FunctionComponent = () => {
   const { goBack } = useStackNavigation();
-  const { state, revealSeedPhrase } = useWallet();
-  const [mnemonic, setMnemonic] = useState('');
+  const { state, revealPrivateKey } = useWallet();
+  const [privateKey, setPrivateKey] = useState('');
   const {
     control,
     handleSubmit,
@@ -41,8 +41,8 @@ export const RevealSeedPhrase: React.FunctionComponent = () => {
   });
   const onFormSubmit = async (data: PasswordFormState) => {
     try {
-      const mnemonicSeedPhrase = await revealSeedPhrase(data.password);
-      setMnemonic(mnemonicSeedPhrase);
+      const privateKey = await revealPrivateKey(data.password);
+      setPrivateKey(privateKey);
     } catch (e: any) {
       toast.error(e.message);
     }
@@ -53,11 +53,11 @@ export const RevealSeedPhrase: React.FunctionComponent = () => {
         <IconButton onClick={goBack}>
           <IoArrowBackOutline />
         </IconButton>
-        <Typography variant="h6">Seed Phrase</Typography>
+        <Typography variant="h6">Private Key</Typography>
       </Box>
       <Box px={1}>
-        {mnemonic ? (
-          <MnemonicView mnemonic={mnemonic} />
+        {privateKey ? (
+          <PrivateKeyView privateKey={privateKey} />
         ) : (
           <form onSubmit={handleSubmit(onFormSubmit)}>
             <Stack spacing={2}>
@@ -82,7 +82,7 @@ export const RevealSeedPhrase: React.FunctionComponent = () => {
                 fullWidth
                 type="submit"
                 disabled={
-                  !isValid || state === 'account:pending:revealSeedPhrase'
+                  !isValid || state === 'account:pending:revealPrivateKey'
                 }
               >
                 Reveal

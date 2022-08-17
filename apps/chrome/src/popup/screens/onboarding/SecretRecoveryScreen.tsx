@@ -9,7 +9,7 @@ export const SecretRecoveryScreen: React.FunctionComponent = () => {
   const { goBack } = useStackNavigation();
   return (
     <Box pb={4}>
-      <Box py={1} px={2}>
+      <Box py={1} px={1}>
         <IconButton aria-label="delete" onClick={goBack}>
           <IoArrowBackOutline />
         </IconButton>

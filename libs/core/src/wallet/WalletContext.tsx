@@ -37,7 +37,8 @@ export interface WalletContextState {
   clearOneTimeMnemonic: () => void;
   logout: () => void;
   lockWallet: () => void;
-  revealSeedPhrase: (password: string) => void;
+  revealSeedPhrase: (password: string) => Promise<string>;
+  revealPrivateKey: (password: string) => Promise<string>;
   changePassword: (currentPassword: string, newPassword: string) => void;
 }
 
@@ -94,6 +95,9 @@ export const WalletContext = createContext<WalletContextState>({
     throw new Error('unimplemented');
   },
   revealSeedPhrase: (password: string) => {
+    throw new Error('unimplemented');
+  },
+  revealPrivateKey: (password: string) => {
     throw new Error('unimplemented');
   },
   changePassword: (currentPassword: string, newPassword: string) => {
