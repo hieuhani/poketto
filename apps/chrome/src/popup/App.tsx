@@ -58,6 +58,7 @@ export const App: React.FunctionComponent = () => {
       <Box zIndex={1000}>
         {state === 'account:pending:loadAccount' && !password ? (
           <StackNavigation
+            key="1"
             routes={[
               { route: 'password_resume', screen: <PasswordResumeScreen /> },
               { route: 'forgot_password', screen: <ForgotPasswordScreen /> },
@@ -79,6 +80,7 @@ export const App: React.FunctionComponent = () => {
           />
         ) : (
           <StackNavigation
+            key="2"
             routes={[
               { route: 'welcome', screen: <WelcomeScreen /> },
               { route: 'new_wallet', screen: <NewWalletScreen /> },

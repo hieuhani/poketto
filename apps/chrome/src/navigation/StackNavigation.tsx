@@ -6,6 +6,7 @@ import {
   useMemo,
   useState,
 } from 'react';
+import { useStack } from './use-stack';
 
 interface Route {
   route: string;
@@ -29,7 +30,7 @@ const NavigationContext = createContext<NavigationContextState>({
 });
 
 export const StackNavigation: React.FunctionComponent<Props> = ({ routes }) => {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const { push, pop, top } = useStack([routes[0].route]);
   const routeIndex = useMemo<Record<string, number>>(
     () =>
       routes.reduce((previousValue, currentValue, currentIndex) => {
@@ -43,17 +44,15 @@ export const StackNavigation: React.FunctionComponent<Props> = ({ routes }) => {
   const navigate = useCallback(
     (route: string) => {
       if (routeIndex[route]) {
-        setActiveIndex(routeIndex[route]);
+        push(route);
       }
     },
     [routeIndex]
   );
 
   const goBack = useCallback(() => {
-    if (activeIndex > 0) {
-      setActiveIndex(activeIndex - 1);
-    }
-  }, [activeIndex]);
+    pop();
+  }, [top]);
 
   if (routes.length === 0) {
     console.error('No routes provided to StackNavigation');
@@ -66,7 +65,7 @@ export const StackNavigation: React.FunctionComponent<Props> = ({ routes }) => {
         goBack,
       }}
     >
-      {routes[activeIndex].screen}
+      {routes[routeIndex[top]].screen}
     </NavigationContext.Provider>
   );
 };

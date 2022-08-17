@@ -49,7 +49,6 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
   }, [network]);
 
   const stateAccount = accounts[walletPreference.defaultAccountIndex];
-
   const loadWallet = async (password: string) => {
     const walletAccounts = await walletStorage.readWalletAccounts();
 
