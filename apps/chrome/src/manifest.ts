@@ -15,21 +15,21 @@ export async function getManifest() {
     description: pkg.description,
     action: {
       default_icon: './assets/icon-512.png',
-      default_popup: './dist/src/popup/index.html',
+      default_popup: './dist/popup.html',
     },
     background: {
-      service_worker: './dist/background/index.js',
+      service_worker: './dist/background.js',
     },
     web_accessible_resources: [
       {
-        resources: ['dist/inpage/index.js'],
+        resources: ['dist/inpage.js'],
         matches: ['<all_urls>'],
       },
     ],
     content_scripts: [
       {
         matches: ['file://*/*', 'http://*/*', 'https://*/*'],
-        js: ['./dist/content/index.js'],
+        js: ['./dist/content.js'],
         run_at: 'document_start',
         all_frames: true,
       },
@@ -40,6 +40,10 @@ export async function getManifest() {
       128: './assets/icon-512.png',
     },
     permissions: ['tabs', 'storage', 'unlimitedStorage', 'activeTab'],
+    content_security_policy: {
+      extension_pages:
+        "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'",
+    },
   };
 
   return manifest;

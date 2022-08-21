@@ -1,5 +1,5 @@
 import * as bip39 from '@scure/bip39';
-import * as english from '@scure/bip39/wordlists/english';
+import * as english from '@scure/bip39/wordlists/english.js';
 
 export const generateMnemonic = (): string => {
   return bip39.generateMnemonic(english.wordlist);
