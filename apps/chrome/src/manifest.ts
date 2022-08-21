@@ -20,6 +20,12 @@ export async function getManifest() {
     background: {
       service_worker: './dist/background/index.js',
     },
+    web_accessible_resources: [
+      {
+        resources: ['dist/inpage/index.js'],
+        matches: ['<all_urls>'],
+      },
+    ],
     content_scripts: [
       {
         matches: ['file://*/*', 'http://*/*', 'https://*/*'],
