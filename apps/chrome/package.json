@@ -8,16 +8,12 @@
     "dev:ext": "npm run clear && cross-env NODE_ENV=development run-p dev:ext:*",
     "dev:ext:prepare": "esno scripts/prepare.ts",
     "dev:ext:popup": "vite build --config ./config/vite.config.popup.ts --watch",
-    "dev:ext:background": "vite build --config ./config/vite.config.background.ts --watch",
-    "dev:ext:content": "vite build --config ./config/vite.config.content.ts --watch",
-    "dev:ext:inpage": "vite build --config ./config/vite.config.inpage.ts --watch",
+    "dev:ext:pages": "esno scripts/buildPages.ts",
     "build": "vite build --config ./config/vite.config.web.ts",
     "build:ext": "npm run clear && cross-env NODE_ENV=production run-p build:ext:*",
     "build:ext:prepare": "esno scripts/prepare.ts",
     "build:ext:popup": "vite build --config ./config/vite.config.popup.ts",
-    "build:ext:background": "vite build --config ./config/vite.config.background.ts",
-    "build:ext:content": "vite build --config ./config/vite.config.content.ts",
-    "build:ext:inpage": "vite build --config ./config/vite.config.inpage.ts",
+    "build:ext:pages": "esno scripts/buildPages.ts",
     "clear": "rimraf extension/dist extension/manifest.json extension.*"
   },
   "dependencies": {
