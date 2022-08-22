@@ -2,9 +2,9 @@
   "name": "@poketto/core",
   "version": "0.0.1",
   "scripts": {
-    "dev": "vite build --watch",
+    "build": "rollup -c",
+    "dev": "rollup -cw",
     "prebuild": "yarn clean",
-    "build": "vite build && yarn dts",
     "dts": "tsc --declaration --emitDeclarationOnly",
     "clean": "rimraf dist"
   },
@@ -12,28 +12,28 @@
     "access": "public"
   },
   "typing": "./dist/index.d.ts",
-  "main": "./dist/core.js",
-  "module": "./dist/core.mjs",
+  "main": "./dist/index.js",
+  "module": "./dist/index.es.js",
   "types": "./dist/index.d.ts",
   "sideEffects": true,
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "require": "./dist/core.js",
-      "import": "./dist/core.mjs"
+      "require": "./dist/index.js",
+      "import": "./dist/index.es.js"
     }
   },
   "files": [
     "dist"
   ],
   "devDependencies": {
+    "@rollup/plugin-typescript": "^8.3.4",
     "@types/node": "^18.0.5",
     "@types/react": "^18.0.15",
-    "@vitejs/plugin-react": "^2.0.1",
     "aptos": "^1.3.6",
     "react": "^18.2.0",
-    "vite": "^3.0.9",
-    "vite-plugin-react": "^4.0.1"
+    "rollup": "^2.78.1",
+    "tslib": "^2.4.0"
   },
   "peerDependencies": {
     "aptos": "^1.3.6",

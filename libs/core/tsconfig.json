@@ -13,10 +13,11 @@
     "noUnusedLocals": true,
     "strictNullChecks": true,
     "forceConsistentCasingInFileNames": true,
+    "declaration": true,
     "paths": {
       "~/*": ["src/*"]
     },
-    "outDir": "dist",
+    "outDir": "./dist",
     "jsx": "react-jsx"
   },
   "exclude": ["dist", "node_modules"],

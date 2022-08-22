@@ -41,7 +41,6 @@ export type ScriptType = 'content' | 'background' | 'inpage';
 export const makeBuildExtensionPageConfig = (
   scriptType: ScriptType
 ): UserConfig => {
-  console.log(isDev);
   return {
     ...sharedConfig,
     plugins: extensionPlugins,

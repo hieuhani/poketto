@@ -11,8 +11,10 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, './src/index.ts'),
       name: '@poketto/core',
-      formats: ['cjs', 'es'],
+      formats: ['es', 'umd'],
+      fileName: (format) => `index.${format}.js`,
     },
+    minify: false,
     target: ['es2020'],
     rollupOptions: {
       external,
