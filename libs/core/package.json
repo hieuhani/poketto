@@ -1,6 +1,6 @@
 {
   "name": "@poketto/core",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -cw",
