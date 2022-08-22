@@ -41,6 +41,7 @@ export type ScriptType = 'content' | 'background' | 'inpage';
 export const makeBuildExtensionPageConfig = (
   scriptType: ScriptType
 ): UserConfig => {
+  console.log(isDev);
   return {
     ...sharedConfig,
     plugins: extensionPlugins,
@@ -48,7 +49,7 @@ export const makeBuildExtensionPageConfig = (
       outDir: r(`extension/dist/${scriptType}`),
       cssCodeSplit: false,
       emptyOutDir: false,
-      sourcemap: isDev ? 'inline' : 'hidden',
+      sourcemap: isDev ? 'inline' : undefined,
       target: ['es2020'],
       lib: {
         entry: r(`src/${scriptType}/main.ts`),
