@@ -5,7 +5,6 @@
     "build": "rollup -c",
     "dev": "rollup -cw",
     "prebuild": "yarn clean",
-    "dts": "tsc --declaration --emitDeclarationOnly",
     "clean": "rimraf dist"
   },
   "publishConfig": {
