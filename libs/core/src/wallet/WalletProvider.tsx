@@ -16,10 +16,12 @@ import { WalletContext } from './WalletContext';
 
 interface Props extends PropsWithChildren {
   storage: Storage;
+  sessionStorage?: Storage;
 }
 export const WalletProvider: React.FunctionComponent<Props> = ({
   children,
   storage,
+  sessionStorage,
 }) => {
   const walletStorage = useMemo(() => new WalletStorage(storage), [storage]);
   const [accounts, setAccounts] = useState<AptosAccount[]>([]);
@@ -99,8 +101,22 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
       const preference = await walletStorage.readWalletPreference();
       setWalletPreference(preference);
     };
+
     loadWalletPreference();
   }, []);
+  useEffect(() => {
+    const loadPassword = async () => {
+      if (sessionStorage) {
+        const savedPassword = await sessionStorage.get<string>('password');
+        if (savedPassword) {
+          setPassword(savedPassword);
+        }
+      }
+    };
+    if (!password) {
+      loadPassword();
+    }
+  }, [sessionStorage, password]);
 
   const createNewAccount = async (password: string) => {
     try {
@@ -117,6 +133,9 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
       setAccounts([...accounts, account]);
       setOneTimeMnemonic(mnemonic);
       setState('account:fulfilled:activeAccount');
+      if (sessionStorage) {
+        await sessionStorage.save('password', password);
+      }
     } catch (e) {
       console.error(e);
       setState('account:rejected:createAccount');
@@ -189,9 +208,12 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
     }
   };
 
-  const updatePassword = (password: string) => {
+  const updatePassword = async (password: string) => {
     setPasswordError(null);
     setPassword(password);
+    if (sessionStorage) {
+      await sessionStorage.save('password', password);
+    }
   };
 
   const logout = async () => {
@@ -200,12 +222,19 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
     setAccounts([]);
     setPassword('');
     setOneTimeMnemonic(null);
+
+    if (sessionStorage) {
+      sessionStorage.remove('password');
+    }
     setState('account:fulfilled:logout');
   };
 
   const lockWallet = async () => {
     setPassword('');
     setState('account:pending:loadAccount');
+    if (sessionStorage) {
+      sessionStorage.remove('password');
+    }
   };
 
   const revealSeedPhrase = async (password: string): Promise<string> => {

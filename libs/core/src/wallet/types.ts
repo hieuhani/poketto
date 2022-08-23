@@ -39,4 +39,7 @@ export type WalletState =
   | 'account:rejected:simulateTransaction'
   | 'account:pending:submitTransaction'
   | 'account:fulfilled:submitTransaction'
-  | 'account:rejected:submitTransaction';
+  | 'account:rejected:submitTransaction'
+  | 'account:pending:loadPassword'
+  | 'account:fulfilled:loadPassword'
+  | 'account:rejected:loadPassword';

@@ -29,7 +29,6 @@ export const App: React.FunctionComponent = () => {
       'account:pending:loadAccount',
       'account:fulfilled:noAccount',
     ].includes(state);
-
   return (
     <Box
       sx={{
