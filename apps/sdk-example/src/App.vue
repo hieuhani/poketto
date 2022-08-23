@@ -9,6 +9,7 @@
 
 <script setup lang="ts">
 function connect() {
+  // @ts-ignore
   window.poketto.connect()
 }
 </script>
