@@ -148,6 +148,7 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
       setAccounts([...accounts, account]);
       setOneTimeMnemonic(mnemonic);
       setState('account:fulfilled:activeAccount');
+      setPassword(password);
       if (sessionStorage) {
         await sessionStorage.save('password', password);
       }
@@ -396,6 +397,21 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
     setState('account:fulfilled:addTrustedOrigin');
   };
 
+  const removeTrustedOrigin = async (
+    origin: string,
+    fromAccount?: AptosAccount
+  ) => {
+    const account = fromAccount || stateAccount;
+    if (!account) {
+      throw new Error('Undefined account');
+    }
+    const updatedOrigins = await walletStorage.removeTrustedOriginFromAccount(
+      account.address().hex(),
+      origin
+    );
+    setAccountTrustedOrigins(updatedOrigins);
+  };
+
   return (
     <WalletContext.Provider
       value={{
@@ -428,6 +444,7 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
         revealPrivateKey,
         changePassword,
         addTrustedOrigin,
+        removeTrustedOrigin,
       }}
     >
       {children}
