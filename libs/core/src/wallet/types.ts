@@ -42,4 +42,7 @@ export type WalletState =
   | 'account:rejected:submitTransaction'
   | 'account:pending:loadPassword'
   | 'account:fulfilled:loadPassword'
-  | 'account:rejected:loadPassword';
+  | 'account:rejected:loadPassword'
+  | 'account:pending:addTrustedOrigin'
+  | 'account:fulfilled:addTrustedOrigin'
+  | 'account:rejected:addTrustedOrigin';

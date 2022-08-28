@@ -4,7 +4,6 @@ import {
   useCallback,
   useContext,
   useMemo,
-  useState,
 } from 'react';
 import { useStack } from './use-stack';
 

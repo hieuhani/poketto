@@ -5,6 +5,7 @@ import { WebLocalStorage } from '@poketto/core';
 import { Bootstrap } from '../shared/Bootstrap';
 import { App } from './App';
 import { ModalNavigation } from '../navigation/ModalNavigation';
+import { SdkProvider } from './sdk';
 
 const platform = window.location.protocol;
 
@@ -36,13 +37,15 @@ const Entry = () => {
     return null;
   }
   return (
-    <WalletProvider storage={storage} sessionStorage={sessionStorage}>
-      <Bootstrap>
-        <ModalNavigation>
-          <App />
-        </ModalNavigation>
-      </Bootstrap>
-    </WalletProvider>
+    <SdkProvider>
+      <WalletProvider storage={storage} sessionStorage={sessionStorage}>
+        <Bootstrap>
+          <ModalNavigation>
+            <App />
+          </ModalNavigation>
+        </Bootstrap>
+      </WalletProvider>
+    </SdkProvider>
   );
 };
 

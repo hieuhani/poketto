@@ -10,4 +10,7 @@ export default defineConfig(({ command }) => ({
     emptyOutDir: false,
     sourcemap: isDev ? 'inline' : false,
   },
+  server: {
+    port: 3000,
+  },
 }));

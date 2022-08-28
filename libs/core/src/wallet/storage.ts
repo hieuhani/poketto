@@ -2,6 +2,7 @@ import { Storage } from '../storage';
 
 const WALLET_ACCOUNTS_STORAGE_KEY = 'accounts';
 const WALLET_PREFERENCE_STORAGE_KEY = 'preference';
+const WALLET_TRUSTED_ORIGINS_KEY = 'origins';
 
 export interface WalletAccount {
   mnemonic: string;
@@ -46,9 +47,46 @@ export class WalletStorage {
 
   deleteWallet = async () => {
     await Promise.all(
-      [WALLET_ACCOUNTS_STORAGE_KEY, WALLET_PREFERENCE_STORAGE_KEY].map((key) =>
-        this.storage.remove(key)
-      )
+      [
+        WALLET_ACCOUNTS_STORAGE_KEY,
+        WALLET_PREFERENCE_STORAGE_KEY,
+        WALLET_TRUSTED_ORIGINS_KEY,
+      ].map((key) => this.storage.remove(key))
     );
+  };
+
+  getAccountTrustedOrigins = async (): Promise<Record<string, string[]>> => {
+    const trustedOrigins = await this.storage.get<Record<string, string[]>>(
+      WALLET_TRUSTED_ORIGINS_KEY
+    );
+    return trustedOrigins || {};
+  };
+
+  addTrustedOriginToAccount = async (
+    address: string,
+    origin: string
+  ): Promise<Record<string, string[]>> => {
+    const origins = await this.getAccountTrustedOrigins();
+
+    if (origins[address]) {
+      const originSet = new Set(origins[address]);
+      originSet.add(origin);
+      origins[address] = Array.from(originSet);
+    } else {
+      origins[address] = [origin];
+    }
+
+    await this.storage.save(WALLET_TRUSTED_ORIGINS_KEY, origins);
+    return origins;
+  };
+
+  removeTrustedOriginFromAccount = async (address: string, origin: string) => {
+    const origins = await this.getAccountTrustedOrigins();
+    if (origins[address]) {
+      const originSet = new Set(origins[address]);
+      originSet.delete(origin);
+      origins[address] = Array.from(originSet);
+      await this.storage.save(WALLET_TRUSTED_ORIGINS_KEY, origins);
+    }
   };
 }
