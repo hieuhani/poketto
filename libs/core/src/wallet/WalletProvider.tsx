@@ -25,6 +25,9 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
 }) => {
   const walletStorage = useMemo(() => new WalletStorage(storage), [storage]);
   const [accounts, setAccounts] = useState<AptosAccount[]>([]);
+  const [accountTrustedOrigins, setAccountTrustedOrigins] = useState<
+    Record<string, string[]>
+  >({});
   const [oneTimeMnemonic, setOneTimeMnemonic] = useState<string | null>(null);
   const [walletPreference, setWalletPreference] = useState<WalletPreference>(
     defaultWalletPreference
@@ -51,6 +54,13 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
   }, [network]);
 
   const stateAccount = accounts[walletPreference.defaultAccountIndex];
+  const currentAccountTrustedOrigins = useMemo(() => {
+    if (!stateAccount) {
+      return [];
+    }
+    return accountTrustedOrigins[stateAccount.address().hex()] || [];
+  }, [stateAccount, accountTrustedOrigins]);
+
   const loadWallet = async (password: string) => {
     const walletAccounts = await walletStorage.readWalletAccounts();
 
@@ -102,7 +112,12 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
       setWalletPreference(preference);
     };
 
+    const loadAccountTrustedOrigins = async () => {
+      const origins = await walletStorage.getAccountTrustedOrigins();
+      setAccountTrustedOrigins(origins);
+    };
     loadWalletPreference();
+    loadAccountTrustedOrigins();
   }, []);
   useEffect(() => {
     const loadPassword = async () => {
@@ -371,6 +386,16 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
 
   const totalWalletAccount = useMemo(() => accounts.length, [accounts]);
 
+  const addTrustedOrigin = async (address: string, origin: string) => {
+    setState('account:pending:addTrustedOrigin');
+    const origins = await walletStorage.addTrustedOriginToAccount(
+      address,
+      origin
+    );
+    setAccountTrustedOrigins(origins);
+    setState('account:fulfilled:addTrustedOrigin');
+  };
+
   return (
     <WalletContext.Provider
       value={{
@@ -386,6 +411,8 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
         passwordError,
         walletPreference,
         totalWalletAccount,
+        currentAccountTrustedOrigins,
+        accountTrustedOrigins,
         changeDefaultAccountIndex,
         createNewSiblingAccount,
         updatePassword,
@@ -400,6 +427,7 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
         revealSeedPhrase,
         revealPrivateKey,
         changePassword,
+        addTrustedOrigin,
       }}
     >
       {children}

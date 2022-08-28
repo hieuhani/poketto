@@ -5,6 +5,7 @@ import { Layout } from './components/Layout';
 import { OnboardingNavigation } from './screens/onboarding/OnboardingNavigation';
 import { HomeNavigation } from './screens/home/HomeNavigation';
 import { NewWalletNavigation } from './screens/onboarding/NewWalletNavigation';
+import { SdkNavigation } from './screens/sdk';
 
 export const App: React.FunctionComponent = () => {
   const { account, state, oneTimeMnemonic, password } = useWallet();
@@ -14,6 +15,7 @@ export const App: React.FunctionComponent = () => {
     'account:pending:submitTransaction',
     'account:pending:createNewSiblingAccount',
     'account:pending:createAccount',
+    'account:pending:addTrustedOrigin',
   ].includes(state);
 
   const authenticated =
@@ -23,11 +25,14 @@ export const App: React.FunctionComponent = () => {
       'account:pending:createAccount',
       'account:pending:loadAccount',
       'account:fulfilled:noAccount',
+      ,
     ].includes(state);
   return (
     <>
       <Layout>
-        {state === 'account:pending:loadAccount' && !password ? (
+        {sdk.valid ? (
+          <SdkNavigation />
+        ) : state === 'account:pending:loadAccount' && !password ? (
           <OnboardingNavigation />
         ) : authenticated ? (
           <HomeNavigation />

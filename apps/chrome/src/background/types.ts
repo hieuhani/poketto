@@ -1,5 +1,7 @@
 export interface MessageRequest {
   method: string;
-  payload: unknown;
+  payload: any;
   requestId: number;
+  channel?: string;
+  tabId?: string;
 }

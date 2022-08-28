@@ -7,7 +7,9 @@ export interface SdkContextState {
   valid: boolean;
 }
 
-export const SdkContext = createContext<SdkContextState>({});
+export const SdkContext = createContext<SdkContextState>({
+  valid: false,
+});
 
 export const useSdk = () => {
   const context = useContext(SdkContext);

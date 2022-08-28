@@ -1,3 +1,4 @@
+import { MessageRequest } from '../background/types';
 import browser from 'webextension-polyfill';
 
 function injectScript() {
@@ -21,16 +22,23 @@ pokettoChannel.onmessage = async function (event) {
     let error = null;
     let data = null;
     try {
-      data = await browser.runtime.sendMessage(event.data);
+      data = await browser.runtime.sendMessage({
+        ...event.data,
+        channel: 'content_script',
+      });
     } catch (e) {
       error = e;
     }
-    if (event.data.requestId) {
+  }
+};
+
+browser.runtime.onMessage.addListener(
+  async (request: MessageRequest, sender) => {
+    if (request.channel === 'background') {
       pokettoChannel.postMessage({
-        data,
-        error,
-        requestId: event.data.requestId,
+        data: request.payload,
+        requestId: request.requestId,
       });
     }
   }
-};
+);

@@ -12,6 +12,10 @@ class Poketto {
     return this.dispatch(MessageMethod.CONNECT, {});
   }
 
+  async disconnect(address: string) {
+    return this.dispatch(MessageMethod.DISCONNECT, { address });
+  }
+
   dispatch(method: string, payload: unknown) {
     const requestId = this.requestId++;
     return new Promise((resolve, reject) => {
@@ -31,4 +35,5 @@ class Poketto {
   }
 }
 
+// @ts-ignore
 window.poketto = new Poketto();

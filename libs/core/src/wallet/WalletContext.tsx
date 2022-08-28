@@ -1,7 +1,6 @@
 import { AptosAccount, AptosClient, Types } from 'aptos';
 import { useContext } from 'react';
 import { createContext } from 'react';
-
 import { defaultWalletPreference, WalletPreference } from './storage';
 import { NetworkConfig, networkConfigs } from '../network';
 import { Coin } from '../resource';
@@ -20,6 +19,8 @@ export interface WalletContextState {
   passwordError: string | null;
   walletPreference: WalletPreference;
   totalWalletAccount: number;
+  currentAccountTrustedOrigins: string[];
+  accountTrustedOrigins: Record<string, string[]>;
   changeDefaultAccountIndex: (index: number) => void;
   updatePassword: (password: string) => void;
   createNewAccount: (password: string) => Promise<void>;
@@ -40,6 +41,7 @@ export interface WalletContextState {
   revealSeedPhrase: (password: string) => Promise<string>;
   revealPrivateKey: (password: string) => Promise<string>;
   changePassword: (currentPassword: string, newPassword: string) => void;
+  addTrustedOrigin: (address: string, origin: string) => void;
 }
 
 export const WalletContext = createContext<WalletContextState>({
@@ -55,6 +57,8 @@ export const WalletContext = createContext<WalletContextState>({
   oneTimeMnemonic: null,
   walletPreference: defaultWalletPreference,
   totalWalletAccount: 0,
+  currentAccountTrustedOrigins: [],
+  accountTrustedOrigins: {},
   changeDefaultAccountIndex: (index: number) => {
     throw new Error('unimplemented');
   },
@@ -101,6 +105,9 @@ export const WalletContext = createContext<WalletContextState>({
     throw new Error('unimplemented');
   },
   changePassword: (currentPassword: string, newPassword: string) => {
+    throw new Error('unimplemented');
+  },
+  addTrustedOrigin: (address: string, origin: string) => {
     throw new Error('unimplemented');
   },
 });
