@@ -1,7 +1,12 @@
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import { FaSeedling, FaKey } from 'react-icons/fa';
-import { IoSettingsSharp, IoLogOut, IoLockClosed } from 'react-icons/io5';
+import {
+  IoSettingsSharp,
+  IoLogOut,
+  IoLockClosed,
+  IoApps,
+} from 'react-icons/io5';
 import { MdPassword } from 'react-icons/md';
 import { green, orange, red, blue, brown, yellow } from '@mui/material/colors';
 import Divider from '@mui/material/Divider';
@@ -47,7 +52,7 @@ export const SettingHome: React.FunctionComponent = () => {
               <Divider />
 
               <SettingItem
-                title="Change Password"
+                title="Change password"
                 description="Change your wallet password"
                 icon={MdPassword}
                 iconBgColor={yellow[700]}
@@ -55,6 +60,13 @@ export const SettingHome: React.FunctionComponent = () => {
               />
             </SettingGroup>
             <SettingGroup>
+              <SettingItem
+                title="Connected apps"
+                description="Manage your connected apps"
+                icon={IoApps}
+                iconBgColor={blue[400]}
+                onClick={() => stackNavigate('connected_apps')}
+              />
               <SettingItem
                 title="Network"
                 description="Select APTOS network"

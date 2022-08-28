@@ -80,7 +80,10 @@ export class WalletStorage {
     return origins;
   };
 
-  removeTrustedOriginFromAccount = async (address: string, origin: string) => {
+  removeTrustedOriginFromAccount = async (
+    address: string,
+    origin: string
+  ): Promise<Record<string, string[]>> => {
     const origins = await this.getAccountTrustedOrigins();
     if (origins[address]) {
       const originSet = new Set(origins[address]);
@@ -88,5 +91,6 @@ export class WalletStorage {
       origins[address] = Array.from(originSet);
       await this.storage.save(WALLET_TRUSTED_ORIGINS_KEY, origins);
     }
+    return origins;
   };
 }

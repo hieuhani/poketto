@@ -42,6 +42,10 @@ export interface WalletContextState {
   revealPrivateKey: (password: string) => Promise<string>;
   changePassword: (currentPassword: string, newPassword: string) => void;
   addTrustedOrigin: (address: string, origin: string) => void;
+  removeTrustedOrigin: (
+    origin: string,
+    fromAccount?: AptosAccount
+  ) => Promise<void>;
 }
 
 export const WalletContext = createContext<WalletContextState>({
@@ -108,6 +112,9 @@ export const WalletContext = createContext<WalletContextState>({
     throw new Error('unimplemented');
   },
   addTrustedOrigin: (address: string, origin: string) => {
+    throw new Error('unimplemented');
+  },
+  removeTrustedOrigin: (origin: string, fromAccount?: AptosAccount) => {
     throw new Error('unimplemented');
   },
 });
