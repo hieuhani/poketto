@@ -52,7 +52,7 @@ export const makeBuildExtensionPageConfig = (
       target: ['es2020'],
       lib: {
         entry: r(`src/${scriptType}/main.ts`),
-        formats: ['cjs'],
+        formats: ['iife'],
         name: `${scriptType}`,
       },
       rollupOptions: {
