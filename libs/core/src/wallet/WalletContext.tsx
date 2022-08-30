@@ -4,7 +4,8 @@ import { createContext } from 'react';
 import { defaultWalletPreference, WalletPreference } from './storage';
 import { NetworkConfig, networkConfigs } from '../network';
 import { Coin } from '../resource';
-import { SimulatedTransaction, TransactionPayload, WalletState } from './types';
+import { SimulatedTransaction, WalletState } from './types';
+import { EntryFunctionPayload } from 'aptos/dist/generated';
 
 export interface WalletContextState {
   account: AptosAccount | null;
@@ -28,11 +29,11 @@ export interface WalletContextState {
   importAccount: (mnemonic: string, password: string) => Promise<void>;
   fundAccountWithFaucet: (amount: number) => void;
   submitTransaction: (
-    payload: TransactionPayload,
+    payload: EntryFunctionPayload,
     fromAccount?: AptosAccount
   ) => Promise<string>;
   simulateTransaction: (
-    payload: TransactionPayload,
+    payload: EntryFunctionPayload,
     fromAccount?: AptosAccount
   ) => Promise<SimulatedTransaction>;
   clearOneTimeMnemonic: () => void;
@@ -82,13 +83,13 @@ export const WalletContext = createContext<WalletContextState>({
     throw new Error('unimplemented');
   },
   submitTransaction: (
-    payload: Types.TransactionPayload,
+    payload: EntryFunctionPayload,
     fromAccount?: AptosAccount
   ) => {
     throw new Error('unimplemented');
   },
   simulateTransaction: (
-    payload: Types.TransactionPayload,
+    payload: EntryFunctionPayload,
     fromAccount?: AptosAccount
   ) => {
     throw new Error('unimplemented');
