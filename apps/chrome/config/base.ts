@@ -24,6 +24,8 @@ export const sharedConfig: UserConfig = {
   resolve: {
     alias: {
       '@poketto/core': r('../../libs/core/src/'),
+      stream: 'stream-browserify',
+      util: 'util/',
     },
   },
   optimizeDeps: {

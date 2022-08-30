@@ -5,7 +5,6 @@ export interface SimulatedTransaction {
   gasUsed: number;
   vmStatus: string;
 }
-export type TransactionPayload = Types.TransactionPayload;
 export type AccountResource = Types.MoveResource;
 export type WalletState =
   | 'account:pending:createAccount'

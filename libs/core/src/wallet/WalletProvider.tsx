@@ -1,4 +1,4 @@
-import { AptosAccount, AptosClient, FaucetClient, Types } from 'aptos';
+import { AptosAccount, AptosClient, FaucetClient } from 'aptos';
 import React, { PropsWithChildren, useEffect, useMemo, useState } from 'react';
 import { generateMnemonic } from '../mnemonic';
 import { createAccount, loadAccount } from '../account';
@@ -11,8 +11,9 @@ import {
 import { networkConfigs, NetworkProfile } from '../network';
 import { useAccountResources } from './hooks';
 import { decrypt, encrypt } from '../password';
-import { TransactionPayload, WalletState } from './types';
+import { WalletState } from './types';
 import { WalletContext } from './WalletContext';
+import { EntryFunctionPayload } from 'aptos/dist/generated';
 
 interface Props extends PropsWithChildren {
   storage: Storage;
@@ -198,7 +199,7 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
   };
 
   const submitTransaction = async (
-    payload: Types.TransactionPayload,
+    payload: EntryFunctionPayload,
     fromAccount?: AptosAccount
   ): Promise<string> => {
     const account = fromAccount || stateAccount;
@@ -351,7 +352,7 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
   };
 
   const simulateTransaction = async (
-    payload: TransactionPayload,
+    payload: EntryFunctionPayload,
     fromAccount?: AptosAccount
   ) => {
     const account = fromAccount || stateAccount;

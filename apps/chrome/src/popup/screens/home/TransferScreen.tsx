@@ -82,7 +82,7 @@ export const TransferScreen: React.FunctionComponent = () => {
     };
     if (debouncedAmountOnChange && toAddress) {
       const payload: TransactionPayload = {
-        arguments: [toAddress, debouncedAmountOnChange],
+        arguments: [toAddress, BigInt(debouncedAmountOnChange)],
         function: '0x1::coin::transfer',
         type: 'script_function_payload',
         type_arguments: ['0x1::aptos_coin::AptosCoin'],
@@ -118,7 +118,7 @@ export const TransferScreen: React.FunctionComponent = () => {
   const onSendTransaction = async () => {
     try {
       const payload: TransactionPayload = {
-        arguments: [toAddress, amount],
+        arguments: [toAddress, BigInt(amount)],
         function: '0x1::coin::transfer',
         type: 'script_function_payload',
         type_arguments: ['0x1::aptos_coin::AptosCoin'],
