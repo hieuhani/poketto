@@ -12,7 +12,7 @@ import { useStackNavigation } from '../../../navigation';
 
 const formSchema = Yup.object().shape({
   password: Yup.string()
-    .required('Password is mendatory')
+    .required('Password is mandatory')
     .min(3, 'Password length should be at least 3 characters long'),
 });
 

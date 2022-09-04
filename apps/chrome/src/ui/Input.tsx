@@ -39,7 +39,11 @@ export const Input = forwardRef<HTMLDivElement, Props>(
       {label && <InputLabel shrink>{label}</InputLabel>}
 
       <StyledInput {...props} />
-      {helperText && <Typography sx={{ mt: 1 }}>{helperText}</Typography>}
+      {helperText && (
+        <Typography variant="caption" sx={{ mt: 1 }}>
+          {helperText}
+        </Typography>
+      )}
     </FormControl>
   )
 );

@@ -45,3 +45,27 @@ export type WalletState =
   | 'account:pending:addTrustedOrigin'
   | 'account:fulfilled:addTrustedOrigin'
   | 'account:rejected:addTrustedOrigin';
+
+export interface CreateTokenPayload {
+  collectionName: string;
+  name: string;
+  description: string;
+  uri: string;
+  supply: number;
+}
+
+export interface CreateCollectionPayload {
+  name: string;
+  description: string;
+  uri: string;
+  maxAmount?: number;
+}
+
+export interface TokenCollection {
+  sequenceNumber: string;
+  collectionName: string;
+  creator: string;
+  description: string;
+  maximum: string;
+  uri: string;
+}

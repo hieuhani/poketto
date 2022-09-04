@@ -1,4 +1,4 @@
-import { AptosAccount, AptosClient, FaucetClient } from 'aptos';
+import { AptosAccount, AptosClient, FaucetClient, TokenClient } from 'aptos';
 import React, { PropsWithChildren, useEffect, useMemo, useState } from 'react';
 import { generateMnemonic } from '../mnemonic';
 import { createAccount, loadAccount } from '../account';
@@ -11,9 +11,14 @@ import {
 import { networkConfigs, NetworkProfile } from '../network';
 import { useAccountResources } from './hooks';
 import { decrypt, encrypt } from '../password';
-import { WalletState } from './types';
+import {
+  CreateCollectionPayload,
+  CreateTokenPayload,
+  WalletState,
+} from './types';
 import { WalletContext } from './WalletContext';
 import { EntryFunctionPayload } from 'aptos/dist/generated';
+import { useGetTokenCollections } from './hooks/use-get-token-collections';
 
 interface Props extends PropsWithChildren {
   storage: Storage;
@@ -53,6 +58,10 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
   const aptosClient = useMemo(() => {
     return new AptosClient(network.aptos);
   }, [network]);
+
+  const tokenClient = useMemo(() => {
+    return new TokenClient(aptosClient);
+  }, [aptosClient]);
 
   const stateAccount = accounts[walletPreference.defaultAccountIndex];
   const currentAccountTrustedOrigins = useMemo(() => {
@@ -413,6 +422,59 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
     setAccountTrustedOrigins(updatedOrigins);
   };
 
+  const createToken = async (
+    payload: CreateTokenPayload,
+    fromAccount?: AptosAccount
+  ) => {
+    const account = fromAccount || stateAccount;
+    if (!account) {
+      throw new Error('Undefined account');
+    }
+
+    const hash = await tokenClient.createToken(
+      account,
+      payload.collectionName,
+      payload.name,
+      payload.description,
+      payload.supply,
+      payload.uri
+    );
+
+    await aptosClient.waitForTransaction(hash);
+    return hash;
+  };
+
+  const createCollection = async (
+    payload: CreateCollectionPayload,
+    fromAccount?: AptosAccount
+  ) => {
+    const account = fromAccount || stateAccount;
+    if (!account) {
+      throw new Error('Undefined account');
+    }
+
+    const hash = await tokenClient.createCollection(
+      account,
+      payload.name,
+      payload.description,
+      payload.uri,
+      payload.maxAmount
+    );
+
+    await aptosClient.waitForTransaction(hash);
+    return hash;
+  };
+
+  const tokenCollectionsResource = resources.find((resource) =>
+    resource.type.startsWith('0x3::token::Collections')
+  );
+
+  const { tokenCollections, fetchTokenCollections } = useGetTokenCollections(
+    aptosClient,
+    stateAccount?.address().hex(),
+    tokenCollectionsResource
+  );
+
   return (
     <WalletContext.Provider
       value={{
@@ -421,6 +483,7 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
         state,
         network,
         aptosClient,
+        tokenClient,
         resources,
         coins,
         oneTimeMnemonic,
@@ -430,6 +493,11 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
         totalWalletAccount,
         currentAccountTrustedOrigins,
         accountTrustedOrigins,
+        tokenCollection: {
+          tokenCollectionsResource,
+          tokenCollections,
+          fetchTokenCollections,
+        },
         changeDefaultAccountIndex,
         createNewSiblingAccount,
         updatePassword,
@@ -446,6 +514,8 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
         changePassword,
         addTrustedOrigin,
         removeTrustedOrigin,
+        createToken,
+        createCollection,
       }}
     >
       {children}

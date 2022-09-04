@@ -20,8 +20,6 @@ import { formatMoney } from '../../helpers/number';
 import { SimulatedTransaction } from '@poketto/core';
 import { useModalNavigation } from '../../../navigation/ModalNavigation';
 
-export const STATIC_GAS_AMOUNT = 150;
-
 const StyledInput = styled(InputBase)(({ theme }) => ({
   '& .MuiInputBase-input': {
     position: 'relative',
