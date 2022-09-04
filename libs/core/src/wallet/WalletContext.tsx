@@ -29,10 +29,11 @@ export interface WalletContextState {
   totalWalletAccount: number;
   currentAccountTrustedOrigins: string[];
   accountTrustedOrigins: Record<string, string[]>;
-  tokenCollection: {
+  token: {
     tokenCollectionsResource: MoveResource | undefined;
     tokenCollections: TokenCollection[];
     fetchTokenCollections: () => void;
+    fetchTokens: () => void;
   };
   changeDefaultAccountIndex: (index: number) => void;
   updatePassword: (password: string) => void;
@@ -86,10 +87,13 @@ export const WalletContext = createContext<WalletContextState>({
   totalWalletAccount: 0,
   currentAccountTrustedOrigins: [],
   accountTrustedOrigins: {},
-  tokenCollection: {
+  token: {
     tokenCollectionsResource: undefined,
     tokenCollections: [],
     fetchTokenCollections: () => {
+      throw new Error('unimplemented');
+    },
+    fetchTokens: () => {
       throw new Error('unimplemented');
     },
   },

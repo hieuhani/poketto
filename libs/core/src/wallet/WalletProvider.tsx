@@ -19,6 +19,7 @@ import {
 import { WalletContext } from './WalletContext';
 import { EntryFunctionPayload } from 'aptos/dist/generated';
 import { useGetTokenCollections } from './hooks/use-get-token-collections';
+import { useGetTokens } from './hooks/use-get-tokens';
 
 interface Props extends PropsWithChildren {
   storage: Storage;
@@ -469,10 +470,20 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
     resource.type.startsWith('0x3::token::Collections')
   );
 
+  const tokenResource = resources.find((resource) =>
+    resource.type.startsWith('0x3::token::TokenStore')
+  );
+
   const { tokenCollections, fetchTokenCollections } = useGetTokenCollections(
     aptosClient,
     stateAccount?.address().hex(),
     tokenCollectionsResource
+  );
+
+  const { fetchTokens } = useGetTokens(
+    aptosClient,
+    stateAccount?.address().hex(),
+    tokenResource
   );
 
   return (
@@ -493,10 +504,11 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
         totalWalletAccount,
         currentAccountTrustedOrigins,
         accountTrustedOrigins,
-        tokenCollection: {
+        token: {
           tokenCollectionsResource,
           tokenCollections,
           fetchTokenCollections,
+          fetchTokens,
         },
         changeDefaultAccountIndex,
         createNewSiblingAccount,

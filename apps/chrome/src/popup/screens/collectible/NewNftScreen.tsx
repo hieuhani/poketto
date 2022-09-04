@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import * as Yup from 'yup';
 import IconButton from '@mui/material/IconButton';
@@ -12,6 +12,7 @@ import { TitleHeader } from '../../components/TitleHeader';
 import { useStackNavigation } from '../../../navigation';
 import { useWallet } from '@poketto/core';
 import { useBoolean } from '../../hooks/use-boolean';
+import InputLabel from '@mui/material/InputLabel';
 
 const formSchema = Yup.object().shape({
   name: Yup.string().required('NFT name is a required field'),
@@ -24,7 +25,13 @@ export interface CreateNftFormState {
   description: string;
   uri: string;
 }
-export const NewNftScreen: React.FunctionComponent = () => {
+
+interface Props {
+  collectionName?: string;
+}
+export const NewNftScreen: React.FunctionComponent<Props> = ({
+  collectionName,
+}) => {
   const { goBack } = useStackNavigation();
   const { createToken } = useWallet();
   const { value: loading, setValue: setLoading } = useBoolean();
@@ -47,7 +54,7 @@ export const NewNftScreen: React.FunctionComponent = () => {
     try {
       const tokenHash = await createToken({
         ...data,
-        collectionName: '',
+        collectionName: collectionName || 'MyCollection',
         supply: 1,
       });
       console.info(tokenHash);
@@ -71,6 +78,11 @@ export const NewNftScreen: React.FunctionComponent = () => {
       </Box>
       <form onSubmit={handleSubmit(onFormSubmit)}>
         <Stack px={1} spacing={2}>
+          <Box>
+            <InputLabel shrink>Collection</InputLabel>
+            <Typography>{collectionName}</Typography>
+          </Box>
+
           <Controller
             name="name"
             control={control}

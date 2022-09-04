@@ -15,7 +15,7 @@ import { TitleHeader } from '../../components/TitleHeader';
 export const MyNftScreen: React.FunctionComponent = () => {
   const { navigate } = useStackNavigation();
   const {
-    tokenCollection: { tokenCollections, fetchTokenCollections },
+    token: { tokenCollections, fetchTokenCollections },
   } = useWallet();
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export const MyNftScreen: React.FunctionComponent = () => {
       <Box px={1}>
         <TitleHeader title="My NFT" />
       </Box>
-      <Stack paddingX={1} direction="row" spacing={1} marginBottom={2}>
+      <Box paddingX={1} marginBottom={2}>
         <Button
           variant="contained"
           fullWidth
@@ -34,31 +34,30 @@ export const MyNftScreen: React.FunctionComponent = () => {
         >
           Create collection
         </Button>
-        <Button
-          variant="contained"
-          fullWidth
-          onClick={() => navigate('create_token')}
-        >
-          Create NFT
-        </Button>
-      </Stack>
+      </Box>
       <Box paddingX={1}>
         <Grid container spacing={1}>
-          {tokenCollections.map((token) => (
-            <Grid item xs={6} key={token.sequenceNumber}>
-              <Card>
+          {tokenCollections.map((collection) => (
+            <Grid item xs={6} key={collection.sequenceNumber}>
+              <Card
+                onClick={() =>
+                  navigate('collection_nfts', {
+                    collectionName: collection.collectionName,
+                  })
+                }
+              >
                 <CardMedia
                   component="img"
                   height="140"
-                  image={token.uri}
+                  image={collection.uri}
                   alt=""
                 />
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
-                    {token.collectionName}
+                    {collection.collectionName}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {token.description}
+                    {collection.description}
                   </Typography>
                 </CardContent>
               </Card>

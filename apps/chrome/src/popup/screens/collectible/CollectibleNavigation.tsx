@@ -1,4 +1,5 @@
 import { StackNavigation } from '../../../navigation';
+import { CollectionNftsScreen } from './CollectionNftsScreen';
 import { CreateCollectionScreen } from './CreateCollectionScreen';
 import { MyNftScreen } from './MyNftScreen';
 import { NewNftScreen } from './NewNftScreen';
@@ -18,6 +19,10 @@ export const CollectibleNavigation: React.FunctionComponent = () => {
         {
           route: 'create_collection',
           screen: <CreateCollectionScreen />,
+        },
+        {
+          route: 'collection_nfts',
+          screen: <CollectionNftsScreen />,
         },
       ]}
     />
