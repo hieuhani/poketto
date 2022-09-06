@@ -4,8 +4,6 @@ import { IoArrowBackOutline } from 'react-icons/io5';
 import { TitleHeader } from '../../components/TitleHeader';
 import { useStackNavigation } from '../../../navigation';
 import Button from '@mui/material/Button';
-import { useEffect } from 'react';
-import { useWallet } from '@poketto/core';
 
 interface Props {
   collectionName?: string;
@@ -15,13 +13,7 @@ export const CollectionNftsScreen: React.FunctionComponent<Props> = ({
   collectionName,
 }) => {
   const { goBack, navigate } = useStackNavigation();
-  const {
-    token: { fetchTokens },
-  } = useWallet();
 
-  useEffect(() => {
-    fetchTokens();
-  }, []);
   return (
     <>
       <Box px={1} display="flex" alignItems="center">

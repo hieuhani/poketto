@@ -17,7 +17,6 @@ import { ref } from 'vue';
 const address = ref('')
 async function connect() {
   try {
-    // @ts-ignore
     const data = await window.poketto.connect()
     address.value = data.address
   } catch (e) {
@@ -27,7 +26,6 @@ async function connect() {
 
 async function disconnect() {
   try {
-    // @ts-ignore
     const data = await window.poketto.disconnect(address.value)
     address.value = ''
   } catch (e) {

@@ -12,6 +12,7 @@ import {
   WalletState,
 } from './types';
 import { EntryFunctionPayload, MoveResource } from 'aptos/dist/generated';
+import { Token } from './hooks/use-get-tokens';
 
 export interface WalletContextState {
   account: AptosAccount | null;
@@ -32,6 +33,7 @@ export interface WalletContextState {
   token: {
     tokenCollectionsResource: MoveResource | undefined;
     tokenCollections: TokenCollection[];
+    tokens: Token[];
     fetchTokenCollections: () => void;
     fetchTokens: () => void;
   };
@@ -90,6 +92,7 @@ export const WalletContext = createContext<WalletContextState>({
   token: {
     tokenCollectionsResource: undefined,
     tokenCollections: [],
+    tokens: [],
     fetchTokenCollections: () => {
       throw new Error('unimplemented');
     },

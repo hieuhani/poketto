@@ -480,7 +480,7 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
     tokenCollectionsResource
   );
 
-  const { fetchTokens } = useGetTokens(
+  const { fetchTokens, tokens } = useGetTokens(
     aptosClient,
     stateAccount?.address().hex(),
     tokenResource
@@ -507,6 +507,7 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
         token: {
           tokenCollectionsResource,
           tokenCollections,
+          tokens,
           fetchTokenCollections,
           fetchTokens,
         },

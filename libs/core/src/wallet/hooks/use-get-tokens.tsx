@@ -1,7 +1,7 @@
 import { AptosClient } from 'aptos';
 import { MoveResource } from 'aptos/dist/generated';
 import get from 'lodash.get';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 interface TokenAggregateEvent {
   data: any;
@@ -10,12 +10,21 @@ interface TokenAggregateEvent {
   difference: number;
 }
 
+export interface Token {
+  collection: string;
+  creator: string;
+  amount: number;
+  name: string;
+  version: number;
+}
+
 export const useGetTokens = (
   aptosClient: AptosClient,
   address?: string,
   tokenResource?: MoveResource,
   runOnUseEffect = false
 ) => {
+  const [tokens, setTokens] = useState<Token[]>([]);
   const fetchTokens = useCallback(async () => {
     if (tokenResource) {
       const depositCounter = parseInt(
@@ -124,11 +133,22 @@ export const useGetTokens = (
             },
           };
         }, {} as Record<string, TokenAggregateEvent>);
-        console.log(Object.values(aggregateTokens));
+        const allTokens: Token[] = Object.values(aggregateTokens).map(
+          (event) => ({
+            version: event.data.property_version,
+            ...event.data.token_data_id,
+            amount: event.difference,
+          })
+        );
+        setTokens(allTokens);
+        return allTokens;
       } else {
+        setTokens([]);
+        return [];
       }
-    } else {
     }
+    setTokens([]);
+    return [];
   }, [tokenResource, aptosClient]);
 
   useEffect(() => {
@@ -138,5 +158,6 @@ export const useGetTokens = (
   }, [runOnUseEffect, tokenResource]);
   return {
     fetchTokens,
+    tokens,
   };
 };
