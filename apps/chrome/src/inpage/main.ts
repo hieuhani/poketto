@@ -1,4 +1,4 @@
-import { MessageMethod } from './types';
+import { CreateNFTCollectionPayload, MessageMethod } from './types';
 
 class Poketto {
   private channel: BroadcastChannel;
@@ -14,6 +14,11 @@ class Poketto {
 
   async disconnect(address: string) {
     return this.dispatch(MessageMethod.DISCONNECT, { address });
+  }
+
+  async createNFTCollection(payload: CreateNFTCollectionPayload) {
+    console.log({ payload })
+    return this.dispatch(MessageMethod.CREATE_NFT_COLLECTION, payload);
   }
 
   dispatch(method: string, payload: unknown) {

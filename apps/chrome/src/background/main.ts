@@ -25,6 +25,8 @@ browser.runtime.onMessage.addListener(
           return connect(request, sender);
         case MessageMethod.DISCONNECT:
           return disconnect(request, sender);
+        case MessageMethod.CREATE_NFT_COLLECTION:
+          return createNFTCollection(request, sender);
         default:
           throw new Error(`${request.method} method is not supported`);
       }
@@ -41,9 +43,11 @@ async function connect(
   request: MessageRequest,
   sender: browser.Runtime.MessageSender
 ) {
+  console.log(111)
   const lastFocusedWindow = await browser.windows.getLastFocused();
   const params = new URLSearchParams();
   params.set('request', JSON.stringify(request));
+  console.log({ params, request :  JSON.stringify(request)})
   if (sender.url) {
     const url = new URL(sender.url);
     params.set('origin', url.origin);
@@ -85,5 +89,34 @@ async function disconnect(
     });
   }
 
+  return {};
+}
+
+async function createNFTCollection(
+  request: MessageRequest,
+  sender: browser.Runtime.MessageSender
+) {
+  const lastFocusedWindow = await browser.windows.getLastFocused();
+  const params = new URLSearchParams();
+  console.log({ params, request: JSON.stringify(request) })
+  params.set('request', JSON.stringify(request));
+  if (sender.url) {
+    const url = new URL(sender.url);
+    params.set('origin', url.origin);
+  }
+
+  if (sender.tab?.id) {
+    params.set('tabId', sender.tab.id.toString());
+  }
+
+  await browser.windows.create({
+    url: 'dist/src/popup/index.html?' + params,
+    type: 'popup',
+    width: 420,
+    height: 600,
+    left:
+      lastFocusedWindow.left || 0 + ((lastFocusedWindow.width || 420) - 420),
+    focused: true,
+  });
   return {};
 }
