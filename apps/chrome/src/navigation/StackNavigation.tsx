@@ -1,9 +1,12 @@
+import { isValidElement } from 'react';
+import { cloneElement } from 'react';
 import {
   createContext,
   ReactNode,
   useCallback,
   useContext,
   useMemo,
+  useState,
 } from 'react';
 import { useStack } from './use-stack';
 
@@ -16,11 +19,11 @@ interface Props {
 }
 
 interface NavigationContextState {
-  navigate: (route: string) => void;
+  navigate: (route: string, params?: object) => void;
   goBack: () => void;
 }
 const NavigationContext = createContext<NavigationContextState>({
-  navigate: (route: string) => {
+  navigate: (route: string, params?: object) => {
     throw Error('Unimplemented');
   },
   goBack: () => {
@@ -30,6 +33,7 @@ const NavigationContext = createContext<NavigationContextState>({
 
 export const StackNavigation: React.FunctionComponent<Props> = ({ routes }) => {
   const { push, pop, top } = useStack([routes[0].route]);
+  const [routeParams, setRouteParams] = useState<any>();
   const routeIndex = useMemo<Record<string, number>>(
     () =>
       routes.reduce((previousValue, currentValue, currentIndex) => {
@@ -41,9 +45,10 @@ export const StackNavigation: React.FunctionComponent<Props> = ({ routes }) => {
     [routes]
   );
   const navigate = useCallback(
-    (route: string) => {
+    (route: string, params?: object) => {
       if (routeIndex[route]) {
         push(route);
+        setRouteParams(params);
       }
     },
     [routeIndex]
@@ -57,6 +62,17 @@ export const StackNavigation: React.FunctionComponent<Props> = ({ routes }) => {
     console.error('No routes provided to StackNavigation');
     return null;
   }
+
+  const screen = routes[routeIndex[top]].screen;
+
+  const node = useMemo(() => {
+    return isValidElement(screen)
+      ? cloneElement(screen, {
+          ...routeParams,
+        })
+      : null;
+  }, [screen]);
+
   return (
     <NavigationContext.Provider
       value={{
@@ -64,7 +80,7 @@ export const StackNavigation: React.FunctionComponent<Props> = ({ routes }) => {
         goBack,
       }}
     >
-      {routes[routeIndex[top]].screen}
+      {node}
     </NavigationContext.Provider>
   );
 };

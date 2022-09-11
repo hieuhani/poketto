@@ -14,13 +14,13 @@ import toast from 'react-hot-toast';
 
 const formSchema = Yup.object().shape({
   currentPassword: Yup.string()
-    .required('Password is mendatory')
+    .required('Password is a required field')
     .min(3, 'Password must be at 3 char long'),
   password: Yup.string()
-    .required('Password is mendatory')
+    .required('Password is a required field')
     .min(3, 'Password must be at 3 char long'),
   confirmPassword: Yup.string()
-    .required('Confirm password is mendatory')
+    .required('Confirm password is a required field')
     .oneOf([Yup.ref('password')], 'Passwords does not match'),
 });
 

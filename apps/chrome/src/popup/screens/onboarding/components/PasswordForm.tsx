@@ -9,10 +9,10 @@ import { Input } from '../../../../ui/Input';
 
 const formSchema = Yup.object().shape({
   password: Yup.string()
-    .required('Password is mendatory')
+    .required('Password is a required field')
     .min(3, 'Password must be at 3 char long'),
   confirmPassword: Yup.string()
-    .required('Confirm password is mendatory')
+    .required('Confirm password is a required field')
     .oneOf([Yup.ref('password')], 'Passwords does not match'),
 });
 

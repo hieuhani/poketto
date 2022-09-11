@@ -1,5 +1,5 @@
 import { AptosAccount, AptosClient, HexString, Types } from 'aptos';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useWallet } from './WalletContext';
 
 export interface UseAccountResourcesOptions {
@@ -11,11 +11,15 @@ export const useAccountResources = (
   { refetchInterval = undefined }: UseAccountResourcesOptions = {}
 ) => {
   const firstCalled = useRef(false);
+
   const [resources, setResources] = useState<Types.MoveResource[]>([]);
+  // we assume that is in a blockchain there is no data mutation
+  const memoiResources = useMemo(() => resources, [resources.length]);
   const fetchResources = async (address: HexString) => {
     const data = await client.getAccountResources(address);
     setResources(data);
   };
+
   const refetch = () => {
     firstCalled.current = false;
   };
@@ -42,7 +46,7 @@ export const useAccountResources = (
   }, [account, refetchInterval]);
   return {
     refetch,
-    data: resources,
+    data: memoiResources,
   };
 };
 

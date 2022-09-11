@@ -16,7 +16,7 @@ import { PrivateKeyView } from '../onboarding/components/PrivateKeyView';
 
 const formSchema = Yup.object().shape({
   password: Yup.string()
-    .required('Password is mendatory')
+    .required('Password is a required field')
     .min(3, 'Password must be at 3 char long'),
 });
 

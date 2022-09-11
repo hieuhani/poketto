@@ -1,11 +1,18 @@
-import { AptosAccount, AptosClient, Types } from 'aptos';
+import { AptosAccount, AptosClient, TokenClient, Types } from 'aptos';
 import { useContext } from 'react';
 import { createContext } from 'react';
 import { defaultWalletPreference, WalletPreference } from './storage';
 import { NetworkConfig, networkConfigs } from '../network';
 import { Coin } from '../resource';
-import { SimulatedTransaction, WalletState } from './types';
-import { EntryFunctionPayload } from 'aptos/dist/generated';
+import {
+  CreateCollectionPayload,
+  CreateTokenPayload,
+  SimulatedTransaction,
+  TokenCollection,
+  WalletState,
+} from './types';
+import { EntryFunctionPayload, MoveResource } from 'aptos/dist/generated';
+import { Token } from './hooks/use-get-tokens';
 
 export interface WalletContextState {
   account: AptosAccount | null;
@@ -13,6 +20,7 @@ export interface WalletContextState {
   state: WalletState;
   network: NetworkConfig;
   aptosClient: AptosClient;
+  tokenClient: TokenClient;
   resources: Types.MoveResource[];
   coins: Coin[];
   oneTimeMnemonic: string | null;
@@ -22,6 +30,13 @@ export interface WalletContextState {
   totalWalletAccount: number;
   currentAccountTrustedOrigins: string[];
   accountTrustedOrigins: Record<string, string[]>;
+  token: {
+    tokenCollectionsResource: MoveResource | undefined;
+    tokenCollections: TokenCollection[];
+    tokens: Token[];
+    fetchTokenCollections: () => void;
+    fetchTokens: () => void;
+  };
   changeDefaultAccountIndex: (index: number) => void;
   updatePassword: (password: string) => void;
   createNewAccount: (password: string) => Promise<void>;
@@ -47,14 +62,24 @@ export interface WalletContextState {
     origin: string,
     fromAccount?: AptosAccount
   ) => Promise<void>;
+  createCollection: (
+    payload: CreateCollectionPayload,
+    fromAccount?: AptosAccount
+  ) => Promise<string>;
+  createToken: (
+    payload: CreateTokenPayload,
+    fromAccount?: AptosAccount
+  ) => Promise<string>;
 }
 
+const aptosClient = new AptosClient(networkConfigs.devnet.aptos);
 export const WalletContext = createContext<WalletContextState>({
   account: null,
   accounts: [],
   state: 'account:pending:loadAccount',
   network: networkConfigs.devnet,
-  aptosClient: new AptosClient(networkConfigs.devnet.aptos),
+  aptosClient,
+  tokenClient: new TokenClient(aptosClient),
   resources: [],
   coins: [],
   password: '',
@@ -64,6 +89,18 @@ export const WalletContext = createContext<WalletContextState>({
   totalWalletAccount: 0,
   currentAccountTrustedOrigins: [],
   accountTrustedOrigins: {},
+  token: {
+    tokenCollectionsResource: undefined,
+    tokenCollections: [],
+    tokens: [],
+    fetchTokenCollections: () => {
+      throw new Error('unimplemented');
+    },
+    fetchTokens: () => {
+      throw new Error('unimplemented');
+    },
+  },
+
   changeDefaultAccountIndex: (index: number) => {
     throw new Error('unimplemented');
   },
@@ -116,6 +153,15 @@ export const WalletContext = createContext<WalletContextState>({
     throw new Error('unimplemented');
   },
   removeTrustedOrigin: (origin: string, fromAccount?: AptosAccount) => {
+    throw new Error('unimplemented');
+  },
+  createCollection: (
+    payload: CreateCollectionPayload,
+    fromAccount?: AptosAccount
+  ) => {
+    throw new Error('unimplemented');
+  },
+  createToken: (payload: CreateTokenPayload, fromAccount?: AptosAccount) => {
     throw new Error('unimplemented');
   },
 });
