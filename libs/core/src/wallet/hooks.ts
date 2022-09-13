@@ -14,7 +14,7 @@ export const useAccountResources = (
 
   const [resources, setResources] = useState<Types.MoveResource[]>([]);
   // we assume that is in a blockchain there is no data mutation
-  const memoiResources = useMemo(() => resources, [resources.length]);
+  const memoiResources = useMemo(() => resources, [JSON.stringify(resources)]);
   const fetchResources = async (address: HexString) => {
     const data = await client.getAccountResources(address);
     setResources(data);
