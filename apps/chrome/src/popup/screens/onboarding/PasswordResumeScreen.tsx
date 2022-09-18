@@ -1,14 +1,11 @@
-import Box from '@mui/material/Box';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { useWallet } from '@poketto/core';
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 import { Logo } from '../../components/Logo';
 import { Input } from '../../../ui/Input';
 import { useStackNavigation } from '../../../navigation';
+import { Button } from '@ui/Button';
 
 const formSchema = Yup.object().shape({
   password: Yup.string()
@@ -38,21 +35,15 @@ export const PasswordResumeScreen: React.FunctionComponent = () => {
     updatePassword(data.password);
   };
   return (
-    <Box px={4} py={4}>
+    <div className="px-3">
       <form onSubmit={handleSubmit(onFormSubmit)}>
-        <Box
-          marginY={8}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          flexDirection="column"
-        >
-          <Logo />
-          <Typography marginTop={3} variant="h5">
+        <div className="my-8 flex flex-col items-center space-y-4">
+          <Logo className="h-16 w-16" />
+          <h3 className="text-2xl text-slate-900 dark:text-slate-200 sm:text-3xl">
             Welcome back
-          </Typography>
-        </Box>
-        <Stack spacing={2}>
+          </h3>
+        </div>
+        <div className="space-y-4">
           <Controller
             name="password"
             control={control}
@@ -70,20 +61,18 @@ export const PasswordResumeScreen: React.FunctionComponent = () => {
             )}
           />
           {passwordError}
-          <Button
-            variant="contained"
-            fullWidth
-            type="submit"
-            size="large"
-            disabled={!isValid}
-          >
+          <Button fullWidth type="submit" disabled={!isValid}>
             Unlock
           </Button>
-          <Button fullWidth onClick={() => navigate('forgot_password')}>
+          <Button
+            variant="link"
+            fullWidth
+            onClick={() => navigate('forgot_password')}
+          >
             Forgot password?
           </Button>
-        </Stack>
+        </div>
       </form>
-    </Box>
+    </div>
   );
 };

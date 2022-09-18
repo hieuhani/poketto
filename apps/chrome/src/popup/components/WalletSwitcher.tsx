@@ -2,7 +2,6 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import ButtonBase from '@mui/material/ButtonBase';
 import Menu from '@mui/material/Menu';
-import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
@@ -72,34 +71,19 @@ export const WalletSwitcher: React.FunctionComponent<Props> = ({
         }}
         borderRadius={2}
       >
-        <Box>
-          <Typography
-            variant="subtitle2"
-            fontWeight="700"
-            textTransform="uppercase"
-          >
+        <div>
+          <h3 className="text-uppercase font-semibold">
             Wallet {walletPreference.defaultAccountIndex + 1}
-          </Typography>
+          </h3>
 
-          <Typography
-            lineHeight={1}
-            title={activeAddress}
-            variant="caption"
-            color="grey.400"
-          >
+          <h5 title={activeAddress} className="text-sm text-slate-500">
             {makeShortAddress(activeAddress)}
-          </Typography>
-        </Box>
-        <Box
-          borderRadius="50%"
-          height={40}
-          width={40}
-          overflow="hidden"
-          border="2px solid"
-          borderColor="#1976d2"
-        >
+          </h5>
+        </div>
+
+        <div className="h-10 w-10 overflow-hidden rounded-full border border-2 border-blue-500">
           <canvas ref={canvas} height="40" width="40" />
-        </Box>
+        </div>
       </Stack>
       <Menu
         anchorEl={anchorEl}

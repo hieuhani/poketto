@@ -1,29 +1,12 @@
-import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import ButtonBase from '@mui/material/ButtonBase';
 import { Coin } from '@poketto/core';
-
 interface Props {
   coin: Coin;
 }
+
 export const TokenRow: React.FunctionComponent<Props> = ({ coin }) => (
-  <Paper
-    component={ButtonBase}
-    sx={{
-      backgroundColor: 'grey.900',
-      paddingX: 2,
-      paddingY: 2,
-      display: 'flex',
-      borderRadius: 2,
-      alignItems: 'center',
-      textAlign: 'left',
-    }}
-  >
-    <Box width={44} height={44} sx={{ borderRadius: 4, marginRight: 2 }}>
+  <div className="flex items-center rounded-lg bg-slate-200 p-3">
+    <div className="h-12 w-12">
       <svg
-        id="a2e9f51b-359e-4615-886a-42805a3d0c79"
-        data-name="Icon Logo"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 60 60"
         style={{ fill: '#FFF' }}
@@ -33,12 +16,12 @@ export const TokenRow: React.FunctionComponent<Props> = ({ coin }) => (
         <path d="M38.12,12a1.74,1.74,0,0,0,1.27-.54L42,8.78a1.69,1.69,0,0,1,1.22-.51h.1a1.69,1.69,0,0,1,1.27.56l2.15,2.43a2.17,2.17,0,0,0,1.62.72h5.77A30.19,30.19,0,0,0,5.92,12Z"></path>{' '}
         <path d="M26.53,50.46H18.64A2.17,2.17,0,0,1,17,49.74l-2.15-2.43a1.71,1.71,0,0,0-2.53,0l-1.85,2.08a3.18,3.18,0,0,1-2.38,1.07H8a30.16,30.16,0,0,0,44,0Z"></path>
       </svg>
-    </Box>
-    <Box sx={{ flex: 1 }}>
-      <Typography sx={{ fontWeight: '600' }}>{coin.name}</Typography>
-      <Typography fontSize="small">
+    </div>
+    <div className="ml-3 flex-1">
+      <h4 className="font-medium">{coin.name}</h4>
+      <p className="text-sm">
         {coin.balance} {coin.name}
-      </Typography>
-    </Box>
-  </Paper>
+      </p>
+    </div>
+  </div>
 );

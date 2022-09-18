@@ -71,8 +71,8 @@ export const BackgroundPattern: React.FunctionComponent = () => (
         y2="236"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stopColor="#1A58F7"></stop>
-        <stop offset="1" stopColor="#001E6B"></stop>
+        <stop stopColor="#045AEB"></stop>
+        <stop offset="1" stopColor="#245AEB"></stop>
       </linearGradient>
       <linearGradient
         id="paint1_linear_11_2"

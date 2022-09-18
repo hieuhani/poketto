@@ -1,6 +1,7 @@
 import { Storage, WalletProvider } from '@poketto/core';
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
+import './globals.css';
 import { WebLocalStorage } from '@poketto/core';
 import { Bootstrap } from '../shared/Bootstrap';
 import { App } from './App';
