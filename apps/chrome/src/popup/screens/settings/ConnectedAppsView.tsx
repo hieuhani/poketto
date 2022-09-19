@@ -7,10 +7,10 @@ import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import toast from 'react-hot-toast';
 import { useStackNavigation } from '../../../navigation';
-import { SettingGroup } from '../../components/SettingGroup';
 import { Fragment } from 'react';
 import Button from '@mui/material/Button';
 import { useBoolean } from '../../hooks/use-boolean';
+import { SettingGroup } from '@ui/SettingGroup';
 
 export const ConnectedAppsView: React.FunctionComponent = () => {
   const { goBack } = useStackNavigation();

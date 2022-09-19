@@ -26,7 +26,7 @@ export const OverviewCard: React.FunctionComponent<Props> = ({
 
       <div className="relative px-6 py-4">
         <div className="mb-6">
-          <HexAddress address={address} />
+          <HexAddress className="text-slate-300" address={address} />
           <h4 className="text-slate-100">Account Balance</h4>
         </div>
 
