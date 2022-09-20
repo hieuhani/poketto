@@ -1,4 +1,3 @@
-import Box from '@mui/material/Box';
 import { TabsNavigation } from '../../../navigation';
 import { BottomTabs } from '../../components/BottomTabs';
 import { ActivityScreen } from '../ActivityScreen';
@@ -15,9 +14,9 @@ export const HomeNavigation: React.FunctionComponent = () => (
       { route: 'setting', screen: <SettingScreen /> },
     ]}
     navigation={
-      <Box position="absolute" bottom={0} left={0} right={0}>
+      <div className="absolute inset-x-0 bottom-0">
         <BottomTabs />
-      </Box>
+      </div>
     }
   />
 );

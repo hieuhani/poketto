@@ -1,8 +1,4 @@
 import { useStackNavigation } from '../../../navigation';
-import { IoArrowBackOutline } from 'react-icons/io5';
-import IconButton from '@mui/material/IconButton';
-import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
 import { useWallet } from '@poketto/core';
 import {
   ImportWalletForm,
@@ -10,6 +6,8 @@ import {
 } from './components/ImportWalletForm';
 import { useEffect } from 'react';
 import toast from 'react-hot-toast';
+import { TitleHeader } from '@ui/TitleHeader';
+import { Container } from '@ui/Container';
 
 export const ImportWalletScreen: React.FunctionComponent = () => {
   const { goBack } = useStackNavigation();
@@ -23,17 +21,14 @@ export const ImportWalletScreen: React.FunctionComponent = () => {
     }
   }, [state]);
   return (
-    <Box pb={4}>
-      <Box py={1} px={1}>
-        <IconButton onClick={goBack}>
-          <IoArrowBackOutline />
-        </IconButton>
-      </Box>
-      <Divider />
-      <ImportWalletForm
-        loading={state === 'account:pending:importAccount'}
-        onSubmit={handleImportWallet}
-      />
-    </Box>
+    <>
+      <TitleHeader title="Import wallet" goBack={goBack} />
+      <Container>
+        <ImportWalletForm
+          loading={state === 'account:pending:importAccount'}
+          onSubmit={handleImportWallet}
+        />
+      </Container>
+    </>
   );
 };

@@ -1,10 +1,8 @@
 import { useStackNavigation } from '../../../navigation';
-import { IoArrowBackOutline } from 'react-icons/io5';
-import IconButton from '@mui/material/IconButton';
-import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
 import { useWallet } from '@poketto/core';
 import { PasswordForm, PasswordFormState } from './components/PasswordForm';
+import { TitleHeader } from '@ui/TitleHeader';
+import { Container } from '@ui/Container';
 
 export const NewWalletScreen: React.FunctionComponent = () => {
   const { goBack, navigate } = useStackNavigation();
@@ -16,17 +14,14 @@ export const NewWalletScreen: React.FunctionComponent = () => {
   };
 
   return (
-    <Box pb={4}>
-      <Box py={1} px={1}>
-        <IconButton onClick={goBack}>
-          <IoArrowBackOutline />
-        </IconButton>
-      </Box>
-      <Divider />
-      <PasswordForm
-        onSubmit={handlePasswordSubmitted}
-        loading={state === 'account:pending:createAccount'}
-      />
-    </Box>
+    <>
+      <TitleHeader title="Create a password" goBack={goBack} />
+      <Container>
+        <PasswordForm
+          onSubmit={handlePasswordSubmitted}
+          loading={state === 'account:pending:createAccount'}
+        />
+      </Container>
+    </>
   );
 };

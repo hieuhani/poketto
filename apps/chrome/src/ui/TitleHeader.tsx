@@ -10,7 +10,7 @@ export const TitleHeader: React.FunctionComponent<Props> = ({
   goBack,
 }) => {
   return (
-    <div className="flex items-center py-2">
+    <div className="flex items-center py-2 px-2">
       {goBack && (
         <button onClick={goBack} className="p-2">
           <ArrowBackIcon className="text-xl" />

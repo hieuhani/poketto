@@ -1,7 +1,4 @@
 import { useForm, Controller } from 'react-hook-form';
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { Button } from '@ui/Button';
@@ -46,15 +43,8 @@ export const PasswordForm: React.FunctionComponent<Props> = ({
   };
   return (
     <form onSubmit={handleSubmit(onFormSubmit)}>
-      <Box px={4} py={4}>
-        <Box sx={{ textAlign: 'center' }}>
-          <Typography variant="h5">Create a password</Typography>
-          <Typography variant="subtitle1">
-            Use this password to unlock your wallet
-          </Typography>
-        </Box>
-      </Box>
-      <Stack px={4} spacing={2}>
+      <h5>Use this password to unlock your wallet</h5>
+      <div className="space-y-3">
         <Controller
           name="password"
           control={control}
@@ -90,7 +80,7 @@ export const PasswordForm: React.FunctionComponent<Props> = ({
         <Button fullWidth type="submit" disabled={!isValid || loading}>
           Continue
         </Button>
-      </Stack>
+      </div>
     </form>
   );
 };

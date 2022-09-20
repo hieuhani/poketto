@@ -17,7 +17,7 @@ export const MnemonicView: React.FunctionComponent<Props> = ({ mnemonic }) => {
   };
 
   return (
-    <div className="user-select-none relative space-y-3 overflow-hidden rounded-lg p-3">
+    <div className="user-select-none relative space-y-3 overflow-hidden rounded-lg">
       {!reveal && (
         <div className="absolute inset-0 z-10 flex flex-col place-content-center bg-gray-200 px-3 text-center">
           <Button

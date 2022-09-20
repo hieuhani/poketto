@@ -39,7 +39,7 @@ export const PasswordResumeScreen: React.FunctionComponent = () => {
       <form onSubmit={handleSubmit(onFormSubmit)}>
         <div className="my-8 flex flex-col items-center space-y-4">
           <Logo className="h-16 w-16" />
-          <h3 className="text-2xl text-slate-900 dark:text-slate-200 sm:text-3xl">
+          <h3 className="text-2xl text-slate-900 dark:text-slate-200">
             Welcome back
           </h3>
         </div>
