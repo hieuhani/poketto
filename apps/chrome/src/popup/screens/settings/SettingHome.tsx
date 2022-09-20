@@ -12,6 +12,7 @@ import { DrawerNavigation, useStackNavigation } from '../../../navigation';
 import { NetworksView } from './NetworksView';
 import { useWallet } from '@poketto/core';
 import { SettingGroup } from '@ui/SettingGroup';
+import { Container } from '@ui/Container';
 
 export const SettingHome: React.FunctionComponent = () => {
   const { state, logout, lockWallet } = useWallet();
@@ -26,7 +27,7 @@ export const SettingHome: React.FunctionComponent = () => {
       ]}
     >
       {({ navigate }) => (
-        <div className="px-2">
+        <Container>
           <TitleHeader title="Settings" />
           <div className="space-y-3">
             <SettingGroup>
@@ -85,7 +86,7 @@ export const SettingHome: React.FunctionComponent = () => {
               />
             </SettingGroup>
           </div>
-        </div>
+        </Container>
       )}
     </DrawerNavigation>
   );

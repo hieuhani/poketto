@@ -8,9 +8,9 @@ import { HexAddress } from '../../../ui/HexAddress';
 import { formatMoney } from '../../helpers/number';
 import { SimulatedTransaction } from '@poketto/core';
 import { useModalNavigation } from '../../../navigation/ModalNavigation';
-import { ArrowBackIcon } from '@icons/ArrowBackIcon';
 import { Input } from '@ui/Input';
 import { Button } from '@ui/Button';
+import { TitleHeader } from '../../components/TitleHeader';
 
 export interface TransferFormState {
   toAddress: string;
@@ -116,12 +116,7 @@ export const TransferScreen: React.FunctionComponent = () => {
 
   return (
     <div>
-      <div className="flex items-center py-2">
-        <button onClick={goBack} className="p-2">
-          <ArrowBackIcon className="text-xl" />
-        </button>
-        <h6 className="text-lg">Send coin</h6>
-      </div>
+      <TitleHeader title="Send coin" goBack={goBack} />
       <form>
         <div className="space-y-2 px-3">
           {account && (
