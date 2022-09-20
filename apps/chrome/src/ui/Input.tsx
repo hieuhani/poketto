@@ -3,8 +3,10 @@ import { forwardRef, InputHTMLAttributes } from 'react';
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   helperText?: string;
+  error?: boolean;
 }
 
+// TODO: error chua code xong
 export const Input = forwardRef<HTMLInputElement, Props>(
   ({ label, helperText, ...props }, ref) => (
     <div ref={ref} className="space-y-2">

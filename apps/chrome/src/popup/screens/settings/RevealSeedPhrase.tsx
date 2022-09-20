@@ -7,7 +7,7 @@ import { useWallet } from '@poketto/core';
 import toast from 'react-hot-toast';
 import { useState } from 'react';
 import { MnemonicView } from '../onboarding/components/MnemonicView';
-import { TitleHeader } from '../../components/TitleHeader';
+import { TitleHeader } from '../../../ui/TitleHeader';
 import { Container } from '@ui/Container';
 import { Button } from '@ui/Button';
 

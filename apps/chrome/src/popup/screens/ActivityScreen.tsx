@@ -3,7 +3,7 @@ import { useWallet } from '@poketto/core';
 import { useEffect, useState } from 'react';
 import { Types } from 'aptos';
 
-import { TitleHeader } from '../components/TitleHeader';
+import { TitleHeader } from '../../ui/TitleHeader';
 import Stack from '@mui/material/Stack';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';

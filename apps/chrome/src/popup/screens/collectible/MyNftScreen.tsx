@@ -9,7 +9,7 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import CardMedia from '@mui/material/CardMedia';
 import { useStackNavigation } from '../../../navigation';
-import { TitleHeader } from '../../components/TitleHeader';
+import { TitleHeader } from '../../../ui/TitleHeader';
 
 export const MyNftScreen: React.FunctionComponent = () => {
   const { navigate } = useStackNavigation();

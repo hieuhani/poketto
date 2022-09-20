@@ -1,11 +1,8 @@
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import { IoCopyOutline } from 'react-icons/io5';
 import { HiOutlineCursorClick } from 'react-icons/hi';
 import { useCopy } from '../../../hooks/use-copy';
 import { useState } from 'react';
+import { Button } from '@ui/Button';
+import { CopyIcon } from '@icons/CopyIcon';
 
 interface Props {
   privateKey: string;
@@ -21,59 +18,34 @@ export const PrivateKeyView: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <Paper
-      sx={{
-        px: 2,
-        pt: 3,
-        pb: 2,
-        userSelect: 'none',
-        position: 'relative',
-        borderRadius: 4,
-        overflow: 'hidden',
-      }}
-    >
+    <div className="user-select-none relative space-y-3 overflow-hidden rounded-lg p-3">
       {!reveal && (
-        <Box
-          sx={{
-            position: 'absolute',
-            inset: 0,
-            backgroundColor: 'grey.900',
-            zIndex: 1,
-            display: 'flex',
-            placeContent: 'center',
-            flexDirection: 'column',
-            px: 6,
-            textAlign: 'center',
-          }}
-        >
-          <Button sx={{ marginBottom: 1 }} onClick={() => setReveal(true)}>
+        <div className="absolute inset-0 z-10 flex flex-col place-content-center bg-gray-200 px-3 text-center">
+          <Button
+            variant="link"
+            className="flex items-center justify-center"
+            onClick={() => setReveal(true)}
+          >
             <HiOutlineCursorClick />
-            <Typography ml={1}>Click to reveal private Key</Typography>
+            <h3>Click to reveal private key</h3>
           </Button>
-          <Typography color="grey.700">
+          <h3>
             Make sure no one is watching your screen. Save it somewhere safe.
-          </Typography>
-        </Box>
+          </h3>
+        </div>
       )}
-      <Box
-        marginBottom={2}
-        sx={{
-          wordBreak: 'break-all',
-          backgroundColor: 'grey.800',
-          px: 3,
-          py: 1,
-          borderRadius: 3,
-          textAlign: 'center',
-        }}
-      >
+      <div className="break-all rounded-lg bg-gray-200 px-3 py-2 text-center">
         {privateKey}
-      </Box>
-      <Button size="small" fullWidth onClick={copyPrivateKey} disabled={copied}>
-        <IoCopyOutline />
-        <Typography ml={1}>
-          {copied ? 'Copied' : 'Copy to clipboard'}
-        </Typography>
+      </div>
+      <Button
+        className="flex items-center justify-center space-x-3"
+        fullWidth
+        onClick={copyPrivateKey}
+        disabled={copied}
+      >
+        <CopyIcon />
+        <span>{copied ? 'Copied' : 'Copy to clipboard'}</span>
       </Button>
-    </Paper>
+    </div>
   );
 };

@@ -7,7 +7,7 @@ import {
 } from 'react-icons/io5';
 import { MdPassword } from 'react-icons/md';
 import { SettingItem } from '../../../ui/SettingItem';
-import { TitleHeader } from '../../components/TitleHeader';
+import { TitleHeader } from '../../../ui/TitleHeader';
 import { DrawerNavigation, useStackNavigation } from '../../../navigation';
 import { NetworksView } from './NetworksView';
 import { useWallet } from '@poketto/core';

@@ -10,7 +10,7 @@ import { SimulatedTransaction } from '@poketto/core';
 import { useModalNavigation } from '../../../navigation/ModalNavigation';
 import { Input } from '@ui/Input';
 import { Button } from '@ui/Button';
-import { TitleHeader } from '../../components/TitleHeader';
+import { TitleHeader } from '../../../ui/TitleHeader';
 
 export interface TransferFormState {
   toAddress: string;

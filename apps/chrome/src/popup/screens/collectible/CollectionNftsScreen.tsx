@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import { IoArrowBackOutline } from 'react-icons/io5';
-import { TitleHeader } from '../../components/TitleHeader';
+import { TitleHeader } from '../../../ui/TitleHeader';
 import { useStackNavigation } from '../../../navigation';
 import Button from '@mui/material/Button';
 

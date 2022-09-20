@@ -4,8 +4,8 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import Button from '@mui/material/Button';
-import { Input } from '../../../../ui/Input';
+import { Button } from '@ui/Button';
+import { Input } from '@ui/Input';
 
 const formSchema = Yup.object().shape({
   password: Yup.string()
@@ -87,12 +87,7 @@ export const PasswordForm: React.FunctionComponent<Props> = ({
             />
           )}
         />
-        <Button
-          variant="contained"
-          fullWidth
-          type="submit"
-          disabled={!isValid || loading}
-        >
+        <Button fullWidth type="submit" disabled={!isValid || loading}>
           Continue
         </Button>
       </Stack>

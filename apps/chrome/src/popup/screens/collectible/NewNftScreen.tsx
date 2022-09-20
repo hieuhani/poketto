@@ -8,7 +8,7 @@ import Stack from '@mui/material/Stack';
 import toast from 'react-hot-toast';
 import { Controller, useForm } from 'react-hook-form';
 import { Input } from '../../../ui/Input';
-import { TitleHeader } from '../../components/TitleHeader';
+import { TitleHeader } from '../../../ui/TitleHeader';
 import { useStackNavigation } from '../../../navigation';
 import { useWallet } from '@poketto/core';
 import { useBoolean } from '../../hooks/use-boolean';
