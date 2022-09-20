@@ -1,13 +1,13 @@
-import Box from '@mui/material/Box';
 import { useStackNavigation } from '../../../navigation';
 import { Logo } from '../../components/Logo';
 import { Button } from '@ui/Button';
+import { Container } from '@ui/Container';
 
 export const WelcomeScreen: React.FunctionComponent = () => {
   const { navigate } = useStackNavigation();
 
   return (
-    <Box px={4} py={4}>
+    <Container>
       <div className="my-8 flex flex-col items-center space-y-4 text-center">
         <Logo className="h-16 w-16" />
         <h3 className="text-2xl text-slate-900 dark:text-slate-200 ">
@@ -28,6 +28,6 @@ export const WelcomeScreen: React.FunctionComponent = () => {
           Import my existing wallet
         </Button>
       </div>
-    </Box>
+    </Container>
   );
 };

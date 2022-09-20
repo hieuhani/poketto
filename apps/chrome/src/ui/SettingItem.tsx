@@ -16,7 +16,7 @@ export const SettingItem: React.FunctionComponent<Props> = ({
   iconClassname,
   ...props
 }) => (
-  <button className="flex items-center px-3 py-3 text-left" {...props}>
+  <button className="flex w-full items-center px-3 py-3 text-left" {...props}>
     <div
       className={clsx(
         'mr-3 flex h-12 w-12 items-center justify-center rounded-xl text-white',
