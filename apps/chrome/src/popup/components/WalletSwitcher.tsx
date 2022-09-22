@@ -1,5 +1,5 @@
 import { IoAddOutline, IoCheckmark } from 'react-icons/io5';
-import { useEffect, useRef, useState, Fragment } from 'react';
+import { useEffect, useRef, Fragment } from 'react';
 import { makeShortAddress } from '../helpers/address';
 import { renderIcon } from '../helpers/blockies';
 import { useWallet } from '@poketto/core';
@@ -18,16 +18,10 @@ export const WalletSwitcher: React.FunctionComponent<Props> = ({
     createNewSiblingAccount,
     changeDefaultAccountIndex,
   } = useWallet();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+
   const { openModal } = useModalNavigation();
   const canvas = useRef<HTMLCanvasElement | null>(null);
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+
   useEffect(() => {
     renderIcon(
       {
@@ -80,9 +74,8 @@ export const WalletSwitcher: React.FunctionComponent<Props> = ({
             {accounts.map((account, index) => {
               const isActive = walletPreference.defaultAccountIndex === index;
               return (
-                <Menu.Item>
+                <Menu.Item key={index}>
                   <button
-                    key={index}
                     className="group flex w-full items-center rounded-md px-2 py-2 hover:bg-primary hover:text-white"
                     onClick={() => changeDefaultAccountIndex(index)}
                   >

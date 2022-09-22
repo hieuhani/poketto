@@ -1,18 +1,11 @@
 import { HexAddress } from '../../ui/HexAddress';
+import { formatBalance } from '../helpers/number';
 import { BackgroundPattern } from './BackgroundPattern';
 
 interface Props {
-  balance: number;
+  balance: bigint;
   address: string;
 }
-
-const formatMoney = (amount: number) => {
-  const balanceDesc = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-  }).format(amount);
-  return balanceDesc.substring(1);
-};
 
 export const OverviewCard: React.FunctionComponent<Props> = ({
   balance,
@@ -30,7 +23,7 @@ export const OverviewCard: React.FunctionComponent<Props> = ({
           <h4 className="text-slate-100">Account Balance</h4>
         </div>
 
-        <h4 className="text-3xl text-white">{formatMoney(balance)}</h4>
+        <h4 className="text-3xl text-white">{formatBalance(balance)}</h4>
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 import { Coin } from '@poketto/core';
+import { formatBalance } from '../helpers/number';
 interface Props {
   coin: Coin;
 }
@@ -20,7 +21,7 @@ export const TokenRow: React.FunctionComponent<Props> = ({ coin }) => (
     <div className="ml-3 flex-1">
       <h4 className="font-medium">{coin.name}</h4>
       <p className="text-sm">
-        {coin.balance} {coin.name}
+        {formatBalance(coin.balance)} {coin.name}
       </p>
     </div>
   </div>

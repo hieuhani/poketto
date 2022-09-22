@@ -5,11 +5,12 @@ import { useDebounce } from '../../hooks/use-debounce';
 import { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { HexAddress } from '../../../ui/HexAddress';
-import { formatMoney } from '../../helpers/number';
+import { formatBalance } from '../../helpers/number';
 import { SimulatedTransaction } from '@poketto/core';
 import { useModalNavigation } from '../../../navigation/ModalNavigation';
 import { Input } from '@ui/Input';
 import { Button } from '@ui/Button';
+import Decimal from 'decimal.js';
 import { TitleHeader } from '../../../ui/TitleHeader';
 
 export interface TransferFormState {
@@ -24,7 +25,7 @@ export const TransferScreen: React.FunctionComponent = () => {
   const { openModal } = useModalNavigation();
   const [simulatedTransaction, setSimulatedTransaction] =
     useState<SimulatedTransaction | null>(null);
-  const balance = coins.reduce((acc, coin) => acc + coin.balance, 0);
+  const balance = coins.reduce((acc, coin) => acc + coin.balance, BigInt(0));
   const { check: checkAddress, status: addressStatus } = useCheckAddress();
   const { register, watch } = useForm({
     defaultValues: {
@@ -55,8 +56,12 @@ export const TransferScreen: React.FunctionComponent = () => {
       setSimulatedTransaction(result);
     };
     if (debouncedAmountOnChange && toAddress) {
+      const decimal = new Decimal(debouncedAmountOnChange).mul(
+        Decimal.pow(10, 8)
+      );
+
       const payload: TransactionPayload = {
-        arguments: [toAddress, BigInt(debouncedAmountOnChange)],
+        arguments: [toAddress, decimal.toString()],
         function: '0x1::coin::transfer',
         type: 'script_function_payload',
         type_arguments: ['0x1::aptos_coin::AptosCoin'],
@@ -122,7 +127,7 @@ export const TransferScreen: React.FunctionComponent = () => {
           {account && (
             <div className="rounded-lg bg-slate-100 p-3">
               <HexAddress address={account.address().hex()} />
-              {coins[0] && <p>Balance: {formatMoney(coins[0].balance)}</p>}
+              {coins[0] && <p>Balance: {formatBalance(coins[0].balance)}</p>}
             </div>
           )}
 

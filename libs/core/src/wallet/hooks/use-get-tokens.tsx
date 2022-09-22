@@ -1,5 +1,4 @@
-import { AptosClient } from 'aptos';
-import { MoveResource } from 'aptos/dist/generated';
+import { AptosClient, Types } from 'aptos';
 import get from 'lodash.get';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -21,7 +20,7 @@ export interface Token {
 export const useGetTokens = (
   aptosClient: AptosClient,
   address?: string,
-  tokenResource?: MoveResource,
+  tokenResource?: Types.MoveResource,
   runOnUseEffect = false
 ) => {
   const [tokens, setTokens] = useState<Token[]>([]);

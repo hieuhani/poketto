@@ -3,9 +3,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { useWallet } from '@poketto/core';
 import { Logo } from '../../components/Logo';
-import { Input } from '../../../ui/Input';
 import { useStackNavigation } from '../../../navigation';
 import { Button } from '@ui/Button';
+import { Input } from '@ui/Input';
 
 const formSchema = Yup.object().shape({
   password: Yup.string()

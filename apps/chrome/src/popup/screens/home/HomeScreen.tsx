@@ -10,7 +10,7 @@ export const HomeScreen: React.FunctionComponent = () => {
   const { account, state, coins } = useWallet();
   const { navigate } = useStackNavigation();
   const { openModal } = useModalNavigation();
-  const balance = coins.reduce((acc, coin) => acc + coin.balance, 0);
+  const balance = coins.reduce((acc, coin) => acc + coin.balance, BigInt(0));
   const handleGoToReceiveScreen = () => {
     openModal('ReceiveCoin', {
       accountAddress: account?.address().hex() || '',

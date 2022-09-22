@@ -1,4 +1,10 @@
-import { AptosAccount, AptosClient, FaucetClient, TokenClient } from 'aptos';
+import {
+  AptosAccount,
+  AptosClient,
+  FaucetClient,
+  TokenClient,
+  Types,
+} from 'aptos';
 import React, { PropsWithChildren, useEffect, useMemo, useState } from 'react';
 import { generateMnemonic } from '../mnemonic';
 import { createAccount, loadAccount } from '../account';
@@ -17,7 +23,6 @@ import {
   WalletState,
 } from './types';
 import { WalletContext } from './WalletContext';
-import { EntryFunctionPayload } from 'aptos/dist/generated';
 import { useGetTokenCollections } from './hooks/use-get-token-collections';
 import { useGetTokens } from './hooks/use-get-tokens';
 
@@ -109,7 +114,7 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
       const name = segments[segments.length - 1];
       return {
         name: name.substring(0, name.length - 1),
-        balance: Number((resource.data as any).coin.value),
+        balance: BigInt((resource.data as any).coin.value),
       };
     });
 
@@ -209,7 +214,7 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
   };
 
   const submitTransaction = async (
-    payload: EntryFunctionPayload,
+    payload: Types.EntryFunctionPayload,
     fromAccount?: AptosAccount
   ): Promise<string> => {
     const account = fromAccount || stateAccount;
@@ -362,7 +367,7 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
   };
 
   const simulateTransaction = async (
-    payload: EntryFunctionPayload,
+    payload: Types.EntryFunctionPayload,
     fromAccount?: AptosAccount
   ) => {
     const account = fromAccount || stateAccount;

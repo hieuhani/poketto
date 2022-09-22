@@ -11,7 +11,6 @@ import {
   TokenCollection,
   WalletState,
 } from './types';
-import { EntryFunctionPayload, MoveResource } from 'aptos/dist/generated';
 import { Token } from './hooks/use-get-tokens';
 
 export interface WalletContextState {
@@ -31,7 +30,7 @@ export interface WalletContextState {
   currentAccountTrustedOrigins: string[];
   accountTrustedOrigins: Record<string, string[]>;
   token: {
-    tokenCollectionsResource: MoveResource | undefined;
+    tokenCollectionsResource: Types.MoveResource | undefined;
     tokenCollections: TokenCollection[];
     tokens: Token[];
     fetchTokenCollections: () => void;
@@ -44,11 +43,11 @@ export interface WalletContextState {
   importAccount: (mnemonic: string, password: string) => Promise<void>;
   fundAccountWithFaucet: (amount: number) => void;
   submitTransaction: (
-    payload: EntryFunctionPayload,
+    payload: Types.EntryFunctionPayload,
     fromAccount?: AptosAccount
   ) => Promise<string>;
   simulateTransaction: (
-    payload: EntryFunctionPayload,
+    payload: Types.EntryFunctionPayload,
     fromAccount?: AptosAccount
   ) => Promise<SimulatedTransaction>;
   clearOneTimeMnemonic: () => void;
@@ -120,13 +119,13 @@ export const WalletContext = createContext<WalletContextState>({
     throw new Error('unimplemented');
   },
   submitTransaction: (
-    payload: EntryFunctionPayload,
+    payload: Types.EntryFunctionPayload,
     fromAccount?: AptosAccount
   ) => {
     throw new Error('unimplemented');
   },
   simulateTransaction: (
-    payload: EntryFunctionPayload,
+    payload: Types.EntryFunctionPayload,
     fromAccount?: AptosAccount
   ) => {
     throw new Error('unimplemented');

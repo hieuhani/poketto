@@ -1,10 +1,9 @@
-import { AptosClient } from 'aptos';
-import { Event, MoveResource } from 'aptos/dist/generated';
+import { AptosClient, Types } from 'aptos';
 import get from 'lodash.get';
 import { useCallback, useEffect, useState } from 'react';
 import { TokenCollection } from '../types';
 
-const eventToTokenCollection = (event: Event): TokenCollection => {
+const eventToTokenCollection = (event: Types.Event): TokenCollection => {
   return {
     sequenceNumber: event.sequence_number,
     collectionName: event.data.collection_name,
@@ -18,7 +17,7 @@ const eventToTokenCollection = (event: Event): TokenCollection => {
 export const useGetTokenCollections = (
   aptosClient: AptosClient,
   address?: string,
-  tokenCollectionsResource?: MoveResource,
+  tokenCollectionsResource?: Types.MoveResource,
   runOnUseEffect = false
 ) => {
   const [tokenCollections, setTokenCollections] = useState<TokenCollection[]>(
