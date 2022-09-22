@@ -10,7 +10,7 @@ interface Props
 
 // TODO: error chua code xong
 export const Input = forwardRef<HTMLDivElement, Props>(
-  ({ label, helperText, multiline, ...props }, ref) => {
+  ({ label, helperText, multiline, error, ...props }, ref) => {
     const Tag = multiline ? 'textarea' : 'input';
     return (
       <div ref={ref} className="space-y-2">
