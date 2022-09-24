@@ -69,3 +69,11 @@ export interface TokenCollection {
   maximum: string;
   uri: string;
 }
+
+export interface Transaction {
+  version: string;
+  vmStatus: string;
+  gasUsed: string;
+  amount: string;
+  timestamp: string;
+}

@@ -9,6 +9,7 @@ import {
   CreateTokenPayload,
   SimulatedTransaction,
   TokenCollection,
+  Transaction,
   WalletState,
 } from './types';
 import { Token } from './hooks/use-get-tokens';
@@ -29,6 +30,7 @@ export interface WalletContextState {
   totalWalletAccount: number;
   currentAccountTrustedOrigins: string[];
   accountTrustedOrigins: Record<string, string[]>;
+  transactions: Transaction[];
   token: {
     tokenCollectionsResource: Types.MoveResource | undefined;
     tokenCollections: TokenCollection[];
@@ -69,6 +71,7 @@ export interface WalletContextState {
     payload: CreateTokenPayload,
     fromAccount?: AptosAccount
   ) => Promise<string>;
+  fetchTransactions: () => void;
 }
 
 const aptosClient = new AptosClient(networkConfigs.devnet.aptos);
@@ -88,6 +91,7 @@ export const WalletContext = createContext<WalletContextState>({
   totalWalletAccount: 0,
   currentAccountTrustedOrigins: [],
   accountTrustedOrigins: {},
+  transactions: [],
   token: {
     tokenCollectionsResource: undefined,
     tokenCollections: [],
@@ -161,6 +165,9 @@ export const WalletContext = createContext<WalletContextState>({
     throw new Error('unimplemented');
   },
   createToken: (payload: CreateTokenPayload, fromAccount?: AptosAccount) => {
+    throw new Error('unimplemented');
+  },
+  fetchTransactions: () => {
     throw new Error('unimplemented');
   },
 });

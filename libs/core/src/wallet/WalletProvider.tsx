@@ -25,6 +25,7 @@ import {
 import { WalletContext } from './WalletContext';
 import { useGetTokenCollections } from './hooks/use-get-token-collections';
 import { useGetTokens } from './hooks/use-get-tokens';
+import { useGetTransactions } from './hooks/use-get-transactions';
 
 interface Props extends PropsWithChildren {
   storage: Storage;
@@ -491,6 +492,12 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
     tokenResource
   );
 
+  const { transactions, fetchTransactions } = useGetTransactions(
+    aptosClient,
+    resources,
+    stateAccount?.address().hex()
+  );
+
   return (
     <WalletContext.Provider
       value={{
@@ -509,6 +516,7 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
         totalWalletAccount,
         currentAccountTrustedOrigins,
         accountTrustedOrigins,
+        transactions,
         token: {
           tokenCollectionsResource,
           tokenCollections,
@@ -534,6 +542,7 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
         removeTrustedOrigin,
         createToken,
         createCollection,
+        fetchTransactions,
       }}
     >
       {children}
