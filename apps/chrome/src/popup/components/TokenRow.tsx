@@ -5,7 +5,7 @@ interface Props {
 }
 
 export const TokenRow: React.FunctionComponent<Props> = ({ coin }) => (
-  <div className="flex items-center rounded-lg bg-slate-200 p-3 text-stone-800 dark:bg-stone-800 dark:text-white">
+  <div className="flex items-center rounded-lg bg-stone-100 p-3 text-stone-800 dark:bg-stone-800 dark:text-white">
     <div className="h-12 w-12">
       <svg
         xmlns="http://www.w3.org/2000/svg"

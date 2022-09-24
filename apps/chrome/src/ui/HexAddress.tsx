@@ -23,7 +23,7 @@ export const HexAddress: React.FunctionComponent<Props> = ({
       type="button"
       onClick={copyAddress}
       className={clsx(
-        '-ml-1 flex items-center px-1 text-stone-300 dark:text-white',
+        '-ml-1 flex items-center px-1 text-stone-400 dark:text-white',
         className
       )}
     >

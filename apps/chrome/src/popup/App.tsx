@@ -30,15 +30,17 @@ export const App: React.FunctionComponent = () => {
   return (
     <>
       <Layout>
-        {sdk.valid ? (
-          <SdkNavigation />
-        ) : state === 'account:pending:loadAccount' && !password ? (
-          <OnboardingNavigation />
-        ) : authenticated ? (
-          <HomeNavigation />
-        ) : (
-          <NewWalletNavigation />
-        )}
+        <div className="h-[calc(100%-3rem)] overflow-y-auto">
+          {sdk.valid ? (
+            <SdkNavigation />
+          ) : state === 'account:pending:loadAccount' && !password ? (
+            <OnboardingNavigation />
+          ) : authenticated ? (
+            <HomeNavigation />
+          ) : (
+            <NewWalletNavigation />
+          )}
+        </div>
       </Layout>
       <GlobalLoading loading={loading} />
     </>

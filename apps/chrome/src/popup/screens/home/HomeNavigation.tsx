@@ -14,7 +14,7 @@ export const HomeNavigation: React.FunctionComponent = () => (
       { route: 'setting', screen: <SettingScreen /> },
     ]}
     navigation={
-      <div className="absolute inset-x-0 bottom-0">
+      <div className="absolute inset-x-0 bottom-0 bg-white dark:bg-stone-900">
         <BottomTabs />
       </div>
     }
