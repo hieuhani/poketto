@@ -1,5 +1,5 @@
 import { useStackNavigation } from '../../../navigation';
-import { useWallet, useCheckAddress, TransactionPayload } from '@poketto/core';
+import { useWallet, useCheckAddress } from '@poketto/core';
 import { useForm } from 'react-hook-form';
 import { useDebounce } from '../../hooks/use-debounce';
 import { useEffect, useMemo, useState } from 'react';
@@ -12,6 +12,7 @@ import { Input } from '@ui/Input';
 import { Button } from '@ui/Button';
 import Decimal from 'decimal.js';
 import { TitleHeader } from '../../../ui/TitleHeader';
+import { Types } from 'aptos';
 
 export interface TransferFormState {
   toAddress: string;
@@ -51,7 +52,9 @@ export const TransferScreen: React.FunctionComponent = () => {
   }, [debouncedAddressOnChange]);
 
   useEffect(() => {
-    const executeSimulateTransaction = async (payload: TransactionPayload) => {
+    const executeSimulateTransaction = async (
+      payload: Types.EntryFunctionPayload
+    ) => {
       const result = await simulateTransaction(payload);
       setSimulatedTransaction(result);
     };
@@ -60,10 +63,9 @@ export const TransferScreen: React.FunctionComponent = () => {
         Decimal.pow(10, 8)
       );
 
-      const payload: TransactionPayload = {
+      const payload: Types.EntryFunctionPayload = {
         arguments: [toAddress, decimal.toString()],
         function: '0x1::coin::transfer',
-        type: 'script_function_payload',
         type_arguments: ['0x1::aptos_coin::AptosCoin'],
       };
       executeSimulateTransaction(payload);
@@ -95,10 +97,9 @@ export const TransferScreen: React.FunctionComponent = () => {
 
   const onSendTransaction = async () => {
     try {
-      const payload: TransactionPayload = {
+      const payload: Types.EntryFunctionPayload = {
         arguments: [toAddress, BigInt(amount)],
         function: '0x1::coin::transfer',
-        type: 'script_function_payload',
         type_arguments: ['0x1::aptos_coin::AptosCoin'],
       };
       await submitTransaction(payload);

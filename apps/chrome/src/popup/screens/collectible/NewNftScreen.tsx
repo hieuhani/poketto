@@ -1,18 +1,14 @@
-import { Button, Typography } from '@mui/material';
-import Box from '@mui/material/Box';
 import * as Yup from 'yup';
-import IconButton from '@mui/material/IconButton';
-import { IoArrowBackOutline } from 'react-icons/io5';
 import { yupResolver } from '@hookform/resolvers/yup';
-import Stack from '@mui/material/Stack';
 import toast from 'react-hot-toast';
 import { Controller, useForm } from 'react-hook-form';
-import { Input } from '../../../ui/Input';
-import { TitleHeader } from '../../../ui/TitleHeader';
 import { useStackNavigation } from '../../../navigation';
 import { useWallet } from '@poketto/core';
 import { useBoolean } from '../../hooks/use-boolean';
-import InputLabel from '@mui/material/InputLabel';
+import { TitleHeader } from '@ui/TitleHeader';
+import { Container } from '@ui/Container';
+import { Input } from '@ui/Input';
+import { Button } from '@ui/Button';
 
 const formSchema = Yup.object().shape({
   name: Yup.string().required('NFT name is a required field'),
@@ -57,7 +53,6 @@ export const NewNftScreen: React.FunctionComponent<Props> = ({
         collectionName: collectionName || 'MyCollection',
         supply: 1,
       });
-      console.info(tokenHash);
 
       goBack();
       toast.success('Your NFT is created');
@@ -70,78 +65,74 @@ export const NewNftScreen: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      <Box px={1} display="flex" alignItems="center">
-        <IconButton onClick={goBack}>
-          <IoArrowBackOutline />
-        </IconButton>
-        <TitleHeader title="Create NFT" />
-      </Box>
-      <form onSubmit={handleSubmit(onFormSubmit)}>
-        <Stack px={1} spacing={2}>
-          <Box>
-            <InputLabel shrink>Collection</InputLabel>
-            <Typography>{collectionName}</Typography>
-          </Box>
+      <TitleHeader title="Create NFT" goBack={goBack} />
+      <Container>
+        <form onSubmit={handleSubmit(onFormSubmit)}>
+          <div className="space-y-3">
+            <div>
+              <h3>Collection</h3>
+              <p>{collectionName}</p>
+            </div>
 
-          <Controller
-            name="name"
-            control={control}
-            rules={{
-              required: true,
-            }}
-            render={({ field }) => (
-              <Input
-                label="NFT Name"
-                placeholder="NFT Name"
-                error={!!errors.name?.message}
-                helperText={errors.name?.message}
-                {...field}
-              />
-            )}
-          />
+            <Controller
+              name="name"
+              control={control}
+              rules={{
+                required: true,
+              }}
+              render={({ field }) => (
+                <Input
+                  type="text"
+                  label="NFT Name"
+                  placeholder="NFT Name"
+                  error={!!errors.name?.message}
+                  helperText={errors.name?.message}
+                  {...field}
+                />
+              )}
+            />
 
-          <Controller
-            name="description"
-            control={control}
-            rules={{
-              required: true,
-            }}
-            render={({ field }) => (
-              <Input
-                label="NFT Description"
-                placeholder="NFT Description"
-                error={!!errors.name?.message}
-                helperText={errors.name?.message}
-                {...field}
-              />
-            )}
-          />
+            <Controller
+              name="description"
+              control={control}
+              rules={{
+                required: true,
+              }}
+              render={({ field }) => (
+                <Input
+                  type="text"
+                  label="NFT Description"
+                  placeholder="NFT Description"
+                  error={!!errors.name?.message}
+                  helperText={errors.name?.message}
+                  {...field}
+                />
+              )}
+            />
 
-          <Controller
-            name="uri"
-            control={control}
-            rules={{
-              required: true,
-            }}
-            render={({ field }) => (
-              <Input
-                label="NFT Data (URI)"
-                placeholder="NFT URI"
-                error={!!errors.uri?.message}
-                helperText={errors.uri?.message}
-                {...field}
-              />
-            )}
-          />
-          <Button
-            variant="contained"
-            type="submit"
-            disabled={!isValid || loading}
-          >
-            Create NFT
-          </Button>
-        </Stack>
-      </form>
+            <Controller
+              name="uri"
+              control={control}
+              rules={{
+                required: true,
+              }}
+              render={({ field }) => (
+                <Input
+                  type="text"
+                  label="NFT Data (URI)"
+                  placeholder="NFT URI"
+                  error={!!errors.uri?.message}
+                  helperText={errors.uri?.message}
+                  {...field}
+                />
+              )}
+            />
+            <Button type="submit" fullWidth disabled={!isValid || loading}>
+              Create NFT
+            </Button>
+          </div>
+        </form>
+      </Container>
     </>
   );
 };

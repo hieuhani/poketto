@@ -15,30 +15,55 @@ export const MyNftScreen: React.FunctionComponent = () => {
     fetchTokenCollections();
     fetchTokens();
   }, []);
+
   return (
     <>
-      <TitleHeader title="My NFT" />
-      <Container>
-        <Button fullWidth onClick={() => navigate('create_collection')}>
-          Create collection
-        </Button>
-        <div className="space-y-2">
+      <TitleHeader title="Collectible" />
+      <Container className="space-y-3">
+        <div className="flex items-center justify-between">
+          <h3>NFT Collection</h3>
+          <Button variant="link" onClick={() => navigate('create_collection')}>
+            Create collection
+          </Button>
+        </div>
+        <div className="flex space-x-3 overflow-x-auto">
           {tokenCollections.map((collection) => (
-            <div key={collection.sequenceNumber}>
-              <div>
-                <img height="100" src={collection.uri} alt="" />
+            <button
+              key={collection.sequenceNumber}
+              className="text-left"
+              onClick={() =>
+                navigate('collection_nfts', {
+                  collectionName: collection.collectionName,
+                })
+              }
+            >
+              <div className="h-36 w-max">
+                <img
+                  src={collection.uri}
+                  alt=""
+                  className="h-full rounded-lg object-cover"
+                />
               </div>
               <div>
-                <h4>{collection.collectionName}</h4>
-                <p>{collection.description}</p>
+                <h4 className="font-medium">{collection.collectionName}</h4>
+                <p className="text-sm">{collection.description}</p>
               </div>
-            </div>
+            </button>
           ))}
         </div>
         <div>
           {tokens.map((token, index) => (
             <div key={index}>
-              <h4>{token.name}</h4>
+              <div className="h-36 w-max">
+                <img
+                  // src={token}
+                  alt=""
+                  className="h-full rounded-lg object-cover"
+                />
+              </div>
+              <div>
+                <h4 className="font-medium">{token.name}</h4>
+              </div>
             </div>
           ))}
         </div>
