@@ -57,7 +57,7 @@ export const ChangePasswordView: React.FunctionComponent = () => {
       <TitleHeader goBack={goBack} title="Change password" />
       <Container>
         <form onSubmit={handleSubmit(onFormSubmit)}>
-          <div className="space-y-2">
+          <div className="space-y-3">
             <Controller
               name="currentPassword"
               control={control}

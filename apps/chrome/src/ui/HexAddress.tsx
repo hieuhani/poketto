@@ -22,9 +22,12 @@ export const HexAddress: React.FunctionComponent<Props> = ({
     <button
       type="button"
       onClick={copyAddress}
-      className={clsx('-ml-1 flex items-center px-1', className)}
+      className={clsx(
+        '-ml-1 flex items-center px-1 text-stone-300 dark:text-white',
+        className
+      )}
     >
-      <h3 className="mr-1 text-sm ">
+      <h3 className="mr-1 text-sm">
         {makeShortAddress(address, takeLeft, takeRight)}
       </h3>
       <CopyIcon />

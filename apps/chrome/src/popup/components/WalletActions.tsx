@@ -10,7 +10,7 @@ export const WalletActions: React.FunctionComponent<Props> = ({
   goToTransferScreen,
   goToReceiveScreen,
 }) => (
-  <div className="rounded-lg bg-slate-200">
+  <div className="rounded-lg bg-slate-200 text-stone-800 dark:bg-stone-800 dark:text-white">
     <div className="grid grid-cols-2">
       <button
         onClick={goToReceiveScreen}

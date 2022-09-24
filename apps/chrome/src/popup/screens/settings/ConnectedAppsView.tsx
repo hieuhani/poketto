@@ -23,7 +23,7 @@ export const ConnectedAppsView: React.FunctionComponent = () => {
     <>
       <TitleHeader goBack={goBack} title="Connected Apps" />
 
-      <Container className="space-y-2">
+      <Container className="space-y-3">
         <SettingGroup>
           {currentAccountTrustedOrigins.map((origin, index) => (
             <Fragment key={origin}>

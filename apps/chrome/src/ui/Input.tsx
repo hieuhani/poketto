@@ -13,11 +13,11 @@ export const Input = forwardRef<HTMLDivElement, Props>(
   ({ label, helperText, multiline, error, ...props }, ref) => {
     const Tag = multiline ? 'textarea' : 'input';
     return (
-      <div ref={ref} className="space-y-2">
+      <div ref={ref} className="space-y-3 dark:text-white">
         {label && <label>{label}</label>}
 
         <Tag
-          className="block w-full rounded-lg border-slate-200 focus:border-primary focus:ring-primary dark:text-slate-500"
+          className="block w-full rounded-lg border-slate-200 bg-white focus:border-primary focus:ring-primary dark:border-stone-700 dark:bg-stone-800"
           {...props}
         />
         {helperText && <h3>{helperText}</h3>}

@@ -82,7 +82,7 @@ export const ModalNavigation: React.FunctionComponent<
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-xs transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-xs transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all dark:bg-stone-800">
                   {ModalComponent && (
                     <ModalComponent {...modalParams} close={closeModal} />
                   )}

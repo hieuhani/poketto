@@ -14,7 +14,7 @@ export const SelectWallet: React.FunctionComponent<Props> = ({
   checkIsConnectedOrigin,
 }) => {
   return (
-    <div className="w-full space-y-2 rounded-md">
+    <div className="w-full space-y-3 rounded-md">
       {accounts.map((account, index) => {
         const address = account.address().hex();
         return (

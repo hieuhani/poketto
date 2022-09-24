@@ -3,5 +3,9 @@ import { PropsWithChildren } from 'react';
 export const SettingGroup: React.FunctionComponent<PropsWithChildren<{}>> = ({
   children,
 }) => {
-  return <div className="rounded-xl bg-slate-100">{children}</div>;
+  return (
+    <div className="divide-y divide-gray-100 rounded-xl bg-stone-100 dark:divide-stone-700 dark:bg-stone-800 ">
+      {children}
+    </div>
+  );
 };

@@ -46,7 +46,7 @@ export const WalletSwitcher: React.FunctionComponent<Props> = ({
       <div>
         <Menu.Button className="flex space-x-2 text-right">
           <div>
-            <h3 className="text-uppercase font-semibold">
+            <h3 className="text-uppercase font-semibold dark:text-slate-300">
               Wallet {walletPreference.defaultAccountIndex + 1}
             </h3>
 
@@ -69,7 +69,7 @@ export const WalletSwitcher: React.FunctionComponent<Props> = ({
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5">
+        <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 dark:divide-stone-700 dark:bg-stone-800 dark:text-white">
           <div className="px-1 py-1 ">
             {accounts.map((account, index) => {
               const isActive = walletPreference.defaultAccountIndex === index;

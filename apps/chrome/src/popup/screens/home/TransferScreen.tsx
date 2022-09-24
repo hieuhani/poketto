@@ -124,9 +124,9 @@ export const TransferScreen: React.FunctionComponent = () => {
     <div>
       <TitleHeader title="Send coin" goBack={goBack} />
       <form>
-        <div className="space-y-2 px-3">
+        <div className="space-y-3 px-3">
           {account && (
-            <div className="rounded-lg bg-slate-100 p-3">
+            <div className="rounded-lg bg-slate-100 p-3 text-stone-600 dark:bg-stone-800 dark:text-white">
               <HexAddress address={account.address().hex()} />
               {coins[0] && <p>Balance: {formatBalance(coins[0].balance)}</p>}
             </div>
@@ -144,7 +144,9 @@ export const TransferScreen: React.FunctionComponent = () => {
             }}
             {...toAddressRest}
           />
-          {addressNote}
+          <div className="text-sm text-stone-600 dark:text-white">
+            {addressNote}
+          </div>
 
           <Input
             label="Amount"

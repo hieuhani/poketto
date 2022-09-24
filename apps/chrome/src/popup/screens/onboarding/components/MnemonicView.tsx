@@ -17,9 +17,9 @@ export const MnemonicView: React.FunctionComponent<Props> = ({ mnemonic }) => {
   };
 
   return (
-    <div className="user-select-none relative space-y-3 overflow-hidden rounded-lg">
+    <div className="user-select-none relative space-y-3 overflow-hidden rounded-xl">
       {!reveal && (
-        <div className="absolute inset-0 z-10 flex flex-col place-content-center bg-gray-200 px-3 text-center">
+        <div className="absolute inset-0 z-10 flex flex-col place-content-center bg-stone-200  px-3 text-center dark:bg-stone-800">
           <Button
             variant="link"
             className="flex items-center justify-center"
@@ -37,12 +37,13 @@ export const MnemonicView: React.FunctionComponent<Props> = ({ mnemonic }) => {
       <div className="grid grid-cols-2">
         {mnemonicBlocks.map((block, index) => (
           <div key={index} className="flex">
-            <h3 className="mr-3 text-blue-600">{index + 1}</h3>
+            <h3 className="w-8 text-blue-600">{index + 1}</h3>
             <span>{block}</span>
           </div>
         ))}
       </div>
       <Button
+        variant="link"
         className="flex items-center justify-center space-x-3"
         fullWidth
         onClick={copyMnemonic}

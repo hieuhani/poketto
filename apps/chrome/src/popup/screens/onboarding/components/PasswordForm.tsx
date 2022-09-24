@@ -43,7 +43,7 @@ export const PasswordForm: React.FunctionComponent<Props> = ({
   };
   return (
     <form onSubmit={handleSubmit(onFormSubmit)}>
-      <h5>Use this password to unlock your wallet</h5>
+      <h5 className="mb-3">Use this password to unlock your wallet</h5>
       <div className="space-y-3">
         <Controller
           name="password"

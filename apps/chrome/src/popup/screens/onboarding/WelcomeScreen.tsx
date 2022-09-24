@@ -8,12 +8,14 @@ export const WelcomeScreen: React.FunctionComponent = () => {
 
   return (
     <Container>
-      <div className="my-8 flex flex-col items-center space-y-4 text-center">
+      <div className="flex flex-col items-center space-y-4 py-8 text-center">
         <Logo className="h-16 w-16" />
-        <h3 className="text-2xl text-slate-900 dark:text-slate-200 ">
+        <h3 className="text-2xl text-slate-900 dark:text-slate-200">
           Welcome to Poketto Wallet
         </h3>
-        <h5>Secured store for your digital assets</h5>
+        <h5 className="text-slate-900 dark:text-slate-400">
+          Secured store for your digital assets
+        </h5>
       </div>
 
       <div className="space-y-4">

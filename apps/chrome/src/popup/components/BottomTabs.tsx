@@ -52,6 +52,7 @@ export const BottomTabs: React.FunctionComponent = () => {
           <button
             className={clsx('flex flex-1 flex-col items-center', {
               'text-primary': isActive,
+              'text-stone-600 dark:text-stone-500': !isActive,
             })}
             key={menuKey}
             onClick={() => onRouteChanged(menuKey)}
@@ -59,7 +60,7 @@ export const BottomTabs: React.FunctionComponent = () => {
             <span>
               {isActive ? menus[menuKey].activeIcon : menus[menuKey].icon}
             </span>
-            <h3 className="font-medium">{menus[menuKey].label}</h3>
+            <h3 className="text-sm font-medium">{menus[menuKey].label}</h3>
           </button>
         );
       })}

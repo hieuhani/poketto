@@ -14,7 +14,7 @@ export const RevealMnemonicScreen: React.FunctionComponent = () => {
     <>
       <TitleHeader title="Secret recovery phrase" />
       <Container>
-        <h3>
+        <h3 className="mb-3">
           This phrase is the only way to recover your wallet. Please keep it's
           safe.
         </h3>
