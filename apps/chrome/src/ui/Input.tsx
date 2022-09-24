@@ -1,51 +1,29 @@
-import { alpha, styled } from '@mui/material/styles';
-import { grey } from '@mui/material/colors';
+import { forwardRef, InputHTMLAttributes } from 'react';
 
-import type { InputBaseProps } from '@mui/material/InputBase';
-import InputBase from '@mui/material/InputBase';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import { Typography } from '@mui/material';
-import { forwardRef } from 'react';
-
-const StyledInput = styled(InputBase)(({ theme }) => ({
-  'label + &': {
-    marginTop: theme.spacing(3),
-  },
-
-  '& .MuiInputBase-input': {
-    borderRadius: 8,
-    height: '1.75rem',
-    position: 'relative',
-    padding: '0.625rem 1rem',
-    backgroundColor: grey[900],
-    transition: theme.transitions.create(['border-color', 'box-shadow']),
-    '&:focus': {
-      boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
-      borderColor: theme.palette.primary.main,
-      backgroundColor: alpha(grey[900], 0.6),
-    },
-  },
-}));
-
-interface Props extends InputBaseProps {
+interface Props
+  extends InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement> {
   label?: string;
   helperText?: string;
+  error?: boolean;
+  multiline?: boolean;
 }
 
+// TODO: error chua code xong
 export const Input = forwardRef<HTMLDivElement, Props>(
-  ({ label, helperText, ...props }, ref) => (
-    <FormControl variant="standard" ref={ref} sx={{ width: '100%' }}>
-      {label && <InputLabel shrink>{label}</InputLabel>}
+  ({ label, helperText, multiline, error, ...props }, ref) => {
+    const Tag = multiline ? 'textarea' : 'input';
+    return (
+      <div ref={ref} className="space-y-3 dark:text-white">
+        {label && <label>{label}</label>}
 
-      <StyledInput {...props} />
-      {helperText && (
-        <Typography variant="caption" sx={{ mt: 1 }}>
-          {helperText}
-        </Typography>
-      )}
-    </FormControl>
-  )
+        <Tag
+          className="block w-full rounded-lg border-slate-200 bg-white focus:border-primary focus:ring-primary dark:border-stone-700 dark:bg-stone-800"
+          {...props}
+        />
+        {helperText && <h3>{helperText}</h3>}
+      </div>
+    );
+  }
 );
 
 Input.displayName = 'Input';

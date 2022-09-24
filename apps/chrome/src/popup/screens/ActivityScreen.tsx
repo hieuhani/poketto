@@ -1,13 +1,9 @@
-import Box from '@mui/material/Box';
 import { useWallet } from '@poketto/core';
 import { useEffect, useState } from 'react';
 import { Types } from 'aptos';
-
-import { TitleHeader } from '../components/TitleHeader';
-import Stack from '@mui/material/Stack';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
 import get from 'lodash.get';
+import { TitleHeader } from '@ui/TitleHeader';
+import { Container } from '@ui/Container';
 
 interface DepositTransaction {
   amount: number;
@@ -20,6 +16,7 @@ interface SendTransaction {
   gasUsed: string;
   amount: string;
 }
+
 export const ActivityScreen: React.FunctionComponent = () => {
   const { account, resources, aptosClient } = useWallet();
   const [depositTransactions, setDepositTransactions] = useState<
@@ -78,24 +75,25 @@ export const ActivityScreen: React.FunctionComponent = () => {
   }, [resources]);
   return (
     <>
-      <Box px={1}>
-        <TitleHeader title="Activities" />
-      </Box>
-      <Stack px={1} spacing={2}>
+      <TitleHeader title="Activities" />
+      <Container className="space-y-3">
         {depositTransactions.map((transaction) => (
-          <Paper
+          <div
             key={`deposit-${transaction.sequenceNumber}`}
-            sx={{ px: 2, py: 2 }}
+            className="rounded-lg bg-slate-100 px-3 py-2"
           >
-            <Typography>+{transaction.amount}</Typography>
-          </Paper>
+            <h3>+{transaction.amount}</h3>
+          </div>
         ))}
         {sentTransactions.map((transaction) => (
-          <Paper key={`send-${transaction.version}`} sx={{ px: 2, py: 2 }}>
-            <Typography>-{transaction.amount}</Typography>
-          </Paper>
+          <div
+            key={`send-${transaction.version}`}
+            className="rounded-lg bg-slate-100 px-3 py-2"
+          >
+            <h3>-{transaction.amount}</h3>
+          </div>
         ))}
-      </Stack>
+      </Container>
     </>
   );
 };

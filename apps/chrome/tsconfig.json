@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "./",
     "module": "ESNext",
     "target": "es2016",
     "lib": ["DOM", "ESNext"],
@@ -13,7 +13,11 @@
     "noUnusedLocals": true,
     "strictNullChecks": true,
     "forceConsistentCasingInFileNames": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "paths": {
+      "@ui/*": ["./src/ui/*"],
+      "@icons/*": ["./src/icons/*"]
+    }
   },
   "exclude": ["dist", "node_modules"]
 }

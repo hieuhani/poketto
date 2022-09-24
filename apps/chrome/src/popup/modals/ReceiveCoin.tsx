@@ -1,11 +1,8 @@
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
 import { QRCodeSVG } from 'qrcode.react';
-import CircularProgress from '@mui/material/CircularProgress';
-
 import { HexAddress } from '../../ui/HexAddress';
 import { useWallet } from '@poketto/core';
 import toast from 'react-hot-toast';
+import { Button } from '@ui/Button';
 
 interface Props {
   accountAddress: string;
@@ -19,47 +16,24 @@ export const ReceiveCoin: React.FunctionComponent<Props> = ({
   const loading = state === 'account:pending:faucetFundAccount';
 
   const handleFaucet = async () => {
-    await fundAccountWithFaucet(5000);
+    await fundAccountWithFaucet(1000000);
 
     close();
-    toast.success('5000 Aptos Coins have been added to your account');
+    toast.success('0.01 Aptos Coins have been added to your account');
   };
   return (
-    <Box width="240px" paddingY={4}>
+    <div>
       {accountAddress && (
-        <Box
-          display="flex"
-          alignItems="center"
-          flexDirection="column"
-          marginBottom={4}
-        >
-          <Box
-            padding={2}
-            borderRadius={4}
-            marginBottom={2}
-            sx={{ backgroundColor: 'white' }}
-          >
+        <div className="mb-4 flex flex-col items-center space-y-3 py-4">
+          <div>
             <QRCodeSVG value={accountAddress} />
-          </Box>
-          <HexAddress
-            address={accountAddress}
-            takeLeft={6}
-            takeRight={6}
-            addressSx={{ fontSize: 16 }}
-          />
-        </Box>
+          </div>
+          <HexAddress address={accountAddress} takeLeft={6} takeRight={6} />
+        </div>
       )}
-      <Button
-        fullWidth
-        variant="contained"
-        sx={{ borderRadius: 4 }}
-        size="small"
-        onClick={handleFaucet}
-        disabled={loading}
-        endIcon={loading ? <CircularProgress size={20} color="info" /> : null}
-      >
+      <Button fullWidth onClick={handleFaucet} disabled={loading}>
         Faucet Aptos Coin
       </Button>
-    </Box>
+    </div>
   );
 };

@@ -1,11 +1,8 @@
 import { useForm, Controller } from 'react-hook-form';
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import Button from '@mui/material/Button';
-import { Input } from '../../../../ui/Input';
+import { Button } from '@ui/Button';
+import { Input } from '@ui/Input';
 
 const formSchema = Yup.object().shape({
   mnemonic: Yup.string().required('Mnemonic is a required field'),
@@ -49,13 +46,8 @@ export const ForgotPasswordForm: React.FunctionComponent<Props> = ({
   };
   return (
     <form onSubmit={handleSubmit(onFormSubmit)}>
-      <Box px={4} py={4}>
-        <Typography variant="h5">Forgot password</Typography>
-        <Typography variant="subtitle1">
-          Verify your seed phrase and set new password.
-        </Typography>
-      </Box>
-      <Stack px={4} spacing={2}>
+      <h3 className="mb-3">Verify your seed phrase and set new password.</h3>
+      <div className="space-y-3">
         <Controller
           name="mnemonic"
           control={control}
@@ -67,7 +59,6 @@ export const ForgotPasswordForm: React.FunctionComponent<Props> = ({
               multiline
               autoFocus={true}
               autoComplete="off"
-              rows={2}
               placeholder="Mnemonic seed phrase"
               error={!!errors.password?.message}
               helperText={errors.password?.message}
@@ -107,15 +98,10 @@ export const ForgotPasswordForm: React.FunctionComponent<Props> = ({
             />
           )}
         />
-        <Button
-          variant="contained"
-          fullWidth
-          type="submit"
-          disabled={!isValid || loading}
-        >
+        <Button fullWidth type="submit" disabled={!isValid || loading}>
           Continue
         </Button>
-      </Stack>
+      </div>
     </form>
   );
 };

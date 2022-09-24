@@ -1,5 +1,3 @@
-import Skeleton from '@mui/material/Skeleton';
-import Box from '@mui/material/Box';
 import { Logo } from './Logo';
 import { WalletSwitcher } from './WalletSwitcher';
 
@@ -12,13 +10,13 @@ export const WalletHeader: React.FunctionComponent<Props> = ({
   activeAddress,
 }) => {
   return (
-    <Box display="flex" alignItems="center" justifyContent="space-between">
+    <div className="flex items-center justify-between">
       <Logo />
       {loading ? (
-        <Skeleton width={140} height={50} />
+        <div className="h-8 w-32 animate-pulse rounded-md bg-gray-200" />
       ) : (
         <WalletSwitcher activeAddress={activeAddress || ''} />
       )}
-    </Box>
+    </div>
   );
 };

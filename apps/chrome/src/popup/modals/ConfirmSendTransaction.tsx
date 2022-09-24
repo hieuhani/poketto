@@ -1,8 +1,5 @@
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import Paper from '@mui/material/Paper';
 import { makeShortAddress } from '../helpers/address';
+import { Button } from '@ui/Button';
 
 interface Props {
   close: () => void;
@@ -26,44 +23,29 @@ export const ConfirmSendTransaction: React.FunctionComponent<Props> = ({
     close();
   };
   return (
-    <Box width="260px">
-      <Typography variant="h5" marginBottom={1}>
-        Transaction Preview
-      </Typography>
-      <Paper sx={{ px: 2, py: 2, borderRadius: 2 }}>
-        <Box>
-          <Typography variant="caption" color="grey.400">
-            From
-          </Typography>
-          <Typography>{makeShortAddress(fromAddress, 10, 6)}</Typography>
-        </Box>
-        <Box>
-          <Typography variant="caption" color="grey.400">
-            To
-          </Typography>
-          <Typography>{makeShortAddress(toAddress, 10, 6)}</Typography>
-        </Box>
-        <Box>
-          <Typography variant="caption" color="grey.400">
-            Amount
-          </Typography>
-          <Typography>{amount}</Typography>
-        </Box>
-        <Box>
-          <Typography variant="caption" color="grey.400">
-            Gas fee
-          </Typography>
-          <Typography>{gasFee}</Typography>
-        </Box>
-      </Paper>
-      <Button
-        variant="contained"
-        fullWidth
-        sx={{ marginTop: 4 }}
-        onClick={handleSend}
-      >
+    <div className="space-y-3">
+      <h5 className="mb-3 text-xl font-medium">Transaction Preview</h5>
+      <div>
+        <div>
+          <h4 className="text-sm text-gray-500">From</h4>
+          <p>{makeShortAddress(fromAddress, 10, 6)}</p>
+        </div>
+        <div>
+          <h4 className="text-sm text-gray-500">To</h4>
+          <p>{makeShortAddress(toAddress, 10, 6)}</p>
+        </div>
+        <div>
+          <h4 className="text-sm text-gray-500">Amount</h4>
+          <p>{amount}</p>
+        </div>
+        <div>
+          <h4 className="text-sm text-gray-500">Gas fee</h4>
+          <p>{gasFee}</p>
+        </div>
+      </div>
+      <Button fullWidth onClick={handleSend}>
         Send
       </Button>
-    </Box>
+    </div>
   );
 };

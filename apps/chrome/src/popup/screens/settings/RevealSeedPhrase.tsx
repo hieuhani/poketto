@@ -1,18 +1,15 @@
-import Box from '@mui/material/Box';
-import { IoArrowBackOutline } from 'react-icons/io5';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
 import { useForm, Controller } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useStackNavigation } from '../../../navigation';
 import { Input } from '../../../ui/Input';
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
 import { useWallet } from '@poketto/core';
 import toast from 'react-hot-toast';
 import { useState } from 'react';
 import { MnemonicView } from '../onboarding/components/MnemonicView';
+import { TitleHeader } from '../../../ui/TitleHeader';
+import { Container } from '@ui/Container';
+import { Button } from '@ui/Button';
 
 const formSchema = Yup.object().shape({
   password: Yup.string()
@@ -49,18 +46,13 @@ export const RevealSeedPhrase: React.FunctionComponent = () => {
   };
   return (
     <>
-      <Box py={1} px={1} display="flex" alignItems="center">
-        <IconButton onClick={goBack}>
-          <IoArrowBackOutline />
-        </IconButton>
-        <Typography variant="h6">Seed Phrase</Typography>
-      </Box>
-      <Box px={1}>
+      <TitleHeader goBack={goBack} title="Seed Phrase" />
+      <Container>
         {mnemonic ? (
           <MnemonicView mnemonic={mnemonic} />
         ) : (
           <form onSubmit={handleSubmit(onFormSubmit)}>
-            <Stack spacing={2}>
+            <div className="space-y-3">
               <Controller
                 name="password"
                 control={control}
@@ -78,7 +70,6 @@ export const RevealSeedPhrase: React.FunctionComponent = () => {
                 )}
               />
               <Button
-                variant="contained"
                 fullWidth
                 type="submit"
                 disabled={
@@ -87,10 +78,10 @@ export const RevealSeedPhrase: React.FunctionComponent = () => {
               >
                 Reveal
               </Button>
-            </Stack>
+            </div>
           </form>
         )}
-      </Box>
+      </Container>
     </>
   );
 };

@@ -1,21 +1,12 @@
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
-import { styled } from '@mui/material/styles';
-import Button from '@mui/material/Button';
-import { IoCopyOutline } from 'react-icons/io5';
 import { HiOutlineCursorClick } from 'react-icons/hi';
 import { useCopy } from '../../../hooks/use-copy';
 import { useState } from 'react';
+import { Button } from '@ui/Button';
+import { CopyIcon } from '@icons/CopyIcon';
 
 interface Props {
   mnemonic: string;
 }
-
-const StyledNumberIndex = styled(Typography)(({ theme }) => ({
-  color: theme.palette.primary.main,
-  textAlign: 'right',
-}));
 
 export const MnemonicView: React.FunctionComponent<Props> = ({ mnemonic }) => {
   const [reveal, setReveal] = useState(false);
@@ -26,62 +17,41 @@ export const MnemonicView: React.FunctionComponent<Props> = ({ mnemonic }) => {
   };
 
   return (
-    <Paper
-      sx={{
-        px: 2,
-        pt: 3,
-        pb: 2,
-        userSelect: 'none',
-        position: 'relative',
-        borderRadius: 4,
-        overflow: 'hidden',
-      }}
-    >
+    <div className="user-select-none relative space-y-3 overflow-hidden rounded-xl">
       {!reveal && (
-        <Box
-          sx={{
-            position: 'absolute',
-            inset: 0,
-            backgroundColor: 'grey.900',
-            zIndex: 1,
-            display: 'flex',
-            placeContent: 'center',
-            flexDirection: 'column',
-            px: 6,
-            textAlign: 'center',
-          }}
-        >
-          <Button sx={{ marginBottom: 1 }} onClick={() => setReveal(true)}>
+        <div className="absolute inset-0 z-10 flex flex-col place-content-center bg-stone-200  px-3 text-center dark:bg-stone-800">
+          <Button
+            variant="link"
+            className="flex items-center justify-center"
+            onClick={() => setReveal(true)}
+          >
             <HiOutlineCursorClick />
-            <Typography ml={1}>Click to reveal Seed Phrase</Typography>
+            <h3>Click to reveal Seed Phrase</h3>
           </Button>
-          <Typography color="grey.700">
+          <h3>
             Make sure no one is watching your screen. Save it somewhere safe.
-          </Typography>
-        </Box>
+          </h3>
+        </div>
       )}
-      <Box
-        display="grid"
-        gridTemplateColumns="1fr 1fr"
-        columnGap={1}
-        rowGap={1}
-        marginBottom={2}
-      >
+
+      <div className="grid grid-cols-2">
         {mnemonicBlocks.map((block, index) => (
-          <Box key={index} display="flex">
-            <StyledNumberIndex variant="body1" width="30px" marginRight={1}>
-              {index + 1}
-            </StyledNumberIndex>
-            <Typography>{block}</Typography>
-          </Box>
+          <div key={index} className="flex">
+            <h3 className="w-8 text-blue-600">{index + 1}</h3>
+            <span>{block}</span>
+          </div>
         ))}
-      </Box>
-      <Button size="small" fullWidth onClick={copyMnemonic} disabled={copied}>
-        <IoCopyOutline />
-        <Typography ml={1}>
-          {copied ? 'Copied' : 'Copy to clipboard'}
-        </Typography>
+      </div>
+      <Button
+        variant="link"
+        className="flex items-center justify-center space-x-3"
+        fullWidth
+        onClick={copyMnemonic}
+        disabled={copied}
+      >
+        <CopyIcon />
+        <span>{copied ? 'Copied' : 'Copy to clipboard'}</span>
       </Button>
-    </Paper>
+    </div>
   );
 };

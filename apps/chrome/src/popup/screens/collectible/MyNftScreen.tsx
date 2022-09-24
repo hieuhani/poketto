@@ -1,15 +1,9 @@
-import { Button } from '@mui/material';
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
 import { useWallet } from '@poketto/core';
 import { useEffect } from 'react';
-import Card from '@mui/material/Card';
-import Grid from '@mui/material/Grid';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import CardMedia from '@mui/material/CardMedia';
 import { useStackNavigation } from '../../../navigation';
-import { TitleHeader } from '../../components/TitleHeader';
+import { TitleHeader } from '../../../ui/TitleHeader';
+import { Button } from '@ui/Button';
+import { Container } from '@ui/Container';
 
 export const MyNftScreen: React.FunctionComponent = () => {
   const { navigate } = useStackNavigation();
@@ -21,56 +15,59 @@ export const MyNftScreen: React.FunctionComponent = () => {
     fetchTokenCollections();
     fetchTokens();
   }, []);
+
   return (
     <>
-      <Box px={1}>
-        <TitleHeader title="My NFT" />
-      </Box>
-      <Box paddingX={1} marginBottom={2}>
-        <Button
-          variant="contained"
-          fullWidth
-          onClick={() => navigate('create_collection')}
-        >
-          Create collection
-        </Button>
-      </Box>
-      <Box paddingX={1} width={420}>
-        <Stack
-          direction="row"
-          spacing={1}
-          flexWrap="nowrap"
-          sx={{ overflowX: 'auto' }}
-        >
+      <TitleHeader title="Collectible" />
+      <Container className="space-y-3">
+        <div className="flex items-center justify-between">
+          <h3>NFT Collection</h3>
+          <Button variant="link" onClick={() => navigate('create_collection')}>
+            Create collection
+          </Button>
+        </div>
+        <div className="flex space-x-3 overflow-x-auto">
           {tokenCollections.map((collection) => (
-            <Card key={collection.sequenceNumber} sx={{ minWidth: 100 }}>
-              <CardMedia
-                component="img"
-                height="100"
-                image={collection.uri}
-                alt=""
-              />
-              <CardContent>
-                <Typography gutterBottom variant="subtitle1" component="h4">
-                  {collection.collectionName}
-                </Typography>
-                <Typography gutterBottom variant="body2" color="text.secondary">
-                  {collection.description}
-                </Typography>
-              </CardContent>
-            </Card>
+            <button
+              key={collection.sequenceNumber}
+              className="text-left"
+              onClick={() =>
+                navigate('collection_nfts', {
+                  collectionName: collection.collectionName,
+                })
+              }
+            >
+              <div className="h-36 w-max">
+                <img
+                  src={collection.uri}
+                  alt=""
+                  className="h-full rounded-lg object-cover"
+                />
+              </div>
+              <div>
+                <h4 className="font-medium">{collection.collectionName}</h4>
+                <p className="text-sm">{collection.description}</p>
+              </div>
+            </button>
           ))}
-        </Stack>
-      </Box>
-      <Grid container spacing={1} px={1}>
-        {tokens.map((token, index) => (
-          <Grid key={index} item xs={6}>
-            <Typography gutterBottom variant="subtitle1" component="h4">
-              {token.name}
-            </Typography>
-          </Grid>
-        ))}
-      </Grid>
+        </div>
+        <div>
+          {tokens.map((token, index) => (
+            <div key={index}>
+              <div className="h-36 w-max">
+                <img
+                  // src={token}
+                  alt=""
+                  className="h-full rounded-lg object-cover"
+                />
+              </div>
+              <div>
+                <h4 className="font-medium">{token.name}</h4>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Container>
     </>
   );
 };

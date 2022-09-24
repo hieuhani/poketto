@@ -1,4 +1,3 @@
-import Stack from '@mui/material/Stack';
 import { AptosAccount } from 'aptos';
 import { WalletAccountRow } from './WalletAccountRow';
 
@@ -15,12 +14,7 @@ export const SelectWallet: React.FunctionComponent<Props> = ({
   checkIsConnectedOrigin,
 }) => {
   return (
-    <Stack
-      width="100%"
-      spacing={1}
-      borderRadius={2}
-      sx={{ backgroundColor: 'grey.900' }}
-    >
+    <div className="w-full space-y-3 rounded-md">
       {accounts.map((account, index) => {
         const address = account.address().hex();
         return (
@@ -34,6 +28,6 @@ export const SelectWallet: React.FunctionComponent<Props> = ({
           />
         );
       })}
-    </Stack>
+    </div>
   );
 };

@@ -1,4 +1,3 @@
-import Stack from '@mui/material/Stack';
 import { useWallet } from '@poketto/core';
 import { WalletActions } from '../../components/WalletActions';
 import { useStackNavigation } from '../../../navigation';
@@ -11,14 +10,14 @@ export const HomeScreen: React.FunctionComponent = () => {
   const { account, state, coins } = useWallet();
   const { navigate } = useStackNavigation();
   const { openModal } = useModalNavigation();
-  const balance = coins.reduce((acc, coin) => acc + coin.balance, 0);
+  const balance = coins.reduce((acc, coin) => acc + coin.balance, BigInt(0));
   const handleGoToReceiveScreen = () => {
     openModal('ReceiveCoin', {
       accountAddress: account?.address().hex() || '',
     });
   };
   return (
-    <Stack paddingX={1} paddingTop={2} spacing={2}>
+    <div className="space-y-3">
       <WalletHeader
         loading={state.startsWith('account:pending:loadAccount')}
         activeAddress={account?.address().hex()}
@@ -33,11 +32,11 @@ export const HomeScreen: React.FunctionComponent = () => {
         goToTransferScreen={() => navigate('transfer')}
       />
 
-      <Stack spacing={2}>
+      <div className="spacing-y-3">
         {coins.map((coin) => (
           <TokenRow key={coin.name} coin={coin} />
         ))}
-      </Stack>
-    </Stack>
+      </div>
+    </div>
   );
 };

@@ -1,9 +1,8 @@
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import { useWallet } from '@poketto/core';
 import { MnemonicView } from './components/MnemonicView';
+import { Button } from '@ui/Button';
+import { TitleHeader } from '@ui/TitleHeader';
+import { Container } from '@ui/Container';
 
 export const RevealMnemonicScreen: React.FunctionComponent = () => {
   const { oneTimeMnemonic, clearOneTimeMnemonic } = useWallet();
@@ -12,22 +11,22 @@ export const RevealMnemonicScreen: React.FunctionComponent = () => {
   };
 
   return (
-    <Box px={4} py={4}>
-      <Typography variant="h5" marginBottom={1}>
-        Secret recovery phrase
-      </Typography>
-      <Typography variant="subtitle1" color="grey.400" marginBottom={4}>
-        This phrase is the only way to recover your wallet. Please keep it's
-        safe.
-      </Typography>
+    <>
+      <TitleHeader title="Secret recovery phrase" />
+      <Container>
+        <h3 className="mb-3">
+          This phrase is the only way to recover your wallet. Please keep it's
+          safe.
+        </h3>
 
-      {oneTimeMnemonic && <MnemonicView mnemonic={oneTimeMnemonic} />}
+        <div className="mb-3">
+          {oneTimeMnemonic && <MnemonicView mnemonic={oneTimeMnemonic} />}
+        </div>
 
-      <Stack spacing={2} marginTop={4}>
-        <Button variant="contained" fullWidth onClick={handleContinue}>
+        <Button fullWidth onClick={handleContinue}>
           Continue
         </Button>
-      </Stack>
-    </Box>
+      </Container>
+    </>
   );
 };

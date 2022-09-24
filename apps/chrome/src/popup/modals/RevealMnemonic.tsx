@@ -1,8 +1,6 @@
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import { MnemonicView } from '../screens/onboarding/components/MnemonicView';
 import { useWallet } from '@poketto/core';
+import { Button } from '@ui/Button';
 
 interface Props {
   mnemonic: string;
@@ -18,22 +16,13 @@ export const RevealMnemonic: React.FunctionComponent<Props> = ({
     changeDefaultAccountIndex(totalWalletAccount - 1);
   };
   return (
-    <Box width="260px">
-      <Typography variant="h5" marginBottom={1}>
-        New account created
-      </Typography>
-      <Typography variant="subtitle1" color="grey.400" marginBottom={4}>
-        This is your recovery seed phrase. Please keep it's safe.
-      </Typography>
+    <div className="space-y-3">
+      <h5 className="text-xl font-medium">New account created</h5>
+      <p>This is your recovery seed phrase. Please keep it's safe.</p>
       <MnemonicView mnemonic={mnemonic} />
-      <Button
-        variant="contained"
-        fullWidth
-        sx={{ marginTop: 4 }}
-        onClick={handleContinue}
-      >
+      <Button fullWidth onClick={handleContinue}>
         Continue
       </Button>
-    </Box>
+    </div>
   );
 };

@@ -24,6 +24,8 @@ export const sharedConfig: UserConfig = {
   resolve: {
     alias: {
       '@poketto/core': r('../../libs/core/src/'),
+      '@ui': r('./src/ui/'),
+      '@icons': r('./src/icons/'),
       stream: 'stream-browserify',
       util: 'util/',
     },

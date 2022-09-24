@@ -1,4 +1,3 @@
-import Box from '@mui/material/Box';
 import { useWallet } from '@poketto/core';
 import { useSdk } from '../../sdk';
 import { OnboardingNavigation } from '../onboarding/OnboardingNavigation';
@@ -21,5 +20,5 @@ export const SdkNavigation: React.FunctionComponent = () => {
       />
     );
   }
-  return <Box>Undefined</Box>;
+  return <div>Undefined</div>;
 };

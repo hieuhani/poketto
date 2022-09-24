@@ -1,17 +1,14 @@
-import { Button } from '@mui/material';
-import Box from '@mui/material/Box';
 import * as Yup from 'yup';
-import IconButton from '@mui/material/IconButton';
-import { IoArrowBackOutline } from 'react-icons/io5';
 import { yupResolver } from '@hookform/resolvers/yup';
-import Stack from '@mui/material/Stack';
 import toast from 'react-hot-toast';
 import { Controller, useForm } from 'react-hook-form';
-import { Input } from '../../../ui/Input';
-import { TitleHeader } from '../../components/TitleHeader';
+import { TitleHeader } from '../../../ui/TitleHeader';
 import { useStackNavigation } from '../../../navigation';
 import { useWallet } from '@poketto/core';
 import { useBoolean } from '../../hooks/use-boolean';
+import { Container } from '@ui/Container';
+import { Button } from '@ui/Button';
+import { Input } from '@ui/Input';
 
 const formSchema = Yup.object().shape({
   name: Yup.string().required('NFT name is a required field'),
@@ -59,14 +56,9 @@ export const CreateCollectionScreen: React.FunctionComponent = () => {
   };
   return (
     <>
-      <Box px={1} display="flex" alignItems="center">
-        <IconButton onClick={goBack}>
-          <IoArrowBackOutline />
-        </IconButton>
-        <TitleHeader title="Create NFT collection" />
-      </Box>
-      <form onSubmit={handleSubmit(onFormSubmit)}>
-        <Stack px={1} spacing={2}>
+      <TitleHeader goBack={goBack} title="Create NFT collection" />
+      <Container>
+        <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-3">
           <Controller
             name="name"
             control={control}
@@ -75,6 +67,7 @@ export const CreateCollectionScreen: React.FunctionComponent = () => {
             }}
             render={({ field }) => (
               <Input
+                type="text"
                 label="Name"
                 placeholder="NFT Collection Name"
                 error={!!errors.name?.message}
@@ -92,6 +85,7 @@ export const CreateCollectionScreen: React.FunctionComponent = () => {
             }}
             render={({ field }) => (
               <Input
+                type="text"
                 label="Description"
                 placeholder="NFT Collection Description"
                 error={!!errors.name?.message}
@@ -110,6 +104,7 @@ export const CreateCollectionScreen: React.FunctionComponent = () => {
             render={({ field }) => (
               <Input
                 label="URI"
+                type="text"
                 placeholder="NFT Collection (URI)"
                 error={!!errors.uri?.message}
                 helperText={errors.uri?.message}
@@ -118,15 +113,11 @@ export const CreateCollectionScreen: React.FunctionComponent = () => {
             )}
           />
 
-          <Button
-            variant="contained"
-            type="submit"
-            disabled={!isValid || loading}
-          >
+          <Button fullWidth type="submit" disabled={!isValid || loading}>
             Create NFT
           </Button>
-        </Stack>
-      </form>
+        </form>
+      </Container>
     </>
   );
 };

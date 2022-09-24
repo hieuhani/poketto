@@ -1,6 +1,5 @@
+import { Drawer } from '@ui/Drawer';
 import { createContext, ReactNode, useMemo, useState } from 'react';
-import Drawer from '@mui/material/Drawer';
-
 import { NavigationProps } from './navigation';
 
 interface DrawerNavigationState {
@@ -45,9 +44,6 @@ export const DrawerNavigation: React.FunctionComponent<
         anchor="bottom"
         open={routes[activeIndex] !== undefined}
         onClose={() => setActiveIndex(-1)}
-        PaperProps={{
-          sx: { maxdWidth: '420px', margin: '0 auto' },
-        }}
       >
         {routes[activeIndex] && routes[activeIndex].screen}
       </Drawer>

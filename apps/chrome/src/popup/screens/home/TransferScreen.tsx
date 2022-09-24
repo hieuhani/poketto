@@ -1,40 +1,18 @@
-import Box from '@mui/material/Box';
-import { IoArrowBackOutline } from 'react-icons/io5';
-import IconButton from '@mui/material/IconButton';
-import { alpha, styled } from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
-import MuiLink from '@mui/material/Link';
 import { useStackNavigation } from '../../../navigation';
-import { useWallet, useCheckAddress, TransactionPayload } from '@poketto/core';
-import InputBase from '@mui/material/InputBase';
+import { useWallet, useCheckAddress } from '@poketto/core';
 import { useForm } from 'react-hook-form';
 import { useDebounce } from '../../hooks/use-debounce';
 import { useEffect, useMemo, useState } from 'react';
-import Button from '@mui/material/Button';
 import toast from 'react-hot-toast';
-import Alert from '@mui/material/Alert';
 import { HexAddress } from '../../../ui/HexAddress';
-import { formatMoney } from '../../helpers/number';
+import { formatBalance } from '../../helpers/number';
 import { SimulatedTransaction } from '@poketto/core';
 import { useModalNavigation } from '../../../navigation/ModalNavigation';
-
-const StyledInput = styled(InputBase)(({ theme }) => ({
-  '& .MuiInputBase-input': {
-    position: 'relative',
-    padding: '8px 10px',
-    backgroundColor: 'rgb(18 18 18 / 50%)',
-    borderRadius: '4px',
-    fontSize: 16,
-    marginBottom: 2,
-    transition: theme.transitions.create(['border-color', 'box-shadow']),
-    '&:focus': {
-      boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
-      borderColor: theme.palette.primary.main,
-    },
-  },
-}));
+import { Input } from '@ui/Input';
+import { Button } from '@ui/Button';
+import Decimal from 'decimal.js';
+import { TitleHeader } from '../../../ui/TitleHeader';
+import { Types } from 'aptos';
 
 export interface TransferFormState {
   toAddress: string;
@@ -48,9 +26,9 @@ export const TransferScreen: React.FunctionComponent = () => {
   const { openModal } = useModalNavigation();
   const [simulatedTransaction, setSimulatedTransaction] =
     useState<SimulatedTransaction | null>(null);
-  const balance = coins.reduce((acc, coin) => acc + coin.balance, 0);
+  const balance = coins.reduce((acc, coin) => acc + coin.balance, BigInt(0));
   const { check: checkAddress, status: addressStatus } = useCheckAddress();
-  const { register, watch, handleSubmit } = useForm({
+  const { register, watch } = useForm({
     defaultValues: {
       toAddress: '',
       amount: '',
@@ -74,15 +52,20 @@ export const TransferScreen: React.FunctionComponent = () => {
   }, [debouncedAddressOnChange]);
 
   useEffect(() => {
-    const executeSimulateTransaction = async (payload: TransactionPayload) => {
+    const executeSimulateTransaction = async (
+      payload: Types.EntryFunctionPayload
+    ) => {
       const result = await simulateTransaction(payload);
       setSimulatedTransaction(result);
     };
     if (debouncedAmountOnChange && toAddress) {
-      const payload: TransactionPayload = {
-        arguments: [toAddress, BigInt(debouncedAmountOnChange)],
+      const decimal = new Decimal(debouncedAmountOnChange).mul(
+        Decimal.pow(10, 8)
+      );
+
+      const payload: Types.EntryFunctionPayload = {
+        arguments: [toAddress, decimal.toString()],
         function: '0x1::coin::transfer',
-        type: 'script_function_payload',
         type_arguments: ['0x1::aptos_coin::AptosCoin'],
       };
       executeSimulateTransaction(payload);
@@ -93,21 +76,20 @@ export const TransferScreen: React.FunctionComponent = () => {
     switch (addressStatus) {
       case 'valid':
         return (
-          <Typography variant="caption">
+          <p>
             Address is verified.{' '}
-            <MuiLink
+            <a
               href={`https://explorer.devnet.aptos.dev/account/${toAddress}`}
               target="_blank"
-              sx={{ textDecoration: 'none' }}
             >
               View on explorer
-            </MuiLink>
-          </Typography>
+            </a>
+          </p>
         );
       case 'checking':
-        return <Typography variant="caption">Checking address...</Typography>;
+        return <p>Checking address...</p>;
       case 'invalid':
-        return <Typography variant="caption">Address is invalid</Typography>;
+        return <p>Address is invalid</p>;
       default:
         return null;
     }
@@ -115,10 +97,9 @@ export const TransferScreen: React.FunctionComponent = () => {
 
   const onSendTransaction = async () => {
     try {
-      const payload: TransactionPayload = {
+      const payload: Types.EntryFunctionPayload = {
         arguments: [toAddress, BigInt(amount)],
         function: '0x1::coin::transfer',
-        type: 'script_function_payload',
         type_arguments: ['0x1::aptos_coin::AptosCoin'],
       };
       await submitTransaction(payload);
@@ -140,39 +121,20 @@ export const TransferScreen: React.FunctionComponent = () => {
   };
 
   return (
-    <form>
-      <Box py={1} px={1} display="flex" alignItems="center">
-        <IconButton onClick={goBack}>
-          <IoArrowBackOutline />
-        </IconButton>
-        <Typography variant="h6">Send coins</Typography>
-      </Box>
-      <Stack px={1} spacing={2}>
-        {account && (
-          <Paper sx={{ px: 2, py: 2 }}>
-            <HexAddress
-              address={account.address().hex()}
-              AddressProps={{ variant: 'body1', color: 'white' }}
-            />
-            {coins[0] && (
-              <Typography variant="caption" color="grey.400">
-                Balance: {formatMoney(coins[0].balance)}
-              </Typography>
-            )}
-          </Paper>
-        )}
+    <div>
+      <TitleHeader title="Send coin" goBack={goBack} />
+      <form>
+        <div className="space-y-3 px-3">
+          {account && (
+            <div className="rounded-lg bg-slate-100 p-3 text-stone-600 dark:bg-stone-800 dark:text-white">
+              <HexAddress address={account.address().hex()} />
+              {coins[0] && <p>Balance: {formatBalance(coins[0].balance)}</p>}
+            </div>
+          )}
 
-        <Paper sx={{ px: 2, py: 2 }}>
-          <Typography
-            component="div"
-            variant="caption"
-            color="grey.400"
-            marginBottom={1}
-          >
-            Receive address
-          </Typography>
-          <StyledInput
-            fullWidth
+          <Input
+            label="Receive address"
+            type="text"
             placeholder="Wallet address"
             required
             onChange={addressOnChange}
@@ -182,19 +144,12 @@ export const TransferScreen: React.FunctionComponent = () => {
             }}
             {...toAddressRest}
           />
-          {addressNote}
-        </Paper>
-        <Paper sx={{ px: 2, py: 2 }}>
-          <Typography
-            component="div"
-            variant="caption"
-            color="grey.400"
-            marginBottom={1}
-          >
-            Amount
-          </Typography>
-          <StyledInput
-            fullWidth
+          <div className="text-sm text-stone-600 dark:text-white">
+            {addressNote}
+          </div>
+
+          <Input
+            label="Amount"
             placeholder="Transfer amount"
             required
             type="number"
@@ -202,33 +157,32 @@ export const TransferScreen: React.FunctionComponent = () => {
             inputMode="decimal"
             {...register('amount')}
           />
-        </Paper>
-        {simulatedTransaction && !simulatedTransaction.success && (
-          <Alert severity="error">
-            Insufficient balance. Gas fee: {simulatedTransaction.gasUsed}
-          </Alert>
-        )}
+          {simulatedTransaction && !simulatedTransaction.success && (
+            <div>
+              Insufficient balance. Gas fee: {simulatedTransaction.gasUsed}
+            </div>
+          )}
 
-        <Button
-          variant="contained"
-          type="button"
-          onClick={handlePreviewTransaction}
-          fullWidth
-          disabled={
-            [
-              'account:pending:submitTransaction',
-              'account:pending:simulateTransaction',
-            ].includes(state) ||
-            !simulatedTransaction ||
-            (simulatedTransaction && !simulatedTransaction.success) ||
-            addressStatus !== 'valid' ||
-            (amount || 0) === 0 ||
-            parseFloat(amount) > balance
-          }
-        >
-          Preview
-        </Button>
-      </Stack>
-    </form>
+          <Button
+            type="button"
+            onClick={handlePreviewTransaction}
+            fullWidth
+            disabled={
+              [
+                'account:pending:submitTransaction',
+                'account:pending:simulateTransaction',
+              ].includes(state) ||
+              !simulatedTransaction ||
+              (simulatedTransaction && !simulatedTransaction.success) ||
+              addressStatus !== 'valid' ||
+              (amount || 0) === 0 ||
+              parseFloat(amount) > balance
+            }
+          >
+            Preview
+          </Button>
+        </div>
+      </form>
+    </div>
   );
 };
