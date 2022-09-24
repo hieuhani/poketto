@@ -1,8 +1,4 @@
-import Typography from '@mui/material/Typography';
-import ButtonBase from '@mui/material/ButtonBase';
-import Box from '@mui/material/Box';
 import { IoCheckmark } from 'react-icons/io5';
-
 import { useEffect, useRef } from 'react';
 import { makeShortAddress } from '../../../helpers/address';
 import { renderIcon } from '../../../helpers/blockies';
@@ -37,58 +33,20 @@ export const WalletAccountRow: React.FunctionComponent<Props> = ({
     );
   }, [activeAddress]);
   return (
-    <Box
-      component={ButtonBase}
-      borderRadius={2}
-      justifyContent="start"
-      sx={{
-        paddingY: 1,
-        paddingX: 2,
-        position: 'relative',
-        textAlign: 'left',
-      }}
+    <button
+      className="relative rounded-lg py-1 px-2 text-left"
       onClick={onSelectAccount}
     >
-      <Box width={30}>{selected && <IoCheckmark size={20} />}</Box>
-      <Box>
-        <Typography
-          variant="subtitle2"
-          fontWeight="700"
-          textTransform="uppercase"
-        >
-          {name}
-        </Typography>
+      <div className="h-8">{selected && <IoCheckmark size={20} />}</div>
+      <div>
+        <h3 className="font-medium uppercase">{name}</h3>
 
-        <Typography
-          lineHeight={1}
-          title={activeAddress}
-          variant="caption"
-          color="grey.400"
-        >
-          {makeShortAddress(activeAddress, 6, 6)}
-        </Typography>
-        {connected && (
-          <Typography
-            marginLeft={1}
-            lineHeight={1}
-            variant="caption"
-            color="grey.400"
-          >
-            Connected
-          </Typography>
-        )}
-      </Box>
-      <Box
-        marginLeft="auto"
-        borderRadius="50%"
-        height={40}
-        width={40}
-        overflow="hidden"
-        border="2px solid"
-        borderColor="#1976d2"
-      >
+        <h3 title={activeAddress}>{makeShortAddress(activeAddress, 6, 6)}</h3>
+        {connected && <h3>Connected</h3>}
+      </div>
+      <div className="ml-auto h-8 w-8 overflow-hidden border">
         <canvas ref={canvas} height="40" width="40" />
-      </Box>
-    </Box>
+      </div>
+    </button>
   );
 };

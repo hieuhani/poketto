@@ -46,7 +46,7 @@ export const ForgotPasswordForm: React.FunctionComponent<Props> = ({
   };
   return (
     <form onSubmit={handleSubmit(onFormSubmit)}>
-      <h3>Verify your seed phrase and set new password.</h3>
+      <h3 className="mb-3">Verify your seed phrase and set new password.</h3>
       <div className="space-y-3">
         <Controller
           name="mnemonic"
