@@ -107,8 +107,7 @@ export const TransferScreen: React.FunctionComponent = () => {
       goBack();
       toast.success('Transaction sent');
     } catch (e: any) {
-      console.log(e);
-      // toast.error(e.response.data.message);
+      toast.error(e.response.data.message);
     }
   };
 

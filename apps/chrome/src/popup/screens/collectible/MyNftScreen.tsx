@@ -1,16 +1,16 @@
-import { useWallet } from '@poketto/core';
+import { useWallet, useTokenDetails } from '@poketto/core';
 import { useEffect } from 'react';
 import { useStackNavigation } from '../../../navigation';
 import { TitleHeader } from '../../../ui/TitleHeader';
 import { Button } from '@ui/Button';
 import { Container } from '@ui/Container';
+import { TokenItem } from '../../components/TokenItem';
 
 export const MyNftScreen: React.FunctionComponent = () => {
   const { navigate } = useStackNavigation();
-  const {
-    token: { tokenCollections, fetchTokenCollections, fetchTokens, tokens },
-  } = useWallet();
+  const { tokenCollections, fetchTokenCollections, fetchTokens } = useWallet();
 
+  const { tokenDetails } = useTokenDetails();
   useEffect(() => {
     fetchTokenCollections();
     fetchTokens();
@@ -51,20 +51,9 @@ export const MyNftScreen: React.FunctionComponent = () => {
             </button>
           ))}
         </div>
-        <div>
-          {tokens.map((token, index) => (
-            <div key={index}>
-              <div className="h-36 w-max">
-                <img
-                  // src={token}
-                  alt=""
-                  className="h-full rounded-lg object-cover"
-                />
-              </div>
-              <div>
-                <h4 className="font-medium">{token.name}</h4>
-              </div>
-            </div>
+        <div className="flex flex-wrap space-x-3">
+          {tokenDetails.map((token) => (
+            <TokenItem key={`${token.collection}${token.name}`} token={token} />
           ))}
         </div>
       </Container>

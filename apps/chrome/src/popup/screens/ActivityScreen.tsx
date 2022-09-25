@@ -28,6 +28,7 @@ export const ActivityScreen: React.FunctionComponent = () => {
     <>
       <TitleHeader title="Activities" />
       <Container className="space-y-3">
+        {days.length === 0 && <p>No transaction</p>}
         {days.map((day) => (
           <div key={day}>
             <h3 className="mb-3 text-center font-medium">

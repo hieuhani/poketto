@@ -1,5 +1,5 @@
 import { AptosClient, Types } from 'aptos';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import get from 'lodash.get';
 import { Transaction } from '../types';
 
@@ -32,9 +32,7 @@ export const useGetTransactions = (
             : func
             ? 'FUNCTION'
             : 'UNKNOWN';
-        if (type === 'FUNCTION') {
-          console.log(tx);
-        }
+
         return {
           version: get(tx, 'version'),
           gasUsed: get(tx, 'gas_used'),
@@ -50,7 +48,7 @@ export const useGetTransactions = (
           functionType,
         };
       }),
-    [rawTransactions]
+    [JSON.stringify(rawTransactions)]
   );
 
   const fetchDepositTransactions = async (coin: Types.MoveResource) => {
@@ -87,7 +85,7 @@ export const useGetTransactions = (
     setTransactions(combinedTransactions.flat());
   };
 
-  const fetchTransactions = () => {
+  const fetchTransactions = useCallback(() => {
     if (address && resources.length > 0) {
       const promises: Promise<Types.Transaction[]>[] = [];
       const account = resources.find(
@@ -110,12 +108,13 @@ export const useGetTransactions = (
         fetchAllTransactions(promises);
       }
     }
-  };
+  }, [address, resources]);
 
   useEffect(() => {
     if (runOnUseEffect) {
       fetchTransactions();
     }
   }, [resources, address]);
+
   return { transactions, fetchTransactions };
 };

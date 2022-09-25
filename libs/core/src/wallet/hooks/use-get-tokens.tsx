@@ -1,20 +1,13 @@
 import { AptosClient, Types } from 'aptos';
 import get from 'lodash.get';
 import { useCallback, useEffect, useState } from 'react';
+import { Token } from '../types';
 
 interface TokenAggregateEvent {
   data: any;
   depositSequenceNumber: number;
   withdrawSequenceNumber: number;
   difference: number;
-}
-
-export interface Token {
-  collection: string;
-  creator: string;
-  amount: number;
-  name: string;
-  version: number;
 }
 
 export const useGetTokens = (

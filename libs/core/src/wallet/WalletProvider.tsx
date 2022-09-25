@@ -5,7 +5,13 @@ import {
   TokenClient,
   Types,
 } from 'aptos';
-import React, { PropsWithChildren, useEffect, useMemo, useState } from 'react';
+import React, {
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { generateMnemonic } from '../mnemonic';
 import { createAccount, loadAccount } from '../account';
 import { Storage } from '../storage';
@@ -108,16 +114,21 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
       refetchInterval: 5000,
     }
   );
-  const coins = resources
-    .filter((resource) => resource.type.startsWith('0x1::coin::CoinStore'))
-    .map((resource) => {
-      const segments = resource.type.split(':');
-      const name = segments[segments.length - 1];
-      return {
-        name: name.substring(0, name.length - 1),
-        balance: BigInt((resource.data as any).coin.value),
-      };
-    });
+
+  const coins = useMemo(
+    () =>
+      resources
+        .filter((resource) => resource.type.startsWith('0x1::coin::CoinStore'))
+        .map((resource) => {
+          const segments = resource.type.split(':');
+          const name = segments[segments.length - 1];
+          return {
+            name: name.substring(0, name.length - 1),
+            balance: BigInt((resource.data as any).coin.value),
+          };
+        }),
+    [resources]
+  );
 
   useEffect(() => {
     loadWallet(password);
@@ -150,106 +161,121 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
     }
   }, [sessionStorage, password]);
 
-  const createNewAccount = async (password: string) => {
-    try {
-      setState('account:pending:createAccount');
-      const mnemonic = generateMnemonic();
-      const { account, encryptedMnemonic, encryptedPrivateKey } =
-        await createAccount({ mnemonic, password });
-
-      await walletStorage.addWalletAccount({
-        mnemonic: encryptedMnemonic,
-        privateKey: encryptedPrivateKey,
-      });
-      await faucetClient.fundAccount(account.address(), 0);
-      setAccounts([...accounts, account]);
-      setOneTimeMnemonic(mnemonic);
-      setState('account:fulfilled:activeAccount');
-      setPassword(password);
-      if (sessionStorage) {
-        await sessionStorage.save('password', password);
-      }
-    } catch (e) {
-      console.error(e);
-      setState('account:rejected:createAccount');
-    }
-  };
-
-  const importAccount = async (mnemonic: string, password: string) => {
-    try {
-      setState('account:pending:importAccount');
-
-      const { account, encryptedMnemonic, encryptedPrivateKey } =
-        await createAccount({ mnemonic, password });
-
-      // To test the imported account
-      await aptosClient.getAccountResources(account.address());
-      await walletStorage.addWalletAccount({
-        mnemonic: encryptedMnemonic,
-        privateKey: encryptedPrivateKey,
-      });
-
-      setAccounts([...accounts, account]);
-
-      setState('account:fulfilled:importAccount');
-    } catch (e) {
-      console.error(e);
-      setState('account:rejected:importAccount');
-    }
-  };
-
-  const fundAccountWithFaucet = async (amount: number) => {
-    if (stateAccount) {
+  const createNewAccount = useCallback(
+    async (password: string) => {
       try {
-        setState('account:pending:faucetFundAccount');
-        await faucetClient.fundAccount(stateAccount.address(), amount);
-        setState('account:fulfilled:faucetFundAccount');
+        setState('account:pending:createAccount');
+        const mnemonic = generateMnemonic();
+        const { account, encryptedMnemonic, encryptedPrivateKey } =
+          await createAccount({ mnemonic, password });
+
+        await walletStorage.addWalletAccount({
+          mnemonic: encryptedMnemonic,
+          privateKey: encryptedPrivateKey,
+        });
+        await faucetClient.fundAccount(account.address(), 0);
+        setAccounts([...accounts, account]);
+        setOneTimeMnemonic(mnemonic);
+        setState('account:fulfilled:activeAccount');
+        setPassword(password);
+        if (sessionStorage) {
+          await sessionStorage.save('password', password);
+        }
       } catch (e) {
         console.error(e);
-        setState('account:rejected:faucetFundAccount');
+        setState('account:rejected:createAccount');
       }
-    }
-  };
-  const clearOneTimeMnemonic = () => {
+    },
+    [walletStorage, faucetClient, sessionStorage, accounts]
+  );
+
+  const importAccount = useCallback(
+    async (mnemonic: string, password: string) => {
+      try {
+        setState('account:pending:importAccount');
+
+        const { account, encryptedMnemonic, encryptedPrivateKey } =
+          await createAccount({ mnemonic, password });
+
+        // To test the imported account
+        await aptosClient.getAccountResources(account.address());
+        await walletStorage.addWalletAccount({
+          mnemonic: encryptedMnemonic,
+          privateKey: encryptedPrivateKey,
+        });
+
+        setAccounts([...accounts, account]);
+
+        setState('account:fulfilled:importAccount');
+      } catch (e) {
+        console.error(e);
+        setState('account:rejected:importAccount');
+      }
+    },
+    [aptosClient, walletStorage, accounts]
+  );
+
+  const fundAccountWithFaucet = useCallback(
+    async (amount: number) => {
+      if (stateAccount) {
+        try {
+          setState('account:pending:faucetFundAccount');
+          await faucetClient.fundAccount(stateAccount.address(), amount);
+          setState('account:fulfilled:faucetFundAccount');
+        } catch (e) {
+          console.error(e);
+          setState('account:rejected:faucetFundAccount');
+        }
+      }
+    },
+    [stateAccount, faucetClient]
+  );
+  const clearOneTimeMnemonic = useCallback(() => {
     setOneTimeMnemonic(null);
-  };
+  }, []);
 
-  const submitTransaction = async (
-    payload: Types.EntryFunctionPayload,
-    fromAccount?: AptosAccount
-  ): Promise<string> => {
-    const account = fromAccount || stateAccount;
-    if (!account) {
-      throw new Error('Undefined account');
-    }
-    try {
-      setState('account:pending:submitTransaction');
-      const txnRequest = await aptosClient.generateTransaction(
-        account.address(),
-        payload
-      );
+  const submitTransaction = useCallback(
+    async (
+      payload: Types.EntryFunctionPayload,
+      fromAccount?: AptosAccount
+    ): Promise<string> => {
+      const account = fromAccount || stateAccount;
+      if (!account) {
+        throw new Error('Undefined account');
+      }
+      try {
+        setState('account:pending:submitTransaction');
+        const txnRequest = await aptosClient.generateTransaction(
+          account.address(),
+          payload
+        );
 
-      const signedTxn = await aptosClient.signTransaction(account, txnRequest);
-      const transactionRes = await aptosClient.submitTransaction(signedTxn);
-      await aptosClient.waitForTransaction(transactionRes.hash);
+        const signedTxn = await aptosClient.signTransaction(
+          account,
+          txnRequest
+        );
+        const transactionRes = await aptosClient.submitTransaction(signedTxn);
+        await aptosClient.waitForTransaction(transactionRes.hash);
 
-      setState('account:fulfilled:submitTransaction');
-      return transactionRes.hash;
-    } catch (e) {
-      setState('account:fulfilled:submitTransaction');
-      throw e;
-    }
-  };
+        setState('account:fulfilled:submitTransaction');
+        return transactionRes.hash;
+      } catch (e) {
+        setState('account:fulfilled:submitTransaction');
+        throw e;
+      }
+    },
+    [stateAccount, aptosClient]
+  );
 
-  const updatePassword = async (password: string) => {
+  const updatePassword = useCallback(async (password: string) => {
     setPasswordError(null);
     setPassword(password);
     if (sessionStorage) {
       await sessionStorage.save('password', password);
     }
-  };
+  }, []);
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     setState('account:pending:logout');
     await walletStorage.deleteWallet();
     setAccounts([]);
@@ -260,84 +286,93 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
       sessionStorage.remove('password');
     }
     setState('account:fulfilled:logout');
-  };
+  }, [walletStorage, sessionStorage]);
 
-  const lockWallet = async () => {
+  const lockWallet = useCallback(async () => {
     setPassword('');
     setState('account:pending:loadAccount');
     if (sessionStorage) {
       sessionStorage.remove('password');
     }
-  };
+  }, [sessionStorage]);
 
-  const revealSeedPhrase = async (password: string): Promise<string> => {
-    setState('account:pending:revealSeedPhrase');
-    const walletAccounts = await walletStorage.readWalletAccounts();
+  const revealSeedPhrase = useCallback(
+    async (password: string): Promise<string> => {
+      setState('account:pending:revealSeedPhrase');
+      const walletAccounts = await walletStorage.readWalletAccounts();
 
-    const wallet = walletAccounts[walletPreference.defaultAccountIndex];
-    if (wallet && wallet.mnemonic) {
-      try {
-        const mnemonic = await decrypt<string>(password, wallet.mnemonic);
-        setState('account:fulfilled:revealSeedPhrase');
-        return mnemonic;
-      } catch (e: unknown) {
+      const wallet = walletAccounts[walletPreference.defaultAccountIndex];
+      if (wallet && wallet.mnemonic) {
+        try {
+          const mnemonic = await decrypt<string>(password, wallet.mnemonic);
+          setState('account:fulfilled:revealSeedPhrase');
+          return mnemonic;
+        } catch (e: unknown) {
+          setState('account:rejected:revealSeedPhrase');
+          throw e;
+        }
+      } else {
         setState('account:rejected:revealSeedPhrase');
-        throw e;
+        throw new Error('No wallet found');
       }
-    } else {
-      setState('account:rejected:revealSeedPhrase');
-      throw new Error('No wallet found');
-    }
-  };
-  const revealPrivateKey = async (password: string): Promise<string> => {
-    setState('account:pending:revealPrivateKey');
-    const walletAccounts = await walletStorage.readWalletAccounts();
+    },
+    [walletStorage, walletPreference]
+  );
+  const revealPrivateKey = useCallback(
+    async (password: string): Promise<string> => {
+      setState('account:pending:revealPrivateKey');
+      const walletAccounts = await walletStorage.readWalletAccounts();
 
-    const wallet = walletAccounts[walletPreference.defaultAccountIndex];
-    if (wallet && wallet.privateKey) {
-      try {
-        const privateKey = await decrypt<string>(password, wallet.privateKey);
-        setState('account:fulfilled:revealPrivateKey');
-        return privateKey;
-      } catch (e: unknown) {
+      const wallet = walletAccounts[walletPreference.defaultAccountIndex];
+      if (wallet && wallet.privateKey) {
+        try {
+          const privateKey = await decrypt<string>(password, wallet.privateKey);
+          setState('account:fulfilled:revealPrivateKey');
+          return privateKey;
+        } catch (e: unknown) {
+          setState('account:rejected:revealPrivateKey');
+          throw e;
+        }
+      } else {
         setState('account:rejected:revealPrivateKey');
-        throw e;
+        throw new Error('No wallet found');
       }
-    } else {
-      setState('account:rejected:revealPrivateKey');
-      throw new Error('No wallet found');
-    }
-  };
+    },
+    [walletStorage, walletPreference]
+  );
 
-  const changePassword = async (
-    currentPassword: string,
-    newPassword: string
-  ) => {
-    setState('account:pending:changePassword');
-    const walletAccounts = await walletStorage.readWalletAccounts();
-    if (walletAccounts.length > 0) {
-      const updatedWalletAccounts = await Promise.all(
-        walletAccounts.map(async (wallet) => {
-          const mnemonic = await decrypt(currentPassword, wallet.mnemonic);
-          const privateKey = await decrypt(currentPassword, wallet.privateKey);
-          const encryptedMnemonic = await encrypt(newPassword, mnemonic);
-          const encryptedPrivateKey = await encrypt(newPassword, privateKey);
-          return {
-            mnemonic: encryptedMnemonic,
-            privateKey: encryptedPrivateKey,
-          };
-        })
-      );
+  const changePassword = useCallback(
+    async (currentPassword: string, newPassword: string) => {
+      setState('account:pending:changePassword');
+      const walletAccounts = await walletStorage.readWalletAccounts();
+      if (walletAccounts.length > 0) {
+        const updatedWalletAccounts = await Promise.all(
+          walletAccounts.map(async (wallet) => {
+            const mnemonic = await decrypt(currentPassword, wallet.mnemonic);
+            const privateKey = await decrypt(
+              currentPassword,
+              wallet.privateKey
+            );
+            const encryptedMnemonic = await encrypt(newPassword, mnemonic);
+            const encryptedPrivateKey = await encrypt(newPassword, privateKey);
+            return {
+              mnemonic: encryptedMnemonic,
+              privateKey: encryptedPrivateKey,
+            };
+          })
+        );
 
-      await walletStorage.writeWalletAccounts(updatedWalletAccounts);
-      setState('account:fulfilled:changePassword');
-    } else {
-      setState('account:rejected:changePassword');
-      throw new Error('No wallet found');
-    }
-  };
+        await walletStorage.writeWalletAccounts(updatedWalletAccounts);
+        setState('account:fulfilled:changePassword');
+      } else {
+        setState('account:rejected:changePassword');
+        throw new Error('No wallet found');
+      }
+    },
+    [walletStorage]
+  );
 
-  const createNewSiblingAccount = async () => {
+  const createNewSiblingAccount = useCallback(async () => {
     setState('account:pending:createNewSiblingAccount');
     try {
       const mnemonic = generateMnemonic();
@@ -357,120 +392,127 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
       console.error(e);
       setState('account:rejected:createNewSiblingAccount');
     }
-  };
-  const changeDefaultAccountIndex = (index: number) => {
-    setWalletPreference({
-      ...walletPreference,
-      defaultAccountIndex: index,
-    });
+  }, [walletStorage, faucetClient, accounts]);
 
-    refetch();
-  };
+  const changeDefaultAccountIndex = useCallback(
+    (index: number) => {
+      setWalletPreference({
+        ...walletPreference,
+        defaultAccountIndex: index,
+      });
 
-  const simulateTransaction = async (
-    payload: Types.EntryFunctionPayload,
-    fromAccount?: AptosAccount
-  ) => {
-    const account = fromAccount || stateAccount;
-    if (!account) {
-      throw new Error('Undefined account');
-    }
-    setState('account:pending:simulateTransaction');
-    try {
-      const txnRequest = await aptosClient.generateTransaction(
-        account.address(),
-        payload
-      );
+      refetch();
+    },
+    [walletPreference]
+  );
 
-      const transactions = await aptosClient.simulateTransaction(
-        account,
-        txnRequest
-      );
-      if (transactions.length > 0) {
-        setState('account:fulfilled:simulateTransaction');
-        return {
-          success: transactions[0].success,
-          gasUsed: parseInt(transactions[0].gas_used, 10),
-          vmStatus: transactions[0].vm_status,
-        };
+  const simulateTransaction = useCallback(
+    async (payload: Types.EntryFunctionPayload, fromAccount?: AptosAccount) => {
+      const account = fromAccount || stateAccount;
+      if (!account) {
+        throw new Error('Undefined account');
       }
+      setState('account:pending:simulateTransaction');
+      try {
+        const txnRequest = await aptosClient.generateTransaction(
+          account.address(),
+          payload
+        );
 
-      throw new Error('Invalid transaction');
-    } catch (e) {
-      setState('account:rejected:simulateTransaction');
-      throw e;
-    }
-  };
+        const transactions = await aptosClient.simulateTransaction(
+          account,
+          txnRequest
+        );
+        if (transactions.length > 0) {
+          setState('account:fulfilled:simulateTransaction');
+          return {
+            success: transactions[0].success,
+            gasUsed: parseInt(transactions[0].gas_used, 10),
+            vmStatus: transactions[0].vm_status,
+          };
+        }
+
+        throw new Error('Invalid transaction');
+      } catch (e) {
+        setState('account:rejected:simulateTransaction');
+        throw e;
+      }
+    },
+    [stateAccount, aptosClient]
+  );
 
   const totalWalletAccount = useMemo(() => accounts.length, [accounts]);
 
-  const addTrustedOrigin = async (address: string, origin: string) => {
-    setState('account:pending:addTrustedOrigin');
-    const origins = await walletStorage.addTrustedOriginToAccount(
-      address,
-      origin
-    );
-    setAccountTrustedOrigins(origins);
-    setState('account:fulfilled:addTrustedOrigin');
-  };
+  const addTrustedOrigin = useCallback(
+    async (address: string, origin: string) => {
+      setState('account:pending:addTrustedOrigin');
+      const origins = await walletStorage.addTrustedOriginToAccount(
+        address,
+        origin
+      );
+      setAccountTrustedOrigins(origins);
+      setState('account:fulfilled:addTrustedOrigin');
+    },
+    [walletStorage]
+  );
 
-  const removeTrustedOrigin = async (
-    origin: string,
-    fromAccount?: AptosAccount
-  ) => {
-    const account = fromAccount || stateAccount;
-    if (!account) {
-      throw new Error('Undefined account');
-    }
-    const updatedOrigins = await walletStorage.removeTrustedOriginFromAccount(
-      account.address().toShortString(),
-      origin
-    );
-    setAccountTrustedOrigins(updatedOrigins);
-  };
+  const removeTrustedOrigin = useCallback(
+    async (origin: string, fromAccount?: AptosAccount) => {
+      const account = fromAccount || stateAccount;
+      if (!account) {
+        throw new Error('Undefined account');
+      }
+      const updatedOrigins = await walletStorage.removeTrustedOriginFromAccount(
+        account.address().toShortString(),
+        origin
+      );
+      setAccountTrustedOrigins(updatedOrigins);
+    },
+    [stateAccount, walletStorage]
+  );
 
-  const createToken = async (
-    payload: CreateTokenPayload,
-    fromAccount?: AptosAccount
-  ) => {
-    const account = fromAccount || stateAccount;
-    if (!account) {
-      throw new Error('Undefined account');
-    }
+  const createToken = useCallback(
+    async (payload: CreateTokenPayload, fromAccount?: AptosAccount) => {
+      const account = fromAccount || stateAccount;
+      if (!account) {
+        throw new Error('Undefined account');
+      }
 
-    const hash = await tokenClient.createToken(
-      account,
-      payload.collectionName,
-      payload.name,
-      payload.description,
-      payload.supply,
-      payload.uri
-    );
+      const hash = await tokenClient.createToken(
+        account,
+        payload.collectionName,
+        payload.name,
+        payload.description,
+        payload.supply,
+        payload.uri
+      );
 
-    await aptosClient.waitForTransaction(hash);
-    return hash;
-  };
+      await aptosClient.waitForTransaction(hash);
+      return hash;
+    },
+    [stateAccount, tokenClient, aptosClient]
+  );
 
-  const createCollection = async (
-    payload: CreateCollectionPayload,
-    fromAccount?: AptosAccount
-  ) => {
-    const account = fromAccount || stateAccount;
-    if (!account) {
-      throw new Error('Undefined account');
-    }
+  const createCollection = useCallback(
+    async (payload: CreateCollectionPayload, fromAccount?: AptosAccount) => {
+      const account = fromAccount || stateAccount;
+      if (!account) {
+        throw new Error('Undefined account');
+      }
 
-    const hash = await tokenClient.createCollection(
-      account,
-      payload.name,
-      payload.description,
-      payload.uri,
-      payload.maxAmount
-    );
+      const hash = await tokenClient.createCollection(
+        account,
+        payload.name,
+        payload.description,
+        payload.uri,
+        payload.maxAmount
+      );
 
-    await aptosClient.waitForTransaction(hash);
-    return hash;
-  };
+      await aptosClient.waitForTransaction(hash);
+      return hash;
+    },
+    [stateAccount, tokenClient, aptosClient]
+  );
 
   const tokenCollectionsResource = resources.find((resource) =>
     resource.type.startsWith('0x3::token::Collections')
@@ -517,13 +559,11 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
         currentAccountTrustedOrigins,
         accountTrustedOrigins,
         transactions,
-        token: {
-          tokenCollectionsResource,
-          tokenCollections,
-          tokens,
-          fetchTokenCollections,
-          fetchTokens,
-        },
+        tokenCollectionsResource,
+        tokenCollections,
+        tokens,
+        fetchTokenCollections,
+        fetchTokens,
         changeDefaultAccountIndex,
         createNewSiblingAccount,
         updatePassword,
