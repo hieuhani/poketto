@@ -81,7 +81,9 @@ export const WalletSwitcher: React.FunctionComponent<Props> = ({
                   >
                     <div className="w-8">{isActive && <IoCheckmark />}</div>
                     <span>Wallet {index + 1}</span>
-                    <h4>({makeShortAddress(account.address().hex())})</h4>
+                    <h4>
+                      ({makeShortAddress(account.address().toShortString())})
+                    </h4>
                   </button>
                 </Menu.Item>
               );

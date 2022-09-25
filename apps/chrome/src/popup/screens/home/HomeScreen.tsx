@@ -13,18 +13,18 @@ export const HomeScreen: React.FunctionComponent = () => {
   const balance = coins.reduce((acc, coin) => acc + coin.balance, BigInt(0));
   const handleGoToReceiveScreen = () => {
     openModal('ReceiveCoin', {
-      accountAddress: account?.address().hex() || '',
+      accountAddress: account?.address().toShortString() || '',
     });
   };
   return (
     <div className="space-y-3">
       <WalletHeader
         loading={state.startsWith('account:pending:loadAccount')}
-        activeAddress={account?.address().hex()}
+        activeAddress={account?.address().toShortString()}
       />
       <OverviewCard
         balance={balance}
-        address={account?.address().hex() || ''}
+        address={account?.address().toShortString() || ''}
       />
 
       <WalletActions

@@ -47,7 +47,7 @@ export async function loadAccount(password: string, encryptedMnemonic: string) {
     address,
     privateKeyHex: HexString.fromUint8Array(
       keypair.secretKey.slice(0, 32)
-    ).hex(),
+    ).toShortString(),
   });
 }
 
