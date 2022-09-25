@@ -52,3 +52,5 @@ export const Button: ButtonComponent = forwardRef(
     );
   }
 );
+
+Button.displayName = 'Button';

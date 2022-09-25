@@ -10,7 +10,7 @@ export const WalletHeader: React.FunctionComponent<Props> = ({
   activeAddress,
 }) => {
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-between py-1">
       <Logo />
       {loading ? (
         <div className="h-8 w-32 animate-pulse rounded-md bg-gray-200" />

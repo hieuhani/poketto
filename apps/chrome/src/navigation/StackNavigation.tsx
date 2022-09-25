@@ -1,5 +1,3 @@
-import { isValidElement } from 'react';
-import { cloneElement } from 'react';
 import {
   createContext,
   ReactNode,
@@ -7,6 +5,8 @@ import {
   useContext,
   useMemo,
   useState,
+  cloneElement,
+  isValidElement,
 } from 'react';
 import { useStack } from './use-stack';
 

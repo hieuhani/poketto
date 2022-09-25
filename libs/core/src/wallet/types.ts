@@ -84,3 +84,22 @@ export interface Transaction {
   sender: string;
   functionType: string;
 }
+
+export interface Token {
+  collection: string;
+  creator: string;
+  amount: number;
+  name: string;
+  version: number;
+}
+
+export interface TokenDetail {
+  description: string;
+  name: string;
+  supply: number;
+  collection: string;
+  creator: string;
+  amount: number;
+  version: number;
+  uri: string;
+}

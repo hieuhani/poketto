@@ -1,6 +1,5 @@
 import { AptosAccount, AptosClient, TokenClient, Types } from 'aptos';
-import { useContext } from 'react';
-import { createContext } from 'react';
+import { useContext, createContext } from 'react';
 import { defaultWalletPreference, WalletPreference } from './storage';
 import { NetworkConfig, networkConfigs } from '../network';
 import { Coin } from '../resource';
@@ -8,11 +7,11 @@ import {
   CreateCollectionPayload,
   CreateTokenPayload,
   SimulatedTransaction,
+  Token,
   TokenCollection,
   Transaction,
   WalletState,
 } from './types';
-import { Token } from './hooks/use-get-tokens';
 
 export interface WalletContextState {
   account: AptosAccount | null;
@@ -31,13 +30,11 @@ export interface WalletContextState {
   currentAccountTrustedOrigins: string[];
   accountTrustedOrigins: Record<string, string[]>;
   transactions: Transaction[];
-  token: {
-    tokenCollectionsResource: Types.MoveResource | undefined;
-    tokenCollections: TokenCollection[];
-    tokens: Token[];
-    fetchTokenCollections: () => void;
-    fetchTokens: () => void;
-  };
+  tokenCollectionsResource: Types.MoveResource | undefined;
+  tokenCollections: TokenCollection[];
+  tokens: Token[];
+  fetchTokenCollections: () => void;
+  fetchTokens: () => void;
   changeDefaultAccountIndex: (index: number) => void;
   updatePassword: (password: string) => void;
   createNewAccount: (password: string) => Promise<void>;
@@ -92,18 +89,15 @@ export const WalletContext = createContext<WalletContextState>({
   currentAccountTrustedOrigins: [],
   accountTrustedOrigins: {},
   transactions: [],
-  token: {
-    tokenCollectionsResource: undefined,
-    tokenCollections: [],
-    tokens: [],
-    fetchTokenCollections: () => {
-      throw new Error('unimplemented');
-    },
-    fetchTokens: () => {
-      throw new Error('unimplemented');
-    },
+  tokenCollectionsResource: undefined,
+  tokenCollections: [],
+  tokens: [],
+  fetchTokenCollections: () => {
+    throw new Error('unimplemented');
   },
-
+  fetchTokens: () => {
+    throw new Error('unimplemented');
+  },
   changeDefaultAccountIndex: (index: number) => {
     throw new Error('unimplemented');
   },
