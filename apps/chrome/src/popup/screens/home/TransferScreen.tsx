@@ -97,8 +97,9 @@ export const TransferScreen: React.FunctionComponent = () => {
 
   const onSendTransaction = async () => {
     try {
+      const decimal = new Decimal(amount).mul(Decimal.pow(10, 8));
       const payload: Types.EntryFunctionPayload = {
-        arguments: [toAddress, BigInt(amount)],
+        arguments: [toAddress, decimal.toString()],
         function: '0x1::coin::transfer',
         type_arguments: ['0x1::aptos_coin::AptosCoin'],
       };
@@ -106,16 +107,17 @@ export const TransferScreen: React.FunctionComponent = () => {
       goBack();
       toast.success('Transaction sent');
     } catch (e: any) {
-      toast.error(e.response.data.message);
+      console.log(e);
+      // toast.error(e.response.data.message);
     }
   };
 
   const handlePreviewTransaction = () => {
     openModal('ConfirmSendTransaction', {
       onSendTransaction,
-      fromAddress: account?.address().hex() || '',
+      fromAddress: account?.address().toShortString() || '',
       toAddress: toAddress,
-      amount: parseInt(amount, 10),
+      amount: amount,
       gasFee: simulatedTransaction?.gasUsed || 0,
     });
   };
@@ -127,7 +129,7 @@ export const TransferScreen: React.FunctionComponent = () => {
         <div className="space-y-3 px-3">
           {account && (
             <div className="rounded-lg bg-slate-100 p-3 text-stone-600 dark:bg-stone-800 dark:text-white">
-              <HexAddress address={account.address().hex()} />
+              <HexAddress address={account.address().toShortString()} />
               {coins[0] && <p>Balance: {formatBalance(coins[0].balance)}</p>}
             </div>
           )}

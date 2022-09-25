@@ -69,3 +69,18 @@ export interface TokenCollection {
   maximum: string;
   uri: string;
 }
+
+export interface Transaction {
+  version: string;
+  vmStatus: string;
+  gasUsed: string;
+  amount: string;
+  timestamp: string;
+  type: 'MINT' | 'RECEIVED' | 'SENT' | 'PUBLISH' | 'FUNCTION' | 'UNKNOWN';
+  createdAt: Date;
+  success: boolean;
+  hash: string;
+  destination?: string;
+  sender: string;
+  functionType: string;
+}

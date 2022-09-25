@@ -16,7 +16,7 @@ export const SelectWallet: React.FunctionComponent<Props> = ({
   return (
     <div className="w-full space-y-3 rounded-md">
       {accounts.map((account, index) => {
-        const address = account.address().hex();
+        const address = account.address().toShortString();
         return (
           <WalletAccountRow
             key={index}

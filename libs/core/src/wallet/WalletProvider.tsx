@@ -25,6 +25,7 @@ import {
 import { WalletContext } from './WalletContext';
 import { useGetTokenCollections } from './hooks/use-get-token-collections';
 import { useGetTokens } from './hooks/use-get-tokens';
+import { useGetTransactions } from './hooks/use-get-transactions';
 
 interface Props extends PropsWithChildren {
   storage: Storage;
@@ -74,7 +75,7 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
     if (!stateAccount) {
       return [];
     }
-    return accountTrustedOrigins[stateAccount.address().hex()] || [];
+    return accountTrustedOrigins[stateAccount.address().toShortString()] || [];
   }, [stateAccount, accountTrustedOrigins]);
 
   const loadWallet = async (password: string) => {
@@ -422,7 +423,7 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
       throw new Error('Undefined account');
     }
     const updatedOrigins = await walletStorage.removeTrustedOriginFromAccount(
-      account.address().hex(),
+      account.address().toShortString(),
       origin
     );
     setAccountTrustedOrigins(updatedOrigins);
@@ -481,14 +482,20 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
 
   const { tokenCollections, fetchTokenCollections } = useGetTokenCollections(
     aptosClient,
-    stateAccount?.address().hex(),
+    stateAccount?.address().toShortString(),
     tokenCollectionsResource
   );
 
   const { fetchTokens, tokens } = useGetTokens(
     aptosClient,
-    stateAccount?.address().hex(),
+    stateAccount?.address().toShortString(),
     tokenResource
+  );
+
+  const { transactions, fetchTransactions } = useGetTransactions(
+    aptosClient,
+    resources,
+    stateAccount?.address().toShortString()
   );
 
   return (
@@ -509,6 +516,7 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
         totalWalletAccount,
         currentAccountTrustedOrigins,
         accountTrustedOrigins,
+        transactions,
         token: {
           tokenCollectionsResource,
           tokenCollections,
@@ -534,6 +542,7 @@ export const WalletProvider: React.FunctionComponent<Props> = ({
         removeTrustedOrigin,
         createToken,
         createCollection,
+        fetchTransactions,
       }}
     >
       {children}

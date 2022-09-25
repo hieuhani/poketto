@@ -5,7 +5,7 @@ interface Props {
   close: () => void;
   fromAddress: string;
   toAddress: string;
-  amount: number;
+  amount: string;
   gasFee: number;
   onSendTransaction: () => void;
 }

@@ -42,6 +42,7 @@
     "@metamask/browser-passworder": "^3.0.0",
     "@scure/bip39": "^1.1.0",
     "buffer": "^6.0.3",
+    "lodash.get": "^4.4.2",
     "tweetnacl": "^1.0.3"
   }
 }
