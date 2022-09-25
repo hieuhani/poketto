@@ -16,7 +16,7 @@ export const ReceiveCoin: React.FunctionComponent<Props> = ({
   const loading = state === 'account:pending:faucetFundAccount';
 
   const handleFaucet = async () => {
-    await fundAccountWithFaucet(1000000);
+    await fundAccountWithFaucet(100000000);
 
     close();
     toast.success('0.01 Aptos Coins have been added to your account');
