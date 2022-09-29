@@ -4,7 +4,7 @@ export const Layout: React.FunctionComponent<PropsWithChildren<{}>> = ({
   children,
 }) => {
   return (
-    <div className="relative mx-auto h-screen max-w-sm overflow-hidden">
+    <div className="relative mx-auto h-screen max-w-sm overflow-hidden pt-4">
       {children}
     </div>
   );
