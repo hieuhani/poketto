@@ -1,3 +1,14 @@
+import mdx from '@next/mdx';
+const withMDX = mdx({
+  extension: /\.mdx?$/,
+  options: {
+    remarkPlugins: [],
+    rehypePlugins: [],
+    // If you use `MDXProvider`, uncomment the following line.
+    // providerImportSource: "@mdx-js/react",
+  },
+});
+
 /**
  * @type {import('next').NextConfig}
  */
@@ -24,4 +35,7 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+export default withMDX({
+  ...nextConfig,
+  pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
+});

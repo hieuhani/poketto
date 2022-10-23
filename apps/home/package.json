@@ -8,6 +8,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@mdx-js/loader": "^2.1.5",
+    "@mdx-js/react": "^2.1.5",
+    "@next/mdx": "^12.3.1",
     "autoprefixer": "^10.4.12",
     "next": "^12.3.1",
     "postcss": "^8.4.18",

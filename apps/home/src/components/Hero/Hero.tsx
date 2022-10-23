@@ -4,7 +4,7 @@ import { ImagePreset } from 'components/Image';
 
 export const Hero: React.FunctionComponent = () => {
   return (
-    <Container>
+    <Container className="py-4">
       <div className="lg:grid lg:grid-cols-12 lg:gap-x-8 lg:gap-y-20">
         <div className="relative col-span-8 pt-12">
           <h1 className="text-5xl font-medium tracking-tight text-slate-900">
