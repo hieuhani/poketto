@@ -1,4 +1,4 @@
-name: deploy_staging
+name: deploy staging
 on:
   pull_request:
     paths:

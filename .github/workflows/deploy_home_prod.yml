@@ -1,0 +1,22 @@
+name: deploy home prod
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'apps/apps/**'
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: amondnet/vercel-action@v25.1.0
+        with:
+          vercel-token: ${{ secrets.VERCEL_HOME_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-args: '--prod --force'
+          vercel-project-id: ${{ secrets.VERCEL_HOME_PROJECT_ID }}
+          vercel-org-id: ${{ secrets.VERCEL_HOME_ORG_ID }}
+      - name: preview-url
+        run: |
+          echo ${{ steps.vercel-action.outputs.preview-url }}
